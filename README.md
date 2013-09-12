@@ -1,4 +1,4 @@
-aether
+Beluga
 ======
 
 Communication library for distributed, heterogeneous and dynamic environments

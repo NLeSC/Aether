@@ -1,15 +1,15 @@
-<project name="IPL" default="build" basedir=".">
+<project name="Aether" default="build" basedir=".">
     <description>
-        Build file for Ibis
+        Build file for Aether
     </description>
 
-    <target name="build" description="Build the IPL and its implementations" depends="clean,compile-ipl,examples,benchmarks" />
+    <target name="build" description="Build Aether and its implementations" depends="clean,compile-ipl,examples,benchmarks" />
 
     <!-- Names for generated directories. -->
     <property name="javadoc" value="javadoc/ipl" />
 
     <!-- If you change the version number, change it in IbisFactory.java as well! -->
-    <property name="version" value="2.3" />
+    <property name="version" value="1.0" />
     <property name="version-tag" value="-${version}" />
 
     <property name="sources-filename" value="ipl${version-tag}-sources" />
@@ -52,12 +52,8 @@
         </copy>
     </target>
 
-    <!-- Compile sub-projects -->
-    <target name="sub-projects" depends="util,compile,io">
-    </target>
-
     <!-- Compile IPL -->
-    <target name="compile-ipl" depends="copy-external,sub-projects">
+    <target name="compile-ipl" depends="copy-external">
         <mkdir dir="tmp" />
 
         <!-- Compile the java code from src into tmp -->
@@ -286,9 +282,6 @@
 
         <delete file="${sources-zip}" />
         <delete file="ipl${version-tag}.zip" />
-        <ant dir="util" inheritAll="false" target="clean" />
-        <ant dir="compile" inheritAll="false" target="clean" />
-        <ant dir="io" inheritAll="false" target="clean" />
         <ant dir="examples" inheritAll="false" target="clean" />
         <ant dir="benchmarks" inheritAll="false" target="clean" />
     </target>
@@ -301,24 +294,6 @@
 
     <target name="benchmarks" description="Build examples">
         <ant dir="benchmarks" inheritAll="false" target="build">
-        </ant>
-    </target>
-
-    <target name="compile" description="Build compile subproject">
-        <ant dir="compile" inheritAll="false" target="build">
-            <property name="version-tag" value="${version-tag}" />
-        </ant>
-    </target>
-
-    <target name="util" description="Build util subproject">
-        <ant dir="util" inheritAll="false" target="build">
-            <property name="version-tag" value="${version-tag}" />
-        </ant>
-    </target>
-
-    <target name="io" description="Build io subproject">
-        <ant dir="io" inheritAll="false" target="build">
-            <property name="version-tag" value="${version-tag}" />
         </ant>
     </target>
 

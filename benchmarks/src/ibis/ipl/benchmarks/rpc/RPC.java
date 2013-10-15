@@ -2,23 +2,23 @@ package ibis.ipl.benchmarks.rpc;
 
 /* $Id: RPC.java 12048 2010-05-17 08:32:21Z ceriel $ */
 
-import ibis.ipl.Ibis;
-import ibis.ipl.IbisCapabilities;
-import ibis.ipl.IbisFactory;
-import ibis.ipl.IbisIdentifier;
-import ibis.ipl.MessageUpcall;
-import ibis.ipl.PortType;
-import ibis.ipl.ReadMessage;
-import ibis.ipl.ReceivePort;
-import ibis.ipl.ReceivePortConnectUpcall;
-import ibis.ipl.ReceivePortIdentifier;
-import ibis.ipl.Registry;
-import ibis.ipl.RegistryEventHandler;
-import ibis.ipl.SendPort;
-import ibis.ipl.SendPortDisconnectUpcall;
-import ibis.ipl.SendPortIdentifier;
-import ibis.ipl.WriteMessage;
-import ibis.util.TypedProperties;
+import nl.esciencecenter.aether.Ibis;
+import nl.esciencecenter.aether.IbisCapabilities;
+import nl.esciencecenter.aether.IbisFactory;
+import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.MessageUpcall;
+import nl.esciencecenter.aether.PortType;
+import nl.esciencecenter.aether.ReadMessage;
+import nl.esciencecenter.aether.ReceivePort;
+import nl.esciencecenter.aether.ReceivePortConnectUpcall;
+import nl.esciencecenter.aether.ReceivePortIdentifier;
+import nl.esciencecenter.aether.Registry;
+import nl.esciencecenter.aether.RegistryEventHandler;
+import nl.esciencecenter.aether.SendPort;
+import nl.esciencecenter.aether.SendPortDisconnectUpcall;
+import nl.esciencecenter.aether.SendPortIdentifier;
+import nl.esciencecenter.aether.WriteMessage;
+import nl.esciencecenter.aether.util.TypedProperties;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -348,11 +348,11 @@ class RPC implements MessageUpcall, Runnable, ReceivePortConnectUpcall,
             rcve_one(false /* Not read_data */, partners, 0);
         } else {
 
-            ibis.util.Timer t = null;
-            ibis.util.Timer sum = null;
+            nl.esciencecenter.aether.util.Timer t = null;
+            nl.esciencecenter.aether.util.Timer sum = null;
             if (VARIANCE_TIMER) {
-                t = ibis.util.Timer.createTimer("ibis.util.nativeCode.Rdtsc");
-                sum = ibis.util.Timer.createTimer("ibis.util.nativeCode.Rdtsc");
+                t = nl.esciencecenter.aether.util.Timer.createTimer("nl.esciencecenter.aether.util.nativeCode.Rdtsc");
+                sum = nl.esciencecenter.aether.util.Timer.createTimer("nl.esciencecenter.aether.util.nativeCode.Rdtsc");
             }
 
             for (int i = 0; i < count; i++) {

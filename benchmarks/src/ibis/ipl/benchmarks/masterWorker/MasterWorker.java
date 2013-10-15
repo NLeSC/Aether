@@ -3,17 +3,17 @@ package ibis.ipl.benchmarks.masterWorker;
 /* $Id: MasterWorker.java 11529 2009-11-18 15:53:11Z ceriel $ */
 
 
-import ibis.ipl.Ibis;
-import ibis.ipl.IbisCapabilities;
-import ibis.ipl.IbisFactory;
-import ibis.ipl.IbisIdentifier;
-import ibis.ipl.PortType;
-import ibis.ipl.ReadMessage;
-import ibis.ipl.ReceivePort;
-import ibis.ipl.Registry;
-import ibis.ipl.SendPort;
-import ibis.ipl.SendPortIdentifier;
-import ibis.ipl.WriteMessage;
+import nl.esciencecenter.aether.Ibis;
+import nl.esciencecenter.aether.IbisCapabilities;
+import nl.esciencecenter.aether.IbisFactory;
+import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.PortType;
+import nl.esciencecenter.aether.ReadMessage;
+import nl.esciencecenter.aether.ReceivePort;
+import nl.esciencecenter.aether.Registry;
+import nl.esciencecenter.aether.SendPort;
+import nl.esciencecenter.aether.SendPortIdentifier;
+import nl.esciencecenter.aether.WriteMessage;
 
 import java.util.HashMap;
 

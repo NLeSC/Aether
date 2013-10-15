@@ -1,13 +1,13 @@
 package ibis.ipl.benchmarks.registry;
 
-import ibis.ipl.Ibis;
-import ibis.ipl.IbisCapabilities;
-import ibis.ipl.IbisCreationFailedException;
-import ibis.ipl.IbisFactory;
-import ibis.ipl.IbisIdentifier;
-import ibis.ipl.PortType;
-import ibis.ipl.RegistryEventHandler;
-import ibis.util.ThreadPool;
+import nl.esciencecenter.aether.Ibis;
+import nl.esciencecenter.aether.IbisCapabilities;
+import nl.esciencecenter.aether.IbisCreationFailedException;
+import nl.esciencecenter.aether.IbisFactory;
+import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.PortType;
+import nl.esciencecenter.aether.RegistryEventHandler;
+import nl.esciencecenter.aether.util.ThreadPool;
 
 import java.io.IOException;
 import java.util.HashSet;

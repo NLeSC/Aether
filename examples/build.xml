@@ -13,7 +13,7 @@
     <property name="src" location="src" />
     <property name="tmp" location="tmp" />
     <property name="lib" location="lib" />
-    <property name="jar" location="lib/ipl-examples${version-tag}.jar" />
+    <property name="jar" location="lib/aether-examples${version-tag}.jar" />
 
     <property name="build.sysclasspath" value="ignore"/>
 
@@ -50,7 +50,7 @@
         <jar jarfile="${jar}" basedir="${tmp}" />
 
         <!-- rewrite applications using IbisC -->
-        <java classname="ibis.compile.Ibisc"
+        <java classname="nl.esciencecenter.aether.compile.Ibisc"
               taskname="Ibisc"
               failonerror="true"
               fork="true">

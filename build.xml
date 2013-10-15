@@ -67,13 +67,13 @@
             to this jar later (see below)
         -->
 
-        <jar destfile="lib/ipl${version-tag}.jar">
-            <fileset dir="tmp" includes="ibis/ipl/*.class" />
+        <jar destfile="lib/ipl-${version-tag}.jar">
+            <fileset dir="tmp" includes="nl/esciencecenter/aether/*.class" />
             <metainf dir="." includes="LICENSE.txt" />
         </jar>
 
         <!-- Run Ibisc -->
-        <java classname="ibis.compile.Ibisc" taskname="Ibisc" failonerror="true" dir="tmp" maxmemory="512m" fork="true">
+        <java classname="nl.esciencecenter.aether.compile.Ibisc" taskname="Ibisc" failonerror="true" dir="tmp" maxmemory="512m" fork="true">
             <arg line="." />
             <classpath refid="default.classpath" />
         </java>
@@ -82,7 +82,7 @@
 
         <!-- SUPPORT -->
 
-        <property name="support.files" value="ibis/ipl/support/**/*.class ibis/ipl/management/**/*.class ibis/ipl/registry/**/*.class ibis/ipl/server/**/*.class ibis/ipl/util/**/*.class" />
+        <property name="support.files" value="nl/esciencecenter/aether/support/**/*.class nl/esciencecenter/aether/management/**/*.class nl/esciencecenter/aether/registry/**/*.class nl/esciencecenter/aether/server/**/*.class nl/esciencecenter/aether/util/**/*.class" />
 
         <checksum totalproperty="support.checksum">
             <fileset dir="tmp" includes="${support.files}" />
@@ -98,7 +98,7 @@
 
         <!-- IMPL -->
 
-        <property name="implementation.files" value="ibis/ipl/impl/*.class ibis/ipl/impl/util/**/*.class" />
+        <property name="implementation.files" value="nl/esciencecenter/aether/impl/*.class nl/esciencecenter/aether/impl/util/**/*.class" />
 
         <checksum totalproperty="implementation.checksum">
             <fileset dir="tmp" includes="${implementation.files}" />
@@ -114,7 +114,7 @@
 
         <!-- SMARTSOCKETS -->
 
-        <property name="smartsockets.files" value="ibis/ipl/impl/smartsockets/**/*.class" />
+        <property name="smartsockets.files" value="nl/esciencecenter/aether/impl/smartsockets/**/*.class" />
 
         <checksum totalproperty="smartsockets.checksum">
             <fileset dir="tmp" includes="${smartsockets.files}" />
@@ -124,7 +124,7 @@
             <fileset dir="tmp" includes="${smartsockets.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
-                <attribute name="Ibis-Starter-Class" value="ibis.ipl.impl.smartsockets.SmartSocketsIbisStarter" />
+                <attribute name="Ibis-Starter-Class" value="nl.esciencecenter.aether.impl.smartsockets.SmartSocketsIbisStarter" />
                 <attribute name="Ibis-IPL-Version" value="${version}" />
                 <attribute name="Ibis-Implementation-Version" value="${smartsockets.checksum}" />
                 <attribute name="Ibis-NickName" value="smartsockets" />
@@ -133,7 +133,7 @@
 
         <!-- TCP -->
 
-        <property name="tcp.files" value="ibis/ipl/impl/tcp/**/*.class" />
+        <property name="tcp.files" value="nl/esciencecenter/aether/impl/tcp/**/*.class" />
 
         <checksum totalproperty="tcp.checksum">
             <fileset dir="tmp" includes="${tcp.files}" />
@@ -144,7 +144,7 @@
             <fileset dir="tmp" includes="${tcp.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
-                <attribute name="Ibis-Starter-Class" value="ibis.ipl.impl.tcp.TcpIbisStarter" />
+                <attribute name="Ibis-Starter-Class" value="nl.esciencecenter.aether.impl.tcp.TcpIbisStarter" />
                 <attribute name="Ibis-IPL-Version" value="${version}" />
                 <attribute name="Ibis-Implementation-Version" value="${tcp.checksum}" />
                 <attribute name="Ibis-NickName" value="tcp" />
@@ -153,7 +153,7 @@
 
         <!-- NIO -->
 
-        <property name="nio.files" value="ibis/ipl/impl/nio/**/*.class" />
+        <property name="nio.files" value="nl/esciencecenter/aether/impl/nio/**/*.class" />
 
         <checksum totalproperty="nio.checksum">
             <fileset dir="tmp" includes="${nio.files}" />
@@ -163,7 +163,7 @@
             <fileset dir="tmp" includes="${nio.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
-                <attribute name="Ibis-Starter-Class" value="ibis.ipl.impl.nio.NioIbisStarter" />
+                <attribute name="Ibis-Starter-Class" value="nl.esciencecenter.aether.impl.nio.NioIbisStarter" />
                 <attribute name="Ibis-IPL-Version" value="${version}" />
                 <attribute name="Ibis-Implementation-Version" value="${nio.checksum}" />
                 <attribute name="Ibis-NickName" value="nio" />
@@ -172,7 +172,7 @@
 
         <!-- DUMMY -->
 
-        <property name="dummy.files" value="ibis/ipl/impl/stacking/dummy/**/*.class" />
+        <property name="dummy.files" value="nl/esciencecenter/aether/impl/stacking/dummy/**/*.class" />
 
         <checksum totalproperty="dummy.checksum">
             <fileset dir="tmp" includes="${dummy.files}" />
@@ -182,7 +182,7 @@
             <fileset dir="tmp" includes="${dummy.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
-                <attribute name="Ibis-Starter-Class" value="ibis.ipl.impl.stacking.dummy.StackingIbisStarter" />
+                <attribute name="Ibis-Starter-Class" value="nl.esciencecenter.aether.impl.stacking.dummy.StackingIbisStarter" />
                 <attribute name="Ibis-IPL-Version" value="${version}" />
                 <attribute name="Ibis-Implementation-Version" value="${dummy.files}" />
                 <attribute name="Ibis-NickName" value="dummy" />
@@ -191,7 +191,7 @@
 
         <!-- LRMC -->
 
-        <property name="lrmc.files" value="ibis/ipl/impl/stacking/lrmc/**/*.class" />
+        <property name="lrmc.files" value="nl/esciencecenter/aether/impl/stacking/lrmc/**/*.class" />
 
         <checksum totalproperty="lrmc.checksum">
             <fileset dir="tmp" includes="${lrmc.files}" />
@@ -201,7 +201,7 @@
             <fileset dir="tmp" includes="${lrmc.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
-                <attribute name="Ibis-Starter-Class" value="ibis.ipl.impl.stacking.lrmc.LrmcIbisStarter" />
+                <attribute name="Ibis-Starter-Class" value="nl.esciencecenter.aether.impl.stacking.lrmc.LrmcIbisStarter" />
                 <attribute name="Ibis-IPL-Version" value="${version}" />
                 <attribute name="Ibis-Implementation-Version" value="${lrmc.checksum}" />
                 <attribute name="Ibis-NickName" value="lrmc" />
@@ -210,7 +210,7 @@
 
         <!-- MULTI -->
 
-        <property name="multi.files" value="ibis/ipl/impl/multi/**/*.class" />
+        <property name="multi.files" value="nl/esciencecenter/aether/impl/multi/**/*.class" />
 
         <checksum totalproperty="multi.checksum">
             <fileset dir="tmp" includes="${multi.files}" />
@@ -220,7 +220,7 @@
             <fileset dir="tmp" includes="${multi.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
-                <attribute name="Ibis-Starter-Class" value="ibis.ipl.impl.multi.MultiIbisStarter" />
+                <attribute name="Ibis-Starter-Class" value="nl.esciencecenter.aether.impl.multi.MultiIbisStarter" />
                 <attribute name="Ibis-IPL-Version" value="${version}" />
                 <attribute name="Ibis-Implementation-Version" value="${multi.checksum}" />
                 <attribute name="Ibis-NickName" value="multi" />
@@ -229,46 +229,46 @@
 
         <!-- Backup manifest. Used if the jar file manifests cannot be loaded
              for some reason (e.g. on android) -->
-        <echo file="tmp/ibis/ipl/IPL_MANIFEST">
+        <echo file="tmp/nl/esciencecenter/aether/IPL_MANIFEST">
             support.version=${support.checksum}
             implementation.version=${implementation.checksum}
 
             implementations=smartsockets,tcp,nio,dummy,lrmc
 
             #smartsockets
-            smartsockets.starter.class=ibis.ipl.impl.smartsockets.SmartSocketsIbisStarter
+            smartsockets.starter.class=nl.esciencecenter.aether.impl.smartsockets.SmartSocketsIbisStarter
             smartsockets.ipl.version=${version}
             smartsockets.version=${smartsockets.checksum}
 
             #tcp
-            tcp.starter.class=ibis.ipl.impl.tcp.TcpIbisStarter
+            tcp.starter.class=nl.esciencecenter.aether.impl.tcp.TcpIbisStarter
             tcp.ipl.version=${version}
             tcp.version=${tcp.checksum}
 
             #nio
-            nio.starter.class=ibis.ipl.impl.nio.NioIbisStarter
+            nio.starter.class=nl.esciencecenter.aether.impl.nio.NioIbisStarter
             nio.ipl.version=${version}
             nio.version=${nio.checksum}
 
             #dummy
-            dummy.starter.class=ibis.ipl.impl.stacking.dummy.StackingIbisStarter
+            dummy.starter.class=nl.esciencecenter.aether.impl.stacking.dummy.StackingIbisStarter
             dummy.ipl.version=${version}
             dummy.version=${dummy.checksum}
 
             #lrmc
-            lrmc.starter.class=ibis.ipl.impl.stacking.lrmc.LrmcIbisStarter
+            lrmc.starter.class=nl.esciencecenter.aether.impl.stacking.lrmc.LrmcIbisStarter
             lrmc.ipl.version=${version}
             lrmc.version=${lrmc.checksum}
 
             #multi
-            multi.starter.class=ibis.ipl.impl.multi.MultiIbisStarter
+            multi.starter.class=nl.esciencecenter.aether.impl.multi.MultiIbisStarter
             multi.ipl.version=${version}
             multi.version=${multi.checksum}
         </echo>
 
         <!-- Add manifest property file to ipl jar -->
-        <jar destfile="lib/ipl${version-tag}.jar" update="true">
-            <fileset dir="tmp" includes="ibis/ipl/IPL_MANIFEST" />
+        <jar destfile="lib/aether-${version-tag}.jar" update="true">
+            <fileset dir="tmp" includes="nl/esciencecenter/aether/IPL_MANIFEST" />
         </jar>
 
         <delete dir="tmp" />
@@ -338,7 +338,7 @@
         <delete dir="javadoc/ipl" />
         <mkdir dir="javadoc/ipl" />
         <javadoc destdir="javadoc/ipl" access="public" sourcepath="src" windowtitle="Ibis IPL Documentation" packagenames="ibis.ipl,ibis.ipl.server" classpathref="default.classpath" overview="src/overview.html" doctitle="Ibis IPL Documentation" bottom="The Ibis project">
-	    <link href="http://download.oracle.com/javase/1.5.0/docs/api/" />
+	    <link href="http://download.oracle.com/javase/1.7.0/docs/api/" />
 
             <tag name="ibis.experimental" description="WARNING: This is an Experimental feature of the IPL. It may not function correctly, future releases of the IPL may have a revised API for this feature, or it may be removed completely. " />
         </javadoc>

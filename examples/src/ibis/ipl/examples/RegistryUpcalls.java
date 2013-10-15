@@ -1,10 +1,10 @@
 package ibis.ipl.examples;
 
-import ibis.ipl.Ibis;
-import ibis.ipl.IbisCapabilities;
-import ibis.ipl.IbisFactory;
-import ibis.ipl.IbisIdentifier;
-import ibis.ipl.RegistryEventHandler;
+import nl.esciencecenter.aether.Ibis;
+import nl.esciencecenter.aether.IbisCapabilities;
+import nl.esciencecenter.aether.IbisFactory;
+import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.RegistryEventHandler;
 
 /**
  * This program shows how to handle events from the registry using upcalls. It

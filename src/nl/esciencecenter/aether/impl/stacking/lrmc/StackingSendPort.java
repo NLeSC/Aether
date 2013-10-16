@@ -44,7 +44,7 @@ public class StackingSendPort implements SendPort {
         }
     }
 
-    public StackingSendPort(PortType type, LrmcIbis ibis, String name,
+    public StackingSendPort(PortType type, LRMCAether ibis, String name,
             SendPortDisconnectUpcall connectUpcall, Properties props)
             throws IOException {
 

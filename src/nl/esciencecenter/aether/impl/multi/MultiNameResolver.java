@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 public  class MultiNameResolver {
     private static final Logger logger = LoggerFactory.getLogger(MultiNameResolver.class);
 
-    private final MultiIbis ibis;
+    private final MultiAether ibis;
     private final String ibisName;
     private ReceivePort requestListenPort;
     private ReceivePort replyListenPort;
@@ -35,17 +35,17 @@ public  class MultiNameResolver {
     private static final byte OPP_REQUEST = 2;
     private static final byte OPP_QUIT = 0;
 
-    public MultiNameResolver(MultiIbis multiIbis, String ibisName) throws IOException {
+    public MultiNameResolver(MultiAether multiIbis, String ibisName) throws IOException {
         this.ibis = multiIbis;
         this.ibisName = ibisName;
         ibis.resolverMap.put(ibisName, this);
         Aether subIbis = ibis.subIbisMap.get(ibisName);
-        requestListenPort = subIbis.createReceivePort(MultiIbis.resolvePortType, resolvePortName);
+        requestListenPort = subIbis.createReceivePort(MultiAether.resolvePortType, resolvePortName);
         requestListenPort.enableConnections();
-        replyListenPort = subIbis.createReceivePort(MultiIbis.resolvePortType, replyPortName);
+        replyListenPort = subIbis.createReceivePort(MultiAether.resolvePortType, replyPortName);
         replyListenPort.enableConnections();
-        replyPort = subIbis.createSendPort(MultiIbis.resolvePortType);
-        requestPort = subIbis.createSendPort(MultiIbis.resolvePortType);
+        replyPort = subIbis.createSendPort(MultiAether.resolvePortType);
+        requestPort = subIbis.createSendPort(MultiAether.resolvePortType);
         if (logger.isDebugEnabled()) {
             logger.debug("Started MultiNameResolver for: " + ibisName);
         }
@@ -92,7 +92,7 @@ public  class MultiNameResolver {
                             logger.debug("Received Reply For: " + ibisName);
                         }
                         int hashCode = readMessage.readInt();
-                        MultiIbisIdentifier id = (MultiIbisIdentifier) readMessage.readObject();
+                        MultiAetherIdentifier id = (MultiAetherIdentifier) readMessage.readObject();
                         readMessage.finish();
                         if (logger.isDebugEnabled()) {
                             logger.debug("Setting Resolved for: " + ibisName + " id: " + id);

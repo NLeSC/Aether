@@ -38,7 +38,7 @@ public final class BufferedArrayInputStream extends DataInputStream {
     private static final int BUF_SIZE = 8 * 1024;
 
     /** The underlying <code>InputStream</code>. */
-    private LrmcInputStream in;
+    private LRMCInputStream in;
 
     /** The buffer. */
     private byte[] buffer = new byte[BUF_SIZE];
@@ -51,7 +51,7 @@ public final class BufferedArrayInputStream extends DataInputStream {
     /** Object used to convert primitive types to bytes. */
     private Conversion conversion;
 
-    public BufferedArrayInputStream(LrmcInputStream in) {
+    public BufferedArrayInputStream(LRMCInputStream in) {
         this.in = in;
         conversion = Conversion.loadConversion(false);
     }
@@ -60,11 +60,11 @@ public final class BufferedArrayInputStream extends DataInputStream {
         return BUF_SIZE;
     }
 
-    public void setInputStream(LrmcInputStream in) {
+    public void setInputStream(LRMCInputStream in) {
         this.in = in;
     }
 
-    public LrmcInputStream getInputStream() {
+    public LRMCInputStream getInputStream() {
         return in;
     }
 

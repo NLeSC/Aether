@@ -18,7 +18,7 @@ import nl.esciencecenter.aether.AetherIdentifier;
  * This implementation of the {@link nl.esciencecenter.aether.AetherIdentifier} interface
  * identifies an Ibis instance on the network.
  */
-public final class MultiIbisIdentifier implements AetherIdentifier {
+public final class MultiAetherIdentifier implements AetherIdentifier {
     /**
      * Generated
      */
@@ -53,7 +53,7 @@ public final class MultiIbisIdentifier implements AetherIdentifier {
      * @param location location of this Ibis instance.
      * @param pool identifies the run with the registry.
      */
-    public MultiIbisIdentifier(String id, HashMap<String, nl.esciencecenter.aether.AetherIdentifier> idMap,
+    public MultiAetherIdentifier(String id, HashMap<String, nl.esciencecenter.aether.AetherIdentifier> idMap,
             byte[] registryData, Location location, String pool, byte[] applicationTag) {
         this.id = id;
         this.idMap = idMap;
@@ -69,7 +69,7 @@ public final class MultiIbisIdentifier implements AetherIdentifier {
      * @param codedForm the coded form.
      * @exception IOException is thrown in case of trouble.
      */
-    public MultiIbisIdentifier(byte[] codedForm) throws IOException {
+    public MultiAetherIdentifier(byte[] codedForm) throws IOException {
         this(codedForm, 0, codedForm.length);
     }
 
@@ -81,7 +81,7 @@ public final class MultiIbisIdentifier implements AetherIdentifier {
      * @param size size of the coded form.
      * @exception IOException is thrown in case of trouble.
      */
-    public MultiIbisIdentifier(byte[] codedForm, int offset, int size)
+    public MultiAetherIdentifier(byte[] codedForm, int offset, int size)
             throws IOException {
         this(new ObjectInputStream(
                 new ByteArrayInputStream(codedForm, offset, size)));
@@ -92,7 +92,7 @@ public final class MultiIbisIdentifier implements AetherIdentifier {
      * @param dis the input stream.
      * @exception IOException is thrown in case of trouble.
      */
-    public MultiIbisIdentifier(ObjectInputStream dis) throws IOException {
+    public MultiAetherIdentifier(ObjectInputStream dis) throws IOException {
         location = new Location(dis);
         pool = dis.readUTF();
         idMap = new HashMap<String, nl.esciencecenter.aether.AetherIdentifier>();
@@ -194,7 +194,7 @@ public final class MultiIbisIdentifier implements AetherIdentifier {
             return false;
         }
 
-        MultiIbisIdentifier other = (MultiIbisIdentifier) o;
+        MultiAetherIdentifier other = (MultiAetherIdentifier) o;
         return other.id.equals(id) && other.pool.equals(pool);
     }
 
@@ -231,10 +231,10 @@ public final class MultiIbisIdentifier implements AetherIdentifier {
      * @param c the Ibis identifier to compare to.
      */
     public int compareTo(nl.esciencecenter.aether.AetherIdentifier c) {
-        if (c instanceof MultiIbisIdentifier) {
+        if (c instanceof MultiAetherIdentifier) {
             // If not, the specified Ibis identifier is from a completely
             // different implementation.
-            MultiIbisIdentifier other = (MultiIbisIdentifier) c;
+            MultiAetherIdentifier other = (MultiAetherIdentifier) c;
             // First compare pools.
             int cmp = pool.compareTo(other.pool);
             if (cmp == 0) {

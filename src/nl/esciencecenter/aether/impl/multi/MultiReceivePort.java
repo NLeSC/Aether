@@ -43,7 +43,7 @@ public class MultiReceivePort implements ReceivePort {
 
     private final ArrayList<DowncallHandler>handlers = new ArrayList<DowncallHandler>();
 
-    private final MultiIbis ibis;
+    private final MultiAether ibis;
 
     private boolean handlersStarted;
 
@@ -142,7 +142,7 @@ public class MultiReceivePort implements ReceivePort {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public MultiReceivePort(PortType type, MultiIbis ibis,
+    public MultiReceivePort(PortType type, MultiAether ibis,
             String name, MessageUpcall upcall, ReceivePortConnectUpcall connectUpcall,
             Properties properties)
             throws IOException {

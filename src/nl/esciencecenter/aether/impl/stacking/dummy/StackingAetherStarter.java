@@ -1,6 +1,6 @@
-/* $Id: MultiIbisStarter.java 11529 2009-11-18 15:53:11Z ceriel $ */
+/* $Id: StackingIbisStarter.java 11529 2009-11-18 15:53:11Z ceriel $ */
 
-package nl.esciencecenter.aether.impl.multi;
+package nl.esciencecenter.aether.impl.stacking.dummy;
 
 
 import java.util.Properties;
@@ -11,19 +11,18 @@ import nl.esciencecenter.aether.Aether;
 import nl.esciencecenter.aether.Capabilities;
 import nl.esciencecenter.aether.CreationFailedException;
 import nl.esciencecenter.aether.AetherFactory;
-import nl.esciencecenter.aether.AetherStarter;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.RegistryEventHandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class MultiIbisStarter extends AetherStarter {
+public final class StackingAetherStarter extends nl.esciencecenter.aether.AetherStarter {
 
     static final Logger logger = LoggerFactory
-            .getLogger(MultiIbisStarter.class);
+            .getLogger(StackingAetherStarter.class);
 
-    public MultiIbisStarter(String nickName, String iplVersion,
+    public StackingAetherStarter(String nickName, String iplVersion,
             String implementationVersion) {
         super(nickName, iplVersion, implementationVersion);
     }
@@ -44,12 +43,9 @@ public final class MultiIbisStarter extends AetherStarter {
 
     public Aether startIbis(AetherFactory factory,
             RegistryEventHandler registryEventHandler,
-            Properties userProperties, Capabilities capabilities,
-            Credentials credentials, byte[] applicationTag, PortType[] portTypes,
-            String specifiedSubImplementation)
-            throws CreationFailedException {
-        return new MultiIbis(factory, registryEventHandler, userProperties,
-                capabilities, credentials, applicationTag, portTypes,
-                specifiedSubImplementation, this);
+            Properties userProperties, Capabilities capabilities,  Credentials credentials,
+            byte[] applicationTag, PortType[] portTypes, String specifiedSubImplementation) throws CreationFailedException {
+        return new StackingAether(factory, registryEventHandler,
+                userProperties, capabilities, credentials, applicationTag, portTypes, specifiedSubImplementation, this);
     }
 }

@@ -38,7 +38,7 @@ public class StackingSendPort implements SendPort {
         }
     }
     
-    public StackingSendPort(PortType type, StackingIbis ibis, String name,
+    public StackingSendPort(PortType type, StackingAether ibis, String name,
             SendPortDisconnectUpcall connectUpcall, Properties props) throws IOException {
 
         if (connectUpcall != null) {

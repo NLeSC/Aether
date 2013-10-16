@@ -36,13 +36,13 @@ import nl.esciencecenter.aether.util.TypedProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MultiIbis implements Aether {
+public class MultiAether implements Aether {
 
     /** Debugging output. */
     private static final Logger logger = LoggerFactory
-            .getLogger(MultiIbis.class);
+            .getLogger(MultiAether.class);
 
-    final MultiIbisIdentifier id;
+    final MultiAetherIdentifier id;
 
     public static final PortType resolvePortType = new PortType(
             PortType.COMMUNICATION_RELIABLE, PortType.CONNECTION_MANY_TO_ONE,
@@ -50,7 +50,7 @@ public class MultiIbis implements Aether {
 
     final HashMap<String, Aether> subIbisMap = new HashMap<String, Aether>();
 
-    private final HashMap<AetherIdentifier, MultiIbisIdentifier> idMap = new HashMap<AetherIdentifier, MultiIbisIdentifier>();
+    private final HashMap<AetherIdentifier, MultiAetherIdentifier> idMap = new HashMap<AetherIdentifier, MultiAetherIdentifier>();
 
     private final ArrayList<MultiSendPort> sendPorts = new ArrayList<MultiSendPort>();
 
@@ -75,11 +75,11 @@ public class MultiIbis implements Aether {
     final HashMap<String, MultiRegistryEventHandler> registryHandlerMap = new HashMap<String, MultiRegistryEventHandler>();
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public MultiIbis(AetherFactory factory,
+    public MultiAether(AetherFactory factory,
             RegistryEventHandler registryEventHandler,
             Properties userProperties, Capabilities capabilities,
             Credentials credentials, byte[] applicationTag, PortType[] portTypes,
-            String specifiedSubImplementation, MultiIbisStarter multiIbisStarter) {
+            String specifiedSubImplementation, MultiAetherStarter multiIbisStarter) {
         if (logger.isDebugEnabled()) {
             logger.debug("Constructing MultiIbis!");
         }
@@ -152,7 +152,7 @@ public class MultiIbis implements Aether {
 
         String poolName = userProperties.getProperty(AetherProperties.POOL_NAME);
         Location location = Location.defaultLocation(userProperties);
-        id = new MultiIbisIdentifier(UUID.randomUUID().toString(), subIdMap,
+        id = new MultiAetherIdentifier(UUID.randomUUID().toString(), subIdMap,
                 null, location, poolName, applicationTag);
 
         for (String ibisName : subIdMap.keySet()) {
@@ -277,9 +277,9 @@ public class MultiIbis implements Aether {
         return port;
     }
 
-    public MultiIbisIdentifier mapIdentifier(AetherIdentifier ibisId,
+    public MultiAetherIdentifier mapIdentifier(AetherIdentifier ibisId,
             String ibisName) throws IOException {
-        MultiIbisIdentifier id = idMap.get(ibisId);
+        MultiAetherIdentifier id = idMap.get(ibisId);
         while (id == null) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Attempting to resolve: " + ibisId);
@@ -344,7 +344,7 @@ public class MultiIbis implements Aether {
         return id;
     }
 
-    public void resolved(MultiIbisIdentifier id) {
+    public void resolved(MultiAetherIdentifier id) {
         for (String subIbisName : subIbisMap.keySet()) {
             AetherIdentifier subId = id.subIdForIbis(subIbisName);
             if (subId != null) {

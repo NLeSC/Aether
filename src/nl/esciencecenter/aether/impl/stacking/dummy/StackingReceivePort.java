@@ -61,7 +61,7 @@ public class StackingReceivePort implements ReceivePort {
         }
     }
     
-    public StackingReceivePort(PortType type, StackingIbis ibis,
+    public StackingReceivePort(PortType type, StackingAether ibis,
             String name, MessageUpcall upcall, ReceivePortConnectUpcall connectUpcall,
             Properties properties)
             throws IOException {

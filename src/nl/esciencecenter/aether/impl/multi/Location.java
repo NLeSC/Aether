@@ -21,7 +21,7 @@ import nl.esciencecenter.aether.util.TypedProperties;
 
 /**
  * Represents a location on which an Ibis instance runs. This is the
- * data type returned by {@link MultiIbisIdentifier#location()}.
+ * data type returned by {@link MultiAetherIdentifier#location()}.
  * It represents a number of levels, for instance hostname, domain,
  * in that order, t.i., from detailed to coarse.
  */

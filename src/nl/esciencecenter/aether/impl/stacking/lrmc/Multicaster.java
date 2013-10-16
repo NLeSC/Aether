@@ -7,8 +7,8 @@ import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.impl.stacking.lrmc.io.BufferedArrayInputStream;
 import nl.esciencecenter.aether.impl.stacking.lrmc.io.BufferedArrayOutputStream;
-import nl.esciencecenter.aether.impl.stacking.lrmc.io.LrmcInputStream;
-import nl.esciencecenter.aether.impl.stacking.lrmc.io.LrmcOutputStream;
+import nl.esciencecenter.aether.impl.stacking.lrmc.io.LRMCInputStream;
+import nl.esciencecenter.aether.impl.stacking.lrmc.io.LRMCOutputStream;
 import nl.esciencecenter.aether.impl.stacking.lrmc.io.MessageReceiver;
 import nl.esciencecenter.aether.impl.stacking.lrmc.util.Message;
 import nl.esciencecenter.aether.impl.stacking.lrmc.util.MessageCache;
@@ -29,7 +29,7 @@ public class Multicaster implements MessageReceiver {
     final PortType portType;
     final String name;
 
-    private LrmcOutputStream os;
+    private LRMCOutputStream os;
 
     BufferedArrayOutputStream bout;
     BufferedArrayInputStream bin;
@@ -50,10 +50,10 @@ public class Multicaster implements MessageReceiver {
 
     private AetherIdentifier[] destination = null;
 
-    LrmcSendPort sendPort = null;
-    LrmcReceivePort receivePort = null;
+    LRMCSendPort sendPort = null;
+    LRMCReceivePort receivePort = null;
 
-    public Multicaster(LrmcIbis ibis, PortType type, String name)
+    public Multicaster(LRMCAether ibis, PortType type, String name)
             throws IOException {
         TypedProperties tp = new TypedProperties(ibis.properties());
         this.MESSAGE_SIZE = tp.getIntProperty("lrmc.messageSize", 8 * 1024);
@@ -64,7 +64,7 @@ public class Multicaster implements MessageReceiver {
 
         lrmc = new LabelRoutingMulticast(ibis, this, cache, name);
 
-        os = new LrmcOutputStream(lrmc, cache);
+        os = new LRMCOutputStream(lrmc, cache);
 
         bout = new BufferedArrayOutputStream(os, MESSAGE_SIZE);
         bin = new BufferedArrayInputStream(null);
@@ -100,7 +100,7 @@ public class Multicaster implements MessageReceiver {
 
     public boolean gotMessage(Message m) {
 
-        LrmcInputStream tmp;
+        LRMCInputStream tmp;
 
         // Fix: combined find call and add call into get().
         // There was a race here. (Ceriel)
@@ -133,14 +133,14 @@ public class Multicaster implements MessageReceiver {
         return lastBytesWritten;
     }
 
-    long finalizeRead(LrmcInputStream stream) {
+    long finalizeRead(LRMCInputStream stream) {
         inputStreams.returnStream(stream);
         long sz = bin.bytesRead();
         totalData += sz;
         return sz;
     }
 
-    public LrmcReadMessage receive() {
+    public LRMCReadMessage receive() {
         synchronized (this) {
             if (finish) {
                 return null;
@@ -148,9 +148,9 @@ public class Multicaster implements MessageReceiver {
             receiverDone = false;
             receiver = Thread.currentThread();
         }
-        LrmcReadMessage o;
+        LRMCReadMessage o;
         try {
-            LrmcInputStream stream = inputStreams.getNextFilledStream();
+            LRMCInputStream stream = inputStreams.getNextFilledStream();
 
             if (stream == null) {
                 return null;
@@ -160,7 +160,7 @@ public class Multicaster implements MessageReceiver {
             bin.setInputStream(stream);
             bin.resetBytesRead();
 
-            o = new LrmcReadMessage(this, stream);
+            o = new LRMCReadMessage(this, stream);
         } finally {
             synchronized (this) {
                 receiverDone = true;

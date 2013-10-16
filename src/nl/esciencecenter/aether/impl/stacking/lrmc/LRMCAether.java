@@ -31,10 +31,10 @@ import nl.esciencecenter.aether.impl.stacking.lrmc.util.DynamicObjectArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LrmcIbis implements Aether {
+public class LRMCAether implements Aether {
 
     private static final Logger logger = LoggerFactory
-            .getLogger(LrmcIbis.class);
+            .getLogger(LRMCAether.class);
 
     static final PortType additionalPortType = new PortType(
             PortType.SERIALIZATION_DATA, PortType.COMMUNICATION_RELIABLE,
@@ -43,9 +43,9 @@ public class LrmcIbis implements Aether {
     private static class EventHandler implements RegistryEventHandler {
         RegistryEventHandler h;
 
-        LrmcIbis ibis;
+        LRMCAether ibis;
 
-        EventHandler(RegistryEventHandler h, LrmcIbis ibis) {
+        EventHandler(RegistryEventHandler h, LRMCAether ibis) {
             this.h = h;
             this.ibis = ibis;
         }
@@ -114,11 +114,11 @@ public class LrmcIbis implements Aether {
 
     HashMap<String, Multicaster> multicasters = new HashMap<String, Multicaster>();
 
-    public LrmcIbis(AetherFactory factory,
+    public LRMCAether(AetherFactory factory,
             RegistryEventHandler registryEventHandler,
             Properties userProperties, Capabilities capabilities,
             Credentials credentials, byte[] applicationTag, PortType[] portTypes,
-            String specifiedSubImplementation, LrmcIbisStarter lrmcIbisStarter)
+            String specifiedSubImplementation, LRMCAetherStarter lrmcIbisStarter)
             throws CreationFailedException {
         List<PortType> requiredPortTypes = new ArrayList<PortType>();
         logger.info("Constructor LRMC Ibis");
@@ -248,7 +248,7 @@ public class LrmcIbis implements Aether {
                     throw new IOException(
                             "A sendport with the same name already exists");
                 }
-                mc.sendPort = new LrmcSendPort(mc, this, props);
+                mc.sendPort = new LRMCSendPort(mc, this, props);
                 return mc.sendPort;
             }
         }
@@ -283,7 +283,7 @@ public class LrmcIbis implements Aether {
                     throw new IOException(
                             "A receiveport with the same name already exists");
                 }
-                mc.receivePort = new LrmcReceivePort(mc, this, u, props);
+                mc.receivePort = new LRMCReceivePort(mc, this, u, props);
                 return mc.receivePort;
             }
         }

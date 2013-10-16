@@ -11,10 +11,10 @@ import nl.esciencecenter.aether.impl.stacking.lrmc.util.MessageCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LrmcOutputStream extends OutputStream {
+public class LRMCOutputStream extends OutputStream {
 
     private static final Logger logger = LoggerFactory
-            .getLogger(LrmcOutputStream.class);
+            .getLogger(LRMCOutputStream.class);
 
     private final LabelRoutingMulticast mcast;
     private final MessageCache cache;
@@ -27,7 +27,7 @@ public class LrmcOutputStream extends OutputStream {
 
     private Message message;
 
-    public LrmcOutputStream(LabelRoutingMulticast mcast, MessageCache cache) {
+    public LRMCOutputStream(LabelRoutingMulticast mcast, MessageCache cache) {
         this.mcast = mcast;
         this.cache = cache;
         message = cache.get();

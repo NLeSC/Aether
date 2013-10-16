@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 
 //import mcast.lrm.ByteArrayCache;
 
-public class LrmcInputStream extends InputStream {
+public class LRMCInputStream extends InputStream {
 
     private static final Logger logger = LoggerFactory
-            .getLogger(LrmcInputStream.class);
+            .getLogger(LRMCInputStream.class);
 
     private final int source;
 
@@ -37,7 +37,7 @@ public class LrmcInputStream extends InputStream {
 
     private MessageCache cache;
 
-    public LrmcInputStream(int source, MessageCache cache) {
+    public LRMCInputStream(int source, MessageCache cache) {
         this.source = source;
         this.cache = cache;
     }

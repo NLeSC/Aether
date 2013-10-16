@@ -1,7 +1,7 @@
 package nl.esciencecenter.aether.impl.stacking.lrmc;
 
 
-import nl.esciencecenter.aether.impl.stacking.lrmc.io.LrmcInputStream;
+import nl.esciencecenter.aether.impl.stacking.lrmc.io.LRMCInputStream;
 import nl.esciencecenter.aether.impl.stacking.lrmc.util.Message;
 import nl.esciencecenter.aether.impl.stacking.lrmc.util.MessageCache;
 
@@ -14,7 +14,7 @@ public class InputStreams {
 
     private static final Logger logger = LoggerFactory.getLogger(InputStreams.class);
 
-    private LrmcInputStream[] inputStreams = new LrmcInputStream[DEFAULT_SIZE];
+    private LRMCInputStream[] inputStreams = new LRMCInputStream[DEFAULT_SIZE];
 
     private boolean[] hasData = new boolean[DEFAULT_SIZE];
 
@@ -28,7 +28,7 @@ public class InputStreams {
 
     private boolean finish = false;
 
-    private void add(LrmcInputStream is, int sender) {
+    private void add(LRMCInputStream is, int sender) {
         if (sender >= inputStreams.length) {
             resize(sender);
         }
@@ -56,7 +56,7 @@ public class InputStreams {
             newSize *= 2;
         }
 
-        LrmcInputStream[] tmp1 = new LrmcInputStream[newSize];
+        LRMCInputStream[] tmp1 = new LRMCInputStream[newSize];
         System.arraycopy(inputStreams, 0, tmp1, 0, inputStreams.length);
         inputStreams = tmp1;
 
@@ -69,16 +69,16 @@ public class InputStreams {
         busy = tmp3;
     }
 
-    public synchronized LrmcInputStream get(int sender, MessageCache cache) {
-        LrmcInputStream tmp = find(sender);
+    public synchronized LRMCInputStream get(int sender, MessageCache cache) {
+        LRMCInputStream tmp = find(sender);
         if (tmp == null) {
-            tmp = new LrmcInputStream(sender, cache);
+            tmp = new LRMCInputStream(sender, cache);
             add(tmp, sender);
         }
         return tmp;
     }
 
-    private LrmcInputStream find(int sender) {
+    private LRMCInputStream find(int sender) {
         if (sender < 0 || sender > last) {
             return null;
         }
@@ -86,7 +86,7 @@ public class InputStreams {
         return inputStreams[sender];
     }
 
-    public synchronized void returnStream(LrmcInputStream is) {
+    public synchronized void returnStream(LRMCInputStream is) {
         busy[is.getSource()] = false;
         if (is.haveData()) {
             if (logger.isDebugEnabled()) {
@@ -102,7 +102,7 @@ public class InputStreams {
         }
     }
 
-    public synchronized boolean hasData(LrmcInputStream is, Message m) {
+    public synchronized boolean hasData(LRMCInputStream is, Message m) {
         if (is.addMessage(m)) {
             hasData(is);
             return true;
@@ -110,7 +110,7 @@ public class InputStreams {
         return false;
     }
 
-    public synchronized void hasData(LrmcInputStream is) {
+    public synchronized void hasData(LRMCInputStream is) {
         int src = is.getSource();
         if (!hasData[src] && !busy[src]) {
             // Fix: Test before setting and incrementing counter (Ceriel)
@@ -132,7 +132,7 @@ public class InputStreams {
         }
     }
 
-    public synchronized LrmcInputStream getNextFilledStream() {
+    public synchronized LRMCInputStream getNextFilledStream() {
 
         while (!finish && streamsWithData == 0) {
             try {

@@ -23,19 +23,19 @@ public class MultiRegistry implements Registry{
 
     private static final Logger logger = LoggerFactory.getLogger(MultiRegistry.class);
 
-    private final MultiIbis ibis;
+    private final MultiAether ibis;
 
     private final ManageableMapper ManageableMapper;
 
     private final HashMap<String, Registry>subRegistries;
 
-    final Map<MultiIbisIdentifier, MultiIbisIdentifier>joined = Collections.synchronizedMap(new HashMap<MultiIbisIdentifier, MultiIbisIdentifier>());
-    final Map<MultiIbisIdentifier, MultiIbisIdentifier>left = Collections.synchronizedMap(new HashMap<MultiIbisIdentifier, MultiIbisIdentifier>());
-    final Map<MultiIbisIdentifier, MultiIbisIdentifier>died = Collections.synchronizedMap(new HashMap<MultiIbisIdentifier, MultiIbisIdentifier>());
-    final Map<String, MultiIbisIdentifier>elected = Collections.synchronizedMap(new HashMap<String, MultiIbisIdentifier>());
+    final Map<MultiAetherIdentifier, MultiAetherIdentifier>joined = Collections.synchronizedMap(new HashMap<MultiAetherIdentifier, MultiAetherIdentifier>());
+    final Map<MultiAetherIdentifier, MultiAetherIdentifier>left = Collections.synchronizedMap(new HashMap<MultiAetherIdentifier, MultiAetherIdentifier>());
+    final Map<MultiAetherIdentifier, MultiAetherIdentifier>died = Collections.synchronizedMap(new HashMap<MultiAetherIdentifier, MultiAetherIdentifier>());
+    final Map<String, MultiAetherIdentifier>elected = Collections.synchronizedMap(new HashMap<String, MultiAetherIdentifier>());
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public MultiRegistry(MultiIbis multiIbis) {
+    public MultiRegistry(MultiAether multiIbis) {
         this.ibis = multiIbis;
         subRegistries = new HashMap<String, Registry>();
         for (String ibisName:ibis.subIbisMap.keySet()) {
@@ -51,7 +51,7 @@ public class MultiRegistry implements Registry{
     public void assumeDead(AetherIdentifier ibisIdentifier) throws IOException {
         for(String ibisName:subRegistries.keySet()) {
             Registry subRegistry = subRegistries.get(ibisName);
-            subRegistry.assumeDead(((MultiIbisIdentifier)ibisIdentifier).subIdForIbis(ibisName));
+            subRegistry.assumeDead(((MultiAetherIdentifier)ibisIdentifier).subIdForIbis(ibisName));
         }
     }
 
@@ -86,10 +86,10 @@ public class MultiRegistry implements Registry{
         private final Registry subRegistry;
         private final String electionName;
         private final long timeoutMillis;
-        private final List<IbisIdentifierWrapper>elected;
+        private final List<AetherIdentifierWrapper>elected;
         private final String ibisName;
 
-        public ElectionRunner(String ibisName, Registry subRegistry, List<IbisIdentifierWrapper>elected, String electionName, long timeoutMillis) {
+        public ElectionRunner(String ibisName, Registry subRegistry, List<AetherIdentifierWrapper>elected, String electionName, long timeoutMillis) {
             this.subRegistry = subRegistry;
             this.electionName = electionName;
             this.timeoutMillis = timeoutMillis;
@@ -109,7 +109,7 @@ public class MultiRegistry implements Registry{
             }
             synchronized(elected) {
                 if (winner != null) {
-                    elected.add(new IbisIdentifierWrapper(ibisName, winner));
+                    elected.add(new AetherIdentifierWrapper(ibisName, winner));
                 }
                 elected.notify();
             }
@@ -121,7 +121,7 @@ public class MultiRegistry implements Registry{
         if (subRegistries.size() > 0) {
             // TODO: Need to kick off these elections in parallel
             // TODO This is dumb stupid election management that wont work a lot of the time
-            final List<IbisIdentifierWrapper>elected = new ArrayList<IbisIdentifierWrapper>();
+            final List<AetherIdentifierWrapper>elected = new ArrayList<AetherIdentifierWrapper>();
             synchronized (elected) {
                 for (String ibisName: subRegistries.keySet()) {
                     Registry subRegistry = subRegistries.get(ibisName);
@@ -271,7 +271,7 @@ public class MultiRegistry implements Registry{
         for(String ibisName:subRegistries.keySet()) {
             Registry subRegistry = subRegistries.get(ibisName);
             for (int i=0; i<ids.length; i++) {
-                ids[i] = ((MultiIbisIdentifier)ibisIdentifiers[i]).subIdForIbis(ibisName);
+                ids[i] = ((MultiAetherIdentifier)ibisIdentifiers[i]).subIdForIbis(ibisName);
             }
             subRegistry.signal(signal, ids);
         }

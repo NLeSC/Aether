@@ -8,16 +8,16 @@ import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.WriteMessage;
 import nl.esciencecenter.aether.io.SerializationOutput;
 
-public class LrmcWriteMessage implements WriteMessage {
+public class LRMCWriteMessage implements WriteMessage {
 
     boolean isFinished = false;
     Multicaster om;
     long count = 0;
     SerializationOutput out;
-    LrmcSendPort port;
+    LRMCSendPort port;
     AetherIdentifier[] destinations;
 
-    public LrmcWriteMessage(LrmcSendPort port, Multicaster om,
+    public LRMCWriteMessage(LRMCSendPort port, Multicaster om,
             AetherIdentifier[] dests) throws IOException {
         this.om = om;
         this.out = om.sout;

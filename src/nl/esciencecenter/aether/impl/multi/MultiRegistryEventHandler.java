@@ -10,13 +10,13 @@ public class MultiRegistryEventHandler implements RegistryEventHandler {
 
     private final RegistryEventHandler subHandler;
 
-    private final MultiIbis ibis;
+    private final MultiAether ibis;
 
     private MultiRegistry registry;
 
     private String ibisName;
 
-    public MultiRegistryEventHandler(MultiIbis ibis,
+    public MultiRegistryEventHandler(MultiAether ibis,
             RegistryEventHandler subHandler) {
         this.ibis = ibis;
         this.subHandler = subHandler;
@@ -31,7 +31,7 @@ public class MultiRegistryEventHandler implements RegistryEventHandler {
             }
         }
         try {
-            MultiIbisIdentifier id = ibis.mapIdentifier(corpse, ibisName);
+            MultiAetherIdentifier id = ibis.mapIdentifier(corpse, ibisName);
             if (!registry.died.containsKey(id)) {
                 registry.died.put(id, id);
                 subHandler.died(id);
@@ -51,12 +51,12 @@ public class MultiRegistryEventHandler implements RegistryEventHandler {
             }
         }
         try {
-            MultiIbisIdentifier id = ibis.mapIdentifier(winner, ibisName);
+            MultiAetherIdentifier id = ibis.mapIdentifier(winner, ibisName);
             if (!registry.elected.containsKey(electionName)) {
                 registry.elected.put(electionName, id);
                 subHandler.electionResult(electionName, id);
             } else {
-                MultiIbisIdentifier oldWinner = registry.elected
+                MultiAetherIdentifier oldWinner = registry.elected
                         .get(electionName);
                 if (!oldWinner.equals(id)) {
                     registry.elected.put(electionName, id);
@@ -81,7 +81,7 @@ public class MultiRegistryEventHandler implements RegistryEventHandler {
             }
         }
         try {
-            MultiIbisIdentifier id = ibis.mapIdentifier(joinedIbis, ibisName);
+            MultiAetherIdentifier id = ibis.mapIdentifier(joinedIbis, ibisName);
             if (!registry.joined.containsKey(id)) {
                 registry.joined.put(id, id);
                 subHandler.joined(id);
@@ -100,7 +100,7 @@ public class MultiRegistryEventHandler implements RegistryEventHandler {
             }
         }
         try {
-            MultiIbisIdentifier id = ibis.mapIdentifier(leftIbis, ibisName);
+            MultiAetherIdentifier id = ibis.mapIdentifier(leftIbis, ibisName);
             if (!registry.left.containsKey(id)) {
                 registry.left.put(id, id);
                 subHandler.left(id);

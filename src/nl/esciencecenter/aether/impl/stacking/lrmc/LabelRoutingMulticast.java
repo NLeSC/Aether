@@ -12,7 +12,7 @@ import nl.esciencecenter.aether.SendPort;
 import nl.esciencecenter.aether.WriteMessage;
 import nl.esciencecenter.aether.impl.stacking.lrmc.io.MessageReceiver;
 import nl.esciencecenter.aether.impl.stacking.lrmc.util.DynamicObjectArray;
-import nl.esciencecenter.aether.impl.stacking.lrmc.util.IbisSorter;
+import nl.esciencecenter.aether.impl.stacking.lrmc.util.AetherSorter;
 import nl.esciencecenter.aether.impl.stacking.lrmc.util.Message;
 import nl.esciencecenter.aether.impl.stacking.lrmc.util.MessageCache;
 import nl.esciencecenter.aether.impl.stacking.lrmc.util.MessageQueue;
@@ -28,7 +28,7 @@ public class LabelRoutingMulticast extends Thread implements MessageUpcall {
     private static final Logger logger = LoggerFactory
             .getLogger(LabelRoutingMulticast.class);
 
-    final LrmcIbis ibis;
+    final LRMCAether ibis;
 
     private final String name;
 
@@ -49,7 +49,7 @@ public class LabelRoutingMulticast extends Thread implements MessageUpcall {
 
     private MessageQueue sendQueue;
 
-    public LabelRoutingMulticast(LrmcIbis ibis, MessageReceiver m,
+    public LabelRoutingMulticast(LRMCAether ibis, MessageReceiver m,
             MessageCache c, String name) throws IOException {
         this.ibis = ibis;
         this.receiver = m;
@@ -58,7 +58,7 @@ public class LabelRoutingMulticast extends Thread implements MessageUpcall {
         this.sendQueue = new MessageQueue(
                 new TypedProperties(ibis.properties()).getIntProperty(
                         "lrmc.queueSize", 256));
-        receive = ibis.base.createReceivePort(LrmcIbis.additionalPortType, "LRMCRing-"
+        receive = ibis.base.createReceivePort(LRMCAether.additionalPortType, "LRMCRing-"
                 + name, this);
         receive.enableConnections();
         receive.enableMessageUpcalls();
@@ -114,7 +114,7 @@ public class LabelRoutingMulticast extends Thread implements MessageUpcall {
             AetherIdentifier ibisID = null;
 
             try {
-                sp = ibis.base.createSendPort(LrmcIbis.additionalPortType);
+                sp = ibis.base.createSendPort(LRMCAether.additionalPortType);
                 ibisID = ibis.getId(id);
 
                 if (ibisID != null) {
@@ -226,7 +226,7 @@ public class LabelRoutingMulticast extends Thread implements MessageUpcall {
 
         // We are allowed to change the order of machines in the destination
         // array. This can be used to make the mcast 'cluster aware'.
-        IbisSorter.sort(ibis.identifier(), destinations);
+        AetherSorter.sort(ibis.identifier(), destinations);
 
         this.destinations = new int[destinations.length];
 

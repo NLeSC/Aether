@@ -31,7 +31,7 @@ public final class BufferedArrayOutputStream extends DataOutputStream {
     private static boolean DEBUG = false;
 
     /** The underlying <code>OutputStream</code>. */
-    private LrmcOutputStream out;
+    private LRMCOutputStream out;
 
     /** The buffer in which output data is collected. */
     private byte[] buffer;
@@ -56,7 +56,7 @@ public final class BufferedArrayOutputStream extends DataOutputStream {
      * @param bufsz
      *            the buffer size.
      */
-    public BufferedArrayOutputStream(LrmcOutputStream out, int bufsz) {
+    public BufferedArrayOutputStream(LRMCOutputStream out, int bufsz) {
         this.out = out;
         this.buffer = out.getBuffer();
         this.BUF_SIZE = bufsz;

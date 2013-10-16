@@ -7,15 +7,15 @@ import java.util.Comparator;
 import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.Location;
 
-public class IbisSorter implements Comparator<AetherIdentifier> {
+public class AetherSorter implements Comparator<AetherIdentifier> {
 
     // General sorter to use when no cluster order is preferred.
-    private static final IbisSorter sorter = new IbisSorter("unknown", null);
+    private static final AetherSorter sorter = new AetherSorter("unknown", null);
 
     private final String preferredCluster;
     private final String preferredName;
 
-    private IbisSorter(String preferredCluster, String preferredName) {
+    private AetherSorter(String preferredCluster, String preferredName) {
         this.preferredCluster = preferredCluster;
         this.preferredName = preferredName;
     }

@@ -22,16 +22,16 @@ import nl.esciencecenter.aether.RegistryEventHandler;
 import nl.esciencecenter.aether.SendPort;
 import nl.esciencecenter.aether.SendPortDisconnectUpcall;
 
-public class StackingIbis implements Aether {
+public class StackingAether implements Aether {
 
     Aether base;
 
-    public StackingIbis(AetherFactory factory,
+    public StackingAether(AetherFactory factory,
             RegistryEventHandler registryEventHandler,
             Properties userProperties, Capabilities capabilities,
             Credentials credentials, byte[] applicationTag, PortType[] portTypes,
             String specifiedSubImplementation,
-            StackingIbisStarter stackingIbisStarter)
+            StackingAetherStarter stackingIbisStarter)
             throws CreationFailedException {
         base = factory.createIbis(registryEventHandler, capabilities,
                 userProperties, credentials, applicationTag, portTypes,

@@ -1,6 +1,6 @@
-/* $Id: StackingIbisStarter.java 11529 2009-11-18 15:53:11Z ceriel $ */
+/* $Id: LrmcIbisStarter.java 11529 2009-11-18 15:53:11Z ceriel $ */
 
-package nl.esciencecenter.aether.impl.stacking.dummy;
+package nl.esciencecenter.aether.impl.stacking.lrmc;
 
 
 import java.util.Properties;
@@ -17,17 +17,18 @@ import nl.esciencecenter.aether.RegistryEventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class StackingIbisStarter extends nl.esciencecenter.aether.AetherStarter {
+public final class LRMCAetherStarter extends nl.esciencecenter.aether.AetherStarter {
 
     static final Logger logger = LoggerFactory
-            .getLogger(StackingIbisStarter.class);
+            .getLogger("ibis.ipl.impl.stacking.lrmc.LrmcIbisStarter");
 
-    public StackingIbisStarter(String nickName, String iplVersion,
+    public LRMCAetherStarter(String nickName, String iplVersion,
             String implementationVersion) {
         super(nickName, iplVersion, implementationVersion);
     }
 
     public boolean matches(Capabilities capabilities, PortType[] types) {
+        //pretend we can do everything
         return true;
     }
 
@@ -43,9 +44,9 @@ public final class StackingIbisStarter extends nl.esciencecenter.aether.AetherSt
 
     public Aether startIbis(AetherFactory factory,
             RegistryEventHandler registryEventHandler,
-            Properties userProperties, Capabilities capabilities,  Credentials credentials,
+            Properties userProperties, Capabilities capabilities, Credentials credentials,
             byte[] applicationTag, PortType[] portTypes, String specifiedSubImplementation) throws CreationFailedException {
-        return new StackingIbis(factory, registryEventHandler,
+        return new LRMCAether(factory, registryEventHandler,
                 userProperties, capabilities, credentials, applicationTag, portTypes, specifiedSubImplementation, this);
     }
 }

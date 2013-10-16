@@ -62,7 +62,7 @@ public class StackingReceivePort implements ReceivePort {
         }
     }
 
-    public StackingReceivePort(PortType type, LrmcIbis ibis, String name,
+    public StackingReceivePort(PortType type, LRMCAether ibis, String name,
             MessageUpcall upcall, ReceivePortConnectUpcall connectUpcall,
             Properties properties) throws IOException {
         if (connectUpcall != null) {

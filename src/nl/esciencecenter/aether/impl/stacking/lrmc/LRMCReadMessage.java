@@ -9,20 +9,20 @@ import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.ReadMessage;
 import nl.esciencecenter.aether.ReceivePort;
 import nl.esciencecenter.aether.SendPortIdentifier;
-import nl.esciencecenter.aether.impl.stacking.lrmc.io.LrmcInputStream;
+import nl.esciencecenter.aether.impl.stacking.lrmc.io.LRMCInputStream;
 import nl.esciencecenter.aether.io.SerializationInput;
 import nl.esciencecenter.aether.util.ThreadPool;
 
-public class LrmcReadMessage implements ReadMessage {
+public class LRMCReadMessage implements ReadMessage {
 
     SerializationInput in;
     boolean isFinished = false;
     Multicaster om;
     long count = 0;
-    LrmcInputStream stream;
+    LRMCInputStream stream;
     private boolean inUpcall = false;
 
-    public LrmcReadMessage(Multicaster om, LrmcInputStream stream) {
+    public LRMCReadMessage(Multicaster om, LRMCInputStream stream) {
         this.in = om.sin;
         this.om = om;
         this.stream = stream;
@@ -42,7 +42,7 @@ public class LrmcReadMessage implements ReadMessage {
     public SendPortIdentifier origin() {
         int source = om.bin.getInputStream().getSource();
         AetherIdentifier id = om.lrmc.ibis.getId(source);
-        return new LrmcSendPortIdentifier(id, om.name);
+        return new LRMCSendPortIdentifier(id, om.name);
     }
 
     protected int available() throws IOException {

@@ -17,20 +17,20 @@ import nl.esciencecenter.aether.ReceiveTimedOutException;
 import nl.esciencecenter.aether.SendPortIdentifier;
 import nl.esciencecenter.aether.util.ThreadPool;
 
-public class LrmcReceivePort implements nl.esciencecenter.aether.ReceivePort, Runnable {
+public class LRMCReceivePort implements nl.esciencecenter.aether.ReceivePort, Runnable {
 
-    private final LrmcReceivePortIdentifier identifier;
+    private final LRMCReceivePortIdentifier identifier;
     private final MessageUpcall upcall;
     private final Multicaster om;
-    private LrmcReadMessage message = null;
+    private LRMCReadMessage message = null;
     private boolean closed = false;
     private boolean messageIsAvailable = false;
     private boolean upcallsEnabled = false;
     
-    public LrmcReceivePort(Multicaster om, LrmcIbis ibis, MessageUpcall upcall,
+    public LRMCReceivePort(Multicaster om, LRMCAether ibis, MessageUpcall upcall,
             Properties properties) throws IOException {
         this.om = om;
-        identifier = new LrmcReceivePortIdentifier(ibis.identifier(), om.name);
+        identifier = new LRMCReceivePortIdentifier(ibis.identifier(), om.name);
         this.upcall = upcall;
         if (upcall != null
                 && !om.portType.hasCapability(PortType.RECEIVE_AUTO_UPCALLS)) {
@@ -178,7 +178,7 @@ public class LrmcReceivePort implements nl.esciencecenter.aether.ReceivePort, Ru
         notifyAll();
     }
     
-    private boolean doUpcall(LrmcReadMessage msg) {
+    private boolean doUpcall(LRMCReadMessage msg) {
         synchronized(this) {
             // Wait until upcalls are enabled.
             while (! upcallsEnabled) {
@@ -229,7 +229,7 @@ public class LrmcReceivePort implements nl.esciencecenter.aether.ReceivePort, Ru
             if (closed) {
                 return;
             }
-            LrmcReadMessage m = om.receive();
+            LRMCReadMessage m = om.receive();
             if (m == null) {
                 return;
             }

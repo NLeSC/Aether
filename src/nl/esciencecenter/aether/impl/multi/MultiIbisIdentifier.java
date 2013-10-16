@@ -12,13 +12,13 @@ import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 
 /**
- * This implementation of the {@link nl.esciencecenter.aether.IbisIdentifier} interface
+ * This implementation of the {@link nl.esciencecenter.aether.AetherIdentifier} interface
  * identifies an Ibis instance on the network.
  */
-public final class MultiIbisIdentifier implements IbisIdentifier {
+public final class MultiIbisIdentifier implements AetherIdentifier {
     /**
      * Generated
      */
@@ -40,7 +40,7 @@ public final class MultiIbisIdentifier implements IbisIdentifier {
     /** An Ibis identifier coded as a byte array. Computed once. */
     private transient byte[] codedForm;
 
-    private final HashMap<String, IbisIdentifier>idMap;
+    private final HashMap<String, AetherIdentifier>idMap;
 
     /** The application tag for this multi ibis instance */
     private byte[] tag;
@@ -53,7 +53,7 @@ public final class MultiIbisIdentifier implements IbisIdentifier {
      * @param location location of this Ibis instance.
      * @param pool identifies the run with the registry.
      */
-    public MultiIbisIdentifier(String id, HashMap<String, nl.esciencecenter.aether.IbisIdentifier> idMap,
+    public MultiIbisIdentifier(String id, HashMap<String, nl.esciencecenter.aether.AetherIdentifier> idMap,
             byte[] registryData, Location location, String pool, byte[] applicationTag) {
         this.id = id;
         this.idMap = idMap;
@@ -95,12 +95,12 @@ public final class MultiIbisIdentifier implements IbisIdentifier {
     public MultiIbisIdentifier(ObjectInputStream dis) throws IOException {
         location = new Location(dis);
         pool = dis.readUTF();
-        idMap = new HashMap<String, nl.esciencecenter.aether.IbisIdentifier>();
+        idMap = new HashMap<String, nl.esciencecenter.aether.AetherIdentifier>();
         int subCount = dis.readInt();
         for (int i = 0; i < subCount; i++) {
             try {
                 String impl = dis.readUTF();
-                nl.esciencecenter.aether.IbisIdentifier ibisId = (nl.esciencecenter.aether.IbisIdentifier)dis.readObject();
+                nl.esciencecenter.aether.AetherIdentifier ibisId = (nl.esciencecenter.aether.AetherIdentifier)dis.readObject();
                 idMap.put(impl, ibisId);
             } catch (ClassNotFoundException e) {
                 // TODO should we be ignoring this?
@@ -230,7 +230,7 @@ public final class MultiIbisIdentifier implements IbisIdentifier {
      * Compare to the specified Ibis identifier.
      * @param c the Ibis identifier to compare to.
      */
-    public int compareTo(nl.esciencecenter.aether.IbisIdentifier c) {
+    public int compareTo(nl.esciencecenter.aether.AetherIdentifier c) {
         if (c instanceof MultiIbisIdentifier) {
             // If not, the specified Ibis identifier is from a completely
             // different implementation.
@@ -269,7 +269,7 @@ public final class MultiIbisIdentifier implements IbisIdentifier {
         return tag;
     }
 
-    public IbisIdentifier subIdForIbis(String ibisName) {
+    public AetherIdentifier subIdForIbis(String ibisName) {
         return idMap.get(ibisName);
     }
 }

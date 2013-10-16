@@ -10,7 +10,7 @@ import java.util.Properties;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortConnectUpcall;
-import nl.esciencecenter.aether.impl.Ibis;
+import nl.esciencecenter.aether.impl.Aether;
 import nl.esciencecenter.aether.impl.ReadMessage;
 import nl.esciencecenter.aether.impl.ReceivePort;
 import nl.esciencecenter.aether.impl.ReceivePortConnectionInfo;
@@ -247,7 +247,7 @@ class SmartSocketsReceivePort extends ReceivePort implements SmartSocketsProtoco
 
     private boolean reader_busy = false;    
 
-    SmartSocketsReceivePort(Ibis ibis, PortType type, String name, MessageUpcall upcall,
+    SmartSocketsReceivePort(Aether ibis, PortType type, String name, MessageUpcall upcall,
             ReceivePortConnectUpcall connUpcall, Properties props) throws IOException {
         super(ibis, type, name, upcall, connUpcall, props);
 

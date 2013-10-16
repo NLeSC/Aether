@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ReadOnlyBufferException;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.ReadMessage;
 import nl.esciencecenter.aether.ReceivePort;
 import nl.esciencecenter.aether.SendPortIdentifier;
@@ -41,7 +41,7 @@ public class LrmcReadMessage implements ReadMessage {
 
     public SendPortIdentifier origin() {
         int source = om.bin.getInputStream().getSource();
-        IbisIdentifier id = om.lrmc.ibis.getId(source);
+        AetherIdentifier id = om.lrmc.ibis.getId(source);
         return new LrmcSendPortIdentifier(id, om.name);
     }
 

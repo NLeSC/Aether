@@ -1,6 +1,6 @@
 package nl.esciencecenter.aether.server;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.support.management.AttributeDescription;
 
 /**
@@ -19,7 +19,7 @@ public interface ManagementServiceInterface {
      * @return the attributes.
      * @throws Exception is thrown in case of trouble.
      */
-    public abstract Object[] getAttributes(IbisIdentifier ibis,
+    public abstract Object[] getAttributes(AetherIdentifier ibis,
             AttributeDescription... descriptions) throws Exception;
 
 }

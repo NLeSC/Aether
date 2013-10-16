@@ -16,7 +16,7 @@ import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
 import nl.esciencecenter.aether.ReceivePort;
 import nl.esciencecenter.aether.ReceivePortIdentifier;
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.impl.SendPortIdentifier;
 import nl.esciencecenter.aether.util.ThreadPool;
 
@@ -177,10 +177,10 @@ public class SmartSocketsUltraLightReceivePort implements ReceivePort, CallBack,
 			return;
 		}
 
-		IbisIdentifier source = null;
+		AetherIdentifier source = null;
 
 		try { 
-			source = new IbisIdentifier(message[0]);
+			source = new AetherIdentifier(message[0]);
 	
 			if (logger.isDebugEnabled()) {
 				logger.debug("Message was send by " + source);

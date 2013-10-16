@@ -6,7 +6,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.io.Serializable;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ public final class Member implements Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(Member.class);
 
-    private final IbisIdentifier ibis;
+    private final AetherIdentifier ibis;
 
     private final Event event;
 
@@ -27,7 +27,7 @@ public final class Member implements Serializable {
     // or when it was last reported to be dead (client) 
     private long time;
 
-    public Member(IbisIdentifier ibis, Event event) {
+    public Member(AetherIdentifier ibis, Event event) {
         this.ibis = ibis;
         this.event = event;
         currentEventTime = 0;
@@ -35,7 +35,7 @@ public final class Member implements Serializable {
     }
 
     public Member(DataInput in) throws IOException {
-        ibis = new IbisIdentifier(in);
+        ibis = new AetherIdentifier(in);
         event = new Event(in);
         currentEventTime = 0;
         time = 0;
@@ -46,7 +46,7 @@ public final class Member implements Serializable {
         event.writeTo(out);
     }
 
-    public IbisIdentifier getIbis() {
+    public AetherIdentifier getIbis() {
         return ibis;
     }
 

@@ -16,7 +16,7 @@ import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortConnectUpcall;
 import nl.esciencecenter.aether.ReceiveTimedOutException;
-import nl.esciencecenter.aether.impl.Ibis;
+import nl.esciencecenter.aether.impl.Aether;
 import nl.esciencecenter.aether.impl.SendPortIdentifier;
 
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ final class NonBlockingChannelNioReceivePort extends NioReceivePort {
 
     Selector selector;
 
-    NonBlockingChannelNioReceivePort(Ibis ibis, PortType type,
+    NonBlockingChannelNioReceivePort(Aether ibis, PortType type,
             String name, MessageUpcall upcall, ReceivePortConnectUpcall connUpcall,
             Properties props) throws IOException {
         super(ibis, type, name, upcall, connUpcall, props);

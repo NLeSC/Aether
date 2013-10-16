@@ -7,7 +7,7 @@ import java.util.Properties;
 
 /**
  * The starting point of all Ibis communication, created using the
- * {@link nl.esciencecenter.aether.IbisFactory}.
+ * {@link nl.esciencecenter.aether.AetherFactory}.
  * <p>
  * The following {@link Manageable} items are recognized:
  * <TABLE border="2" frame="box" rules="groups" summary="manageable items">
@@ -37,13 +37,13 @@ import java.util.Properties;
  *<p>
  * Other items may be recognized, depending on the Ibis implementation.
  */
-public interface Ibis extends Manageable {
+public interface Aether extends Manageable {
     
     /**
      * Returns all Ibis recources to the system.
      * The Ibis instance also deregisters itself from the registry. As a
      * result, other Ibis instances may receive a 
-     * {@link RegistryEventHandler#left(IbisIdentifier)} upcall.
+     * {@link RegistryEventHandler#left(AetherIdentifier)} upcall.
      * @exception IOException
      *          is thrown when an error occurs.
      */
@@ -68,13 +68,13 @@ public interface Ibis extends Manageable {
     public void poll() throws IOException;
 
     /**
-     * Returns an Ibis {@linkplain nl.esciencecenter.aether.IbisIdentifier identifier} for
+     * Returns an Ibis {@linkplain nl.esciencecenter.aether.AetherIdentifier identifier} for
      * this Ibis instance.
      * An Ibis identifier identifies an Ibis instance in the network.
      * @return
      *          the Ibis identifier of this Ibis instance.
      */
-    public IbisIdentifier identifier();
+    public AetherIdentifier identifier();
 
     /**
      * Returns the current Ibis version.
@@ -114,7 +114,7 @@ public interface Ibis extends Manageable {
      *          the new sendport.
      * @exception IOException
      *          is thrown when the port could not be created.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *          is thrown when the port type does not match the capabilities
      *          that are required to create this sendport.
      */
@@ -140,7 +140,7 @@ public interface Ibis extends Manageable {
      *          the new sendport.
      * @exception IOException
      *          is thrown when the port could not be created.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *          is thrown when the port type does not match the capabilities
      *          that are required to create this sendport.
      */
@@ -165,7 +165,7 @@ public interface Ibis extends Manageable {
      *          the new receiveport.
      * @exception IOException
      *          is thrown when the port could not be created.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *          is thrown when the port type does not match the capabilities
      *          that are required to create this receiveport.
      */
@@ -194,7 +194,7 @@ public interface Ibis extends Manageable {
      *          the new receiveport.
      * @exception IOException
      *          is thrown when the port could not be created.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *          is thrown when the port type does not match the capabilities
      *          that are required to create this receiveport.
      */
@@ -224,7 +224,7 @@ public interface Ibis extends Manageable {
      *          the new receiveport.
      * @exception IOException
      *          is thrown when the port could not be created.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *          is thrown when the port type does not match the capabilities
      *          that are required to create this receiveport.
      */
@@ -262,7 +262,7 @@ public interface Ibis extends Manageable {
      *          the new receiveport.
      * @exception IOException
      *          is thrown when the port could not be created.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *          is thrown when the port type does not match the capabilities
      *          that are required to create this receiveport.
      */

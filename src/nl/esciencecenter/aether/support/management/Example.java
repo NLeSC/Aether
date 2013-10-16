@@ -7,7 +7,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.server.Server;
 
 public class Example {
@@ -77,12 +77,12 @@ public class Example {
         while (true) {
 
             // get list of ibises in the pool named "test"
-            IbisIdentifier[] ibises = server.getRegistryService().getMembers(
+            AetherIdentifier[] ibises = server.getRegistryService().getMembers(
                     "test");
 
             // for each ibis, print these attributes
             if (ibises != null) {
-                for (IbisIdentifier ibis : ibises) {
+                for (AetherIdentifier ibis : ibises) {
                     try {
                         System.err
                                 .println(ibis
@@ -95,25 +95,25 @@ public class Example {
                                 .println(ibis
                                         + " connected to = "
                                         + Arrays
-                                                .toString((IbisIdentifier[]) server
+                                                .toString((AetherIdentifier[]) server
                                                         .getManagementService()
                                                         .getAttributes(ibis,
                                                                 connections)[0]));
                         
-                        Map<IbisIdentifier, Long> sent = (Map<IbisIdentifier, Long>)
+                        Map<AetherIdentifier, Long> sent = (Map<AetherIdentifier, Long>)
                                 (server.getManagementService().getAttributes(ibis, sentBytesPerIbis)[0]);
                         
                         if (sent != null) {
-                            for (Entry<IbisIdentifier, Long> e : sent.entrySet()) {
+                            for (Entry<AetherIdentifier, Long> e : sent.entrySet()) {
                                 System.err.println(ibis + " wrote " + e.getValue() + " bytes to " + e.getKey());
                             }
                         }
                         
-                        Map<IbisIdentifier, Long> received = (Map<IbisIdentifier, Long>)
+                        Map<AetherIdentifier, Long> received = (Map<AetherIdentifier, Long>)
                                 (server.getManagementService().getAttributes(ibis, receivedBytesPerIbis)[0]);
                         
                         if (received != null) {
-                            for (Entry<IbisIdentifier, Long> e : received.entrySet()) {
+                            for (Entry<AetherIdentifier, Long> e : received.entrySet()) {
                                 System.err.println(ibis + " read " + e.getValue() + " bytes from " + e.getKey());
                             }
                         }
@@ -127,16 +127,16 @@ public class Example {
                             }
                         }
                         
-                        Map<IbisIdentifier, Set<String>> senderConnections =
-                            (Map<IbisIdentifier, Set<String>>) (server.getManagementService().getAttributes(ibis, 
+                        Map<AetherIdentifier, Set<String>> senderConnections =
+                            (Map<AetherIdentifier, Set<String>>) (server.getManagementService().getAttributes(ibis, 
                                     senderConnectionTypes))[0];
                         
                         if (senderConnections != null) {
                             System.err.println("senderConnections: " + senderConnections.toString());
                         }
                         
-                        Map<IbisIdentifier, Set<String>> receiverConnections =
-                            (Map<IbisIdentifier, Set<String>>) (server.getManagementService().getAttributes(ibis, 
+                        Map<AetherIdentifier, Set<String>> receiverConnections =
+                            (Map<AetherIdentifier, Set<String>>) (server.getManagementService().getAttributes(ibis, 
                                     receiverConnectionTypes))[0];
                         
                         if (receiverConnections != null) {

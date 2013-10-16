@@ -10,9 +10,9 @@ import java.util.Properties;
  * Every Ibis implementation must provide an <code>IbisStarter</code> which is
  * used by the Ibis factory to check capabilities, port types, and to start an
  * Ibis instance. This class is not to be used by Ibis applications. Ibis
- * applications should use {@link IbisFactory} to create Ibis instances.
+ * applications should use {@link AetherFactory} to create Ibis instances.
  */
-public abstract class IbisStarter {
+public abstract class AetherStarter {
 
     /**
      * Short name of this implementation. Usually the network stack it is based
@@ -48,16 +48,16 @@ public abstract class IbisStarter {
      * @return an IbisStarter instance for the given class name.
      */
     @SuppressWarnings("unchecked")
-    public static IbisStarter createInstance(String className,
+    public static AetherStarter createInstance(String className,
             ClassLoader classLoader, String nickName, String iplVersion,
             String implementationVersion) {
         try {
-            Class<? extends IbisStarter> starterClass = (Class<? extends IbisStarter>) Class
+            Class<? extends AetherStarter> starterClass = (Class<? extends AetherStarter>) Class
                     .forName(className, false, classLoader);
 
             Constructor<?> constructor = starterClass.getConstructor(
                     String.class, String.class, String.class);
-            return (IbisStarter) constructor.newInstance(nickName, iplVersion,
+            return (AetherStarter) constructor.newInstance(nickName, iplVersion,
                     implementationVersion);
         } catch (Throwable t) {
             System.err.println("Could not create starter from class name "
@@ -69,7 +69,7 @@ public abstract class IbisStarter {
     /**
      * Constructs an <code>IbisStarter</code>.
      */
-    protected IbisStarter(String nickName, String iplVersion,
+    protected AetherStarter(String nickName, String iplVersion,
             String implementationVersion) {
         this.nickName = nickName;
         this.iplVersion = iplVersion;
@@ -121,7 +121,7 @@ public abstract class IbisStarter {
      * 
      * @return <code>true</code> if it can.
      */
-    public abstract boolean matches(IbisCapabilities capabilities,
+    public abstract boolean matches(Capabilities capabilities,
             PortType[] portTypes);
 
     /**
@@ -132,7 +132,7 @@ public abstract class IbisStarter {
      * @return the unmatched ibis capabilities.
      */
     public abstract CapabilitySet unmatchedIbisCapabilities(
-            IbisCapabilities capabilities, PortType[] portTypes);
+            Capabilities capabilities, PortType[] portTypes);
 
     /**
      * Returns the list of port types that are not matched by this starter. If
@@ -143,7 +143,7 @@ public abstract class IbisStarter {
      * @return the unmatched port types.
      */
     public abstract PortType[] unmatchedPortTypes(
-            IbisCapabilities capabilities, PortType[] portTypes);
+            Capabilities capabilities, PortType[] portTypes);
 
     /**
      * Actually creates an Ibis instance from this starter.
@@ -166,9 +166,9 @@ public abstract class IbisStarter {
      *            for stacking ibis starters, the name of the underlying Ibis
      *            implementation.
      */
-    public abstract Ibis startIbis(IbisFactory factory,
+    public abstract Aether startIbis(AetherFactory factory,
             RegistryEventHandler handler, Properties userProperties,
-            IbisCapabilities capabilities, Credentials credentials,
+            Capabilities capabilities, Credentials credentials,
             byte[] applicationTag, PortType[] portTypes, String specifiedSubImplementation)
-            throws IbisCreationFailedException;
+            throws CreationFailedException;
 }

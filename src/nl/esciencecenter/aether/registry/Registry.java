@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.util.Properties;
 
 import nl.esciencecenter.aether.Credentials;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisConfigurationException;
-import nl.esciencecenter.aether.IbisProperties;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.ConfigurationException;
+import nl.esciencecenter.aether.AetherProperties;
 import nl.esciencecenter.aether.RegistryEventHandler;
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 
 /**
  * This implementation of the {@link nl.esciencecenter.aether.Registry} interface defines the
@@ -64,16 +64,16 @@ public abstract class Registry implements nl.esciencecenter.aether.Registry {
      *                    can be any exception resulting from looking up the
      *                    registry constructor or the invocation attempt.
      */
-    public static Registry createRegistry(IbisCapabilities capabilities,
+    public static Registry createRegistry(Capabilities capabilities,
             RegistryEventHandler handler, Properties properties, byte[] data,
             String implementationVersion, byte[] tag, Credentials credentials) throws Throwable {
 
         String registryName = properties
-                .getProperty(IbisProperties.REGISTRY_IMPLEMENTATION);
+                .getProperty(AetherProperties.REGISTRY_IMPLEMENTATION);
 
         if (registryName == null) {
-            throw new IbisConfigurationException("Could not create registry: "
-                    + "property " + IbisProperties.REGISTRY_IMPLEMENTATION
+            throw new ConfigurationException("Could not create registry: "
+                    + "property " + AetherProperties.REGISTRY_IMPLEMENTATION
                     + "  is not set.");
         } else if (registryName.equalsIgnoreCase("central")) {
             // shorthand for central registry
@@ -93,7 +93,7 @@ public abstract class Registry implements nl.esciencecenter.aether.Registry {
 
         try {
             return (Registry) c.getConstructor(
-                    new Class[] { IbisCapabilities.class,
+                    new Class[] { Capabilities.class,
                             RegistryEventHandler.class, Properties.class,
                             byte[].class, String.class, Credentials.class, byte[].class }).newInstance(
                     new Object[] { capabilities, handler, properties, data, implementationVersion, credentials, tag});
@@ -105,9 +105,9 @@ public abstract class Registry implements nl.esciencecenter.aether.Registry {
     /**
      * Returns the Ibis identifier.
      */
-    public abstract IbisIdentifier getIbisIdentifier();
+    public abstract AetherIdentifier getIbisIdentifier();
     
-    public abstract IbisIdentifier getRandomPoolMember();
+    public abstract AetherIdentifier getRandomPoolMember();
     
     public abstract String[] wonElections();
 }

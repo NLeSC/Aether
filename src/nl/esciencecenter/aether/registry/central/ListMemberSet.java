@@ -9,7 +9,7 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Random;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 
 public final class ListMemberSet implements MemberSet {
 
@@ -30,7 +30,7 @@ public final class ListMemberSet implements MemberSet {
         list.add(member);
     }
 
-    public Member remove(IbisIdentifier identifier) {
+    public Member remove(AetherIdentifier identifier) {
         String ID = identifier.getID();
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getID().equals(ID)) {
@@ -41,7 +41,7 @@ public final class ListMemberSet implements MemberSet {
         return null;
     }
 
-    public boolean contains(IbisIdentifier identifier) {
+    public boolean contains(AetherIdentifier identifier) {
         String ID = identifier.getID();
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getID().equals(ID)) {
@@ -55,7 +55,7 @@ public final class ListMemberSet implements MemberSet {
         return contains(member.getIbis());
     }
 
-    public Member get(IbisIdentifier identifier) {
+    public Member get(AetherIdentifier identifier) {
         String ID = identifier.getID();
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getID().equals(ID)) {
@@ -181,7 +181,7 @@ public final class ListMemberSet implements MemberSet {
     /**
      * List does not have parents/children
      */
-    public Member[] getChildren(IbisIdentifier ibis) {
+    public Member[] getChildren(AetherIdentifier ibis) {
         return new Member[0];
     }
 

@@ -4,7 +4,7 @@ package nl.esciencecenter.aether.util.rpc;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import nl.esciencecenter.aether.Ibis;
+import nl.esciencecenter.aether.Aether;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.ReadMessage;
 import nl.esciencecenter.aether.ReceivePort;
@@ -42,12 +42,12 @@ public class RemoteObject<InterfaceType> implements MessageUpcall {
 		return receivePort;
 	}
 
-	private final Ibis ibis;
+	private final Aether ibis;
 
 	private final ReceivePort receivePort;
 
 	RemoteObject(Class<InterfaceType> interfaceClass, InterfaceType theObject,
-			String name, Ibis ibis) throws RemoteException {
+			String name, Aether ibis) throws RemoteException {
 		this.interfaceClass = interfaceClass;
 		this.theObject = theObject;
 		this.ibis = ibis;

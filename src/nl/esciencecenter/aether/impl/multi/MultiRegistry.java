@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisConfigurationException;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.ConfigurationException;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.NoSuchPropertyException;
 import nl.esciencecenter.aether.Registry;
 import nl.esciencecenter.aether.util.ThreadPool;
@@ -39,7 +39,7 @@ public class MultiRegistry implements Registry{
         this.ibis = multiIbis;
         subRegistries = new HashMap<String, Registry>();
         for (String ibisName:ibis.subIbisMap.keySet()) {
-            Ibis subIbis = ibis.subIbisMap.get(ibisName);
+            Aether subIbis = ibis.subIbisMap.get(ibisName);
             if (logger.isDebugEnabled()) {
                 logger.debug("Registry for: " + ibisName + " : "+ subIbis.registry());
             }
@@ -48,18 +48,18 @@ public class MultiRegistry implements Registry{
         ManageableMapper = new ManageableMapper((Map)subRegistries);
     }
 
-    public void assumeDead(IbisIdentifier ibisIdentifier) throws IOException {
+    public void assumeDead(AetherIdentifier ibisIdentifier) throws IOException {
         for(String ibisName:subRegistries.keySet()) {
             Registry subRegistry = subRegistries.get(ibisName);
             subRegistry.assumeDead(((MultiIbisIdentifier)ibisIdentifier).subIdForIbis(ibisName));
         }
     }
 
-    public IbisIdentifier[] diedIbises() {
-        HashMap<IbisIdentifier, String> theDead = new HashMap<IbisIdentifier, String>();
+    public AetherIdentifier[] diedIbises() {
+        HashMap<AetherIdentifier, String> theDead = new HashMap<AetherIdentifier, String>();
         for (String ibisName:subRegistries.keySet()) {
             Registry subRegistry = subRegistries.get(ibisName);
-            IbisIdentifier[] ids = subRegistry.diedIbises();
+            AetherIdentifier[] ids = subRegistry.diedIbises();
             for(int i=0; i<ids.length; i++) {
                 try {
                     theDead.put(ibis.mapIdentifier(ids[i], ibisName), ibisName);
@@ -68,7 +68,7 @@ public class MultiRegistry implements Registry{
                 }
             }
         }
-        return theDead.keySet().toArray(new IbisIdentifier[theDead.size()]);
+        return theDead.keySet().toArray(new AetherIdentifier[theDead.size()]);
     }
 
     public void disableEvents() {
@@ -77,7 +77,7 @@ public class MultiRegistry implements Registry{
         }
     }
 
-    public IbisIdentifier elect(String electionName) throws IOException {
+    public AetherIdentifier elect(String electionName) throws IOException {
         return elect(electionName, 0);
     }
 
@@ -98,7 +98,7 @@ public class MultiRegistry implements Registry{
         }
 
         public void run() {
-            IbisIdentifier winner = null;
+            AetherIdentifier winner = null;
             try {
                 winner = subRegistry.elect(electionName, timeoutMillis);
                 if (logger.isDebugEnabled()) {
@@ -116,7 +116,7 @@ public class MultiRegistry implements Registry{
         }
     }
 
-    public IbisIdentifier elect(final String electionName, final long timeoutMillis)
+    public AetherIdentifier elect(final String electionName, final long timeoutMillis)
             throws IOException {
         if (subRegistries.size() > 0) {
             // TODO: Need to kick off these elections in parallel
@@ -165,24 +165,24 @@ public class MultiRegistry implements Registry{
         }
     }
 
-    public IbisIdentifier getElectionResult(String electionName)
+    public AetherIdentifier getElectionResult(String electionName)
             throws IOException {
         return getElectionResult(electionName, 0);
     }
 
-    public IbisIdentifier getElectionResult(String electionName,
+    public AetherIdentifier getElectionResult(String electionName,
             long timeoutMillis) throws IOException {
-        IbisIdentifier results = null;
+        AetherIdentifier results = null;
         if (logger.isDebugEnabled()) {
             logger.debug("Getting Election Results for: " + electionName + " timeout: " + timeoutMillis);
         }
         timeoutMillis = timeoutMillis / subRegistries.size();
         // TODO This is dumb stupid election management that wont work a lot of the time
-        ArrayList<IbisIdentifier>elected = new ArrayList<IbisIdentifier>();
+        ArrayList<AetherIdentifier>elected = new ArrayList<AetherIdentifier>();
         for (String ibisName: subRegistries.keySet()) {
             Registry subRegistry = subRegistries.get(ibisName);
             // TODO: This expands the timeout.
-            IbisIdentifier winner = subRegistry.getElectionResult(electionName, timeoutMillis);
+            AetherIdentifier winner = subRegistry.getElectionResult(electionName, timeoutMillis);
             if (winner != null) {
                 elected.add(ibis.mapIdentifier(winner, ibisName));
             }
@@ -215,11 +215,11 @@ public class MultiRegistry implements Registry{
         throw new IOException("Sequences not supported!");
     }
 
-    public IbisIdentifier[] joinedIbises() {
-        HashMap<IbisIdentifier, String> theJoined = new HashMap<IbisIdentifier, String>();
+    public AetherIdentifier[] joinedIbises() {
+        HashMap<AetherIdentifier, String> theJoined = new HashMap<AetherIdentifier, String>();
         for (String ibisName:subRegistries.keySet()) {
             Registry subRegistry = subRegistries.get(ibisName);
-            IbisIdentifier[] ids = subRegistry.joinedIbises();
+            AetherIdentifier[] ids = subRegistry.joinedIbises();
             for(int i=0; i<ids.length; i++) {
                 try {
                     theJoined.put(ibis.mapIdentifier(ids[i], ibisName), ibisName);
@@ -228,14 +228,14 @@ public class MultiRegistry implements Registry{
                 }
             }
         }
-        return theJoined.keySet().toArray(new IbisIdentifier[theJoined.size()]);
+        return theJoined.keySet().toArray(new AetherIdentifier[theJoined.size()]);
     }
 
-    public IbisIdentifier[] leftIbises() {
-        HashMap<IbisIdentifier, String> theLeft = new HashMap<IbisIdentifier, String>();
+    public AetherIdentifier[] leftIbises() {
+        HashMap<AetherIdentifier, String> theLeft = new HashMap<AetherIdentifier, String>();
         for (String ibisName:subRegistries.keySet()) {
             Registry subRegistry = subRegistries.get(ibisName);
-            IbisIdentifier[] ids = subRegistry.leftIbises();
+            AetherIdentifier[] ids = subRegistry.leftIbises();
             for(int i=0; i<ids.length; i++) {
                 try {
                     theLeft.put(ibis.mapIdentifier(ids[i], ibisName), ibisName);
@@ -244,10 +244,10 @@ public class MultiRegistry implements Registry{
                 }
             }
         }
-        return theLeft.keySet().toArray(new IbisIdentifier[theLeft.size()]);
+        return theLeft.keySet().toArray(new AetherIdentifier[theLeft.size()]);
     }
 
-    public void maybeDead(IbisIdentifier ibisIdentifier) throws IOException {
+    public void maybeDead(AetherIdentifier ibisIdentifier) throws IOException {
         for (String ibisName:subRegistries.keySet()) {
             Registry subRegistry = subRegistries.get(ibisName);
             subRegistry.maybeDead(ibis.mapIdentifier(ibisIdentifier, ibisName));
@@ -265,9 +265,9 @@ public class MultiRegistry implements Registry{
         return theSignals.keySet().toArray(new String[theSignals.size()]);
     }
 
-    public void signal(String signal, IbisIdentifier... ibisIdentifiers)
+    public void signal(String signal, AetherIdentifier... ibisIdentifiers)
             throws IOException {
-        IbisIdentifier[] ids = new IbisIdentifier[ibisIdentifiers.length];
+        AetherIdentifier[] ids = new AetherIdentifier[ibisIdentifiers.length];
         for(String ibisName:subRegistries.keySet()) {
             Registry subRegistry = subRegistries.get(ibisName);
             for (int i=0; i<ids.length; i++) {
@@ -318,17 +318,17 @@ public class MultiRegistry implements Registry{
 
     public boolean hasTerminated() {
         //FIXME: implement termination for this registry
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
         "termination not supported by MultiRegistry");
     }
 
     public void terminate() throws IOException {
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
         "termination not supported by MultiRegistry");
     }
 
-    public IbisIdentifier waitUntilTerminated() {
-        throw new IbisConfigurationException(
+    public AetherIdentifier waitUntilTerminated() {
+        throw new ConfigurationException(
         "termination not supported by MultiRegistry");
     }
 

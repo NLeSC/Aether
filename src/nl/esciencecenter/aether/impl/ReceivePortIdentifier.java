@@ -24,14 +24,14 @@ public class ReceivePortIdentifier implements nl.esciencecenter.aether.ReceivePo
     public final String name;
 
     /** The IbisIdentifier of the Ibis instance that created the receiveport. */
-    public final IbisIdentifier ibis;
+    public final AetherIdentifier ibis;
 
     /**
      * Constructor, initializing the fields with the specified parameters.
      * @param name the name of the receiveport.
      * @param ibis the Ibis instance that created the receiveport.
      */
-    public ReceivePortIdentifier(String name, IbisIdentifier ibis) {
+    public ReceivePortIdentifier(String name, AetherIdentifier ibis) {
         if (name == null) {
             throw new NullPointerException("name is null in ReceivePortIdentifier");
         }
@@ -74,7 +74,7 @@ public class ReceivePortIdentifier implements nl.esciencecenter.aether.ReceivePo
      */
     public ReceivePortIdentifier(DataInput dis) throws IOException {
         name = dis.readUTF();
-        ibis = new IbisIdentifier(dis);
+        ibis = new AetherIdentifier(dis);
     }
 
     /**
@@ -120,7 +120,7 @@ public class ReceivePortIdentifier implements nl.esciencecenter.aether.ReceivePo
         return name;
     }
 
-    public nl.esciencecenter.aether.IbisIdentifier ibisIdentifier() {
+    public nl.esciencecenter.aether.AetherIdentifier ibisIdentifier() {
         return ibis;
     }
 

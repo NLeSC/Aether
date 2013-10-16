@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.Properties;
 
 import nl.esciencecenter.aether.Credentials;
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisCreationFailedException;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.CreationFailedException;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.NoSuchPropertyException;
 import nl.esciencecenter.aether.PortType;
@@ -22,17 +22,17 @@ import nl.esciencecenter.aether.RegistryEventHandler;
 import nl.esciencecenter.aether.SendPort;
 import nl.esciencecenter.aether.SendPortDisconnectUpcall;
 
-public class StackingIbis implements Ibis {
+public class StackingIbis implements Aether {
 
-    Ibis base;
+    Aether base;
 
-    public StackingIbis(IbisFactory factory,
+    public StackingIbis(AetherFactory factory,
             RegistryEventHandler registryEventHandler,
-            Properties userProperties, IbisCapabilities capabilities,
+            Properties userProperties, Capabilities capabilities,
             Credentials credentials, byte[] applicationTag, PortType[] portTypes,
             String specifiedSubImplementation,
             StackingIbisStarter stackingIbisStarter)
-            throws IbisCreationFailedException {
+            throws CreationFailedException {
         base = factory.createIbis(registryEventHandler, capabilities,
                 userProperties, credentials, applicationTag, portTypes,
                 specifiedSubImplementation);
@@ -75,7 +75,7 @@ public class StackingIbis implements Ibis {
         base.poll();
     }
 
-    public IbisIdentifier identifier() {
+    public AetherIdentifier identifier() {
         return base.identifier();
     }
 

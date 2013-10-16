@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.UUID;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.registry.statistics.Statistics;
 import nl.esciencecenter.aether.util.TypedProperties;
 
@@ -64,7 +64,7 @@ class MemberSet extends Thread {
 
     }
 
-    private synchronized Member getMember(IbisIdentifier ibis, boolean create) {
+    private synchronized Member getMember(AetherIdentifier ibis, boolean create) {
         Member result;
 
         UUID id = UUID.fromString(ibis.getID());
@@ -87,7 +87,7 @@ class MemberSet extends Thread {
         return result;
     }
 
-    public synchronized void maybeDead(IbisIdentifier ibis) {
+    public synchronized void maybeDead(AetherIdentifier ibis) {
         Member member = getMember(ibis, false);
 
         if (member == null) {
@@ -99,7 +99,7 @@ class MemberSet extends Thread {
         cleanup(member);
     }
 
-    public synchronized void assumeDead(IbisIdentifier ibis) {
+    public synchronized void assumeDead(AetherIdentifier ibis) {
         Member member = getMember(ibis, false);
 
         if (member == null) {
@@ -111,7 +111,7 @@ class MemberSet extends Thread {
         cleanup(member);
     }
 
-    public synchronized void leave(IbisIdentifier ibis) {
+    public synchronized void leave(AetherIdentifier ibis) {
         Member member = getMember(ibis, true);
 
         if (member == null) {
@@ -129,13 +129,13 @@ class MemberSet extends Thread {
         }
     }
 
-    public synchronized IbisIdentifier getFirstLiving(
-            IbisIdentifier[] candidates) {
+    public synchronized AetherIdentifier getFirstLiving(
+            AetherIdentifier[] candidates) {
         if (candidates == null || candidates.length == 0) {
             return null;
         }
 
-        for (IbisIdentifier candidate : candidates) {
+        for (AetherIdentifier candidate : candidates) {
             Member member = getMember(candidate, false);
 
             if (member != null && !member.hasLeft() && !member.isDead()) {

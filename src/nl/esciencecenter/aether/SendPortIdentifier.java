@@ -15,12 +15,12 @@ public interface SendPortIdentifier extends java.io.Serializable {
     public String name();
 
     /**
-     * Returns the {@link nl.esciencecenter.aether.IbisIdentifier IbisIdentifier} of the
+     * Returns the {@link nl.esciencecenter.aether.AetherIdentifier IbisIdentifier} of the
      * {@link nl.esciencecenter.aether.SendPort SendPort} corresponding to this identifier.
      * @return
      *          the ibis identifier.
      */
-    public IbisIdentifier ibisIdentifier();
+    public AetherIdentifier ibisIdentifier();
 
     /**
      * The hashCode method is mentioned here just as a reminder that an

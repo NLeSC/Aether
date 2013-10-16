@@ -4,7 +4,7 @@ package nl.esciencecenter.aether;
 
 /**
  * Represents a location on which an Ibis instance runs. This is the
- * data type returned by {@link IbisIdentifier#location()}.
+ * data type returned by {@link AetherIdentifier#location()}.
  * It represents a number of levels, for instance hostname, domain,
  * in that order, t.i., from detailed to coarse.
  * Level 0 represents the most detailed, level {@link #numberOfLevels()}-1
@@ -13,7 +13,7 @@ package nl.esciencecenter.aether;
  * Locations should be comparable with <code>equals()</code>, so implementations
  * probably redefine <code>hashCode()</code> and <code>equals()</code>.
  * <p>
- * The location can be set using the {@link IbisProperties#LOCATION} property.
+ * The location can be set using the {@link AetherProperties#LOCATION} property.
  * The <code>%HOSTNAME%</code> sequence is replaced by the hostname, the <code>%DOMAIN%</code> sequence
  * is replaced by the domain, where each "level" in the domain name is a separate
  * level in the location, and <code>%FLAT_DOMAIN%</code> sequence is replaced by the domain,

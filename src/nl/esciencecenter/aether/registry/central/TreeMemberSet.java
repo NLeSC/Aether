@@ -16,7 +16,7 @@ import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -193,7 +193,7 @@ public final class TreeMemberSet implements MemberSet, Serializable {
         }
     }
 
-    public Member remove(IbisIdentifier identifier) {
+    public Member remove(AetherIdentifier identifier) {
 	if (logger.isDebugEnabled()) {
 	    logger.debug("removing " + identifier + " from tree");
 	}
@@ -230,7 +230,7 @@ public final class TreeMemberSet implements MemberSet, Serializable {
         return result;
     }
 
-    public boolean contains(IbisIdentifier identifier) {
+    public boolean contains(AetherIdentifier identifier) {
         for (Node node : list) {
             if (node.member.getIbis().equals(identifier)) {
                 return true;
@@ -249,7 +249,7 @@ public final class TreeMemberSet implements MemberSet, Serializable {
 
     }
 
-    public Member get(IbisIdentifier identifier) {
+    public Member get(AetherIdentifier identifier) {
         for (Node node : list) {
             if (node.member.getIbis().equals(identifier)) {
                 return node.member;
@@ -267,7 +267,7 @@ public final class TreeMemberSet implements MemberSet, Serializable {
         return null;
     }
 
-    private Node getNode(IbisIdentifier identifier) {
+    private Node getNode(AetherIdentifier identifier) {
         for (Node node : list) {
             if (node.member.getIbis().equals(identifier)) {
                 return node;
@@ -377,7 +377,7 @@ public final class TreeMemberSet implements MemberSet, Serializable {
         }
     }
 
-    public Member[] getChildren(IbisIdentifier ibis) {
+    public Member[] getChildren(AetherIdentifier ibis) {
 	if (logger.isDebugEnabled()) {
 	    logger.debug("getting children of " + ibis);
 	}

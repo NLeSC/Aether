@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import nl.esciencecenter.aether.IbisConfigurationException;
-import nl.esciencecenter.aether.IbisProperties;
+import nl.esciencecenter.aether.ConfigurationException;
+import nl.esciencecenter.aether.AetherProperties;
 import nl.esciencecenter.aether.server.ServerProperties;
 import nl.esciencecenter.aether.util.TypedProperties;
 
@@ -28,10 +28,10 @@ public class Client {
     private static final Logger logger = LoggerFactory.getLogger(Client.class);
 
     private static DirectSocketAddress createServerAddress(String serverString,
-            int defaultPort) throws IbisConfigurationException {
+            int defaultPort) throws ConfigurationException {
 
         if (serverString == null) {
-            throw new IbisConfigurationException("serverString undefined");
+            throw new ConfigurationException("serverString undefined");
         }
 
         // maybe it is a DirectSocketAddress?
@@ -50,7 +50,7 @@ public class Client {
             // IGNORE
         }
 
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
                 "could not create server address from given string: "
                         + serverString, throwable);
     }
@@ -68,13 +68,13 @@ public class Client {
      *            local port to bound client to used when client is created (0
      *            for any free port)
      * @return the client with the specified name
-     * @throws IbisConfigurationException
+     * @throws ConfigurationException
      *             if the client cannot be created due to invalid settings
      * @throws IOException
      *             if the client cannot be created due to a SmartSockets error
      */
     public static synchronized Client getOrCreateClient(String name,
-            Properties properties, int port) throws IbisConfigurationException,
+            Properties properties, int port) throws ConfigurationException,
             IOException {
         Client result = clients.get(name);
 
@@ -90,13 +90,13 @@ public class Client {
     private final VirtualSocketFactory factory;
 
     private Client(Properties properties, int port)
-            throws IbisConfigurationException, IOException {
+            throws ConfigurationException, IOException {
         TypedProperties typedProperties = ServerProperties
                 .getHardcodedProperties();
         typedProperties.addProperties(properties);
 
         String serverAddressString = typedProperties
-                .getProperty(IbisProperties.SERVER_ADDRESS);
+                .getProperty(AetherProperties.SERVER_ADDRESS);
 
         if (serverAddressString == null || serverAddressString.equals("")) {
             serverMachine = null;
@@ -106,11 +106,11 @@ public class Client {
                             ServerProperties.DEFAULT_PORT));
         }
 
-        String hubs = typedProperties.getProperty(IbisProperties.HUB_ADDRESSES);
+        String hubs = typedProperties.getProperty(AetherProperties.HUB_ADDRESSES);
 
         // did the server also start a hub?
         boolean serverIsHub = typedProperties
-                .getBooleanProperty(IbisProperties.SERVER_IS_HUB);
+                .getBooleanProperty(AetherProperties.SERVER_IS_HUB);
 
         if (serverMachine != null && serverIsHub) {
             // add server to hub addresses
@@ -157,16 +157,16 @@ public class Client {
      * 
      * @param port
      *            the port the service is running on
-     * @throws IbisConfigurationException
+     * @throws ConfigurationException
      *             if the server address is unknown.
      */
     public VirtualSocketAddress getServiceAddress(int port)
-            throws IbisConfigurationException {
+            throws ConfigurationException {
 
         if (serverMachine == null) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "cannot get address of server, server address property \""
-                            + IbisProperties.SERVER_ADDRESS + "\" undefined");
+                            + AetherProperties.SERVER_ADDRESS + "\" undefined");
         }
 
         return new VirtualSocketAddress(serverMachine, port, serverMachine,

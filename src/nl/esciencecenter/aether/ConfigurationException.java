@@ -9,14 +9,14 @@ package nl.esciencecenter.aether;
  * for instance because a method was invoked that requires capabilities
  * that were not configured.
  */
-public class IbisConfigurationException extends IbisRuntimeException {
+public class ConfigurationException extends AetherRuntimeException {
     private static final long serialVersionUID = 1L;
 
     /**
      * Constructs a <code>IbisConfigurationException</code> with
      * <code>null</code> as its error detail message.
      */
-    public IbisConfigurationException() {
+    public ConfigurationException() {
         super();
     }
 
@@ -27,7 +27,7 @@ public class IbisConfigurationException extends IbisRuntimeException {
      * @param detailMessage
      *          the detail message
      */
-    public IbisConfigurationException(String detailMessage) {
+    public ConfigurationException(String detailMessage) {
         super(detailMessage);
     }
 
@@ -40,7 +40,7 @@ public class IbisConfigurationException extends IbisRuntimeException {
      * @param cause
      *          the cause
      */
-    public IbisConfigurationException(String detailMessage, Throwable cause) {
+    public ConfigurationException(String detailMessage, Throwable cause) {
         super(detailMessage, cause);
     }
 
@@ -51,7 +51,7 @@ public class IbisConfigurationException extends IbisRuntimeException {
      * @param cause
      *          the cause
      */
-    public IbisConfigurationException(Throwable cause) {
+    public ConfigurationException(Throwable cause) {
         super(cause);
     }
 }

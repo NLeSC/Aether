@@ -26,11 +26,11 @@ import java.util.jar.Manifest;
  * property. All Ibis implementations should be mentioned in the main properties
  * of the manifest of the jar file containing it, in the "Ibis-Starter" entry.
  * This entry should contain a comma- or space-separated list of class names,
- * where each class named provides an {@link IbisStarter} implementation. In
+ * where each class named provides an {@link AetherStarter} implementation. In
  * addition, a property "Ibis-IPL-Version" should be defined in the manifest,
  * containing a version number (e.g. 2.1).
  */
-public final class IbisFactory {
+public final class AetherFactory {
 
     private static final String IPL_VERSION_STRING = "Ibis-IPL-Version";
 
@@ -53,16 +53,16 @@ public final class IbisFactory {
     public static final String DEFAULT_IMPLEMENTATION = "smartsockets";
 
     /** Map of factories, one for each implementation path. */
-    private static final Map<String, IbisFactory> factories = new HashMap<String, IbisFactory>();
+    private static final Map<String, AetherFactory> factories = new HashMap<String, AetherFactory>();
 
-    private static IbisFactory defaultFactory;
+    private static AetherFactory defaultFactory;
 
-    private static final String VERSION = "2.3";
+    private static final String VERSION = "1.0.0";
     
     private static Properties manifestProperties = new Properties();
     
     static {
-        ClassLoader classLoader = IbisFactory.class.getClassLoader();
+        ClassLoader classLoader = AetherFactory.class.getClassLoader();
         InputStream inputStream = classLoader
                 .getResourceAsStream(IPL_MANIFEST_FILE);
 
@@ -92,19 +92,19 @@ public final class IbisFactory {
         return manifestProperties.getProperty(p, null);
     }
 
-    private static synchronized IbisFactory getFactory(String implPath,
+    private static synchronized AetherFactory getFactory(String implPath,
             Properties properties) {
         if (implPath == null) {
             if (defaultFactory == null) {
-                defaultFactory = new IbisFactory(null, properties);
+                defaultFactory = new AetherFactory(null, properties);
             }
 
             return defaultFactory;
         } else {
-            IbisFactory factory = factories.get(implPath);
+            AetherFactory factory = factories.get(implPath);
 
             if (factory == null) {
-                factory = new IbisFactory(implPath, properties);
+                factory = new AetherFactory(implPath, properties);
                 factories.put(implPath, factory);
             }
 
@@ -115,9 +115,9 @@ public final class IbisFactory {
     /**
      * List of all available implementations.
      */
-    private Map<String, IbisStarter> implementations;
+    private Map<String, AetherStarter> implementations;
 
-    private IbisFactory() {
+    private AetherFactory() {
         // DO NOT USE
     }
 
@@ -129,9 +129,9 @@ public final class IbisFactory {
      * @param properties
      *            the properties to be used.
      */
-    private IbisFactory(String implementationPath, Properties properties) {
+    private AetherFactory(String implementationPath, Properties properties) {
 
-        implementations = new HashMap<String, IbisStarter>();
+        implementations = new HashMap<String, AetherStarter>();
 
         // load implementations from jar path
 
@@ -142,14 +142,14 @@ public final class IbisFactory {
         loadIbisesFromManifestFile();
 
         if (implementations.size() == 0) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "Cannot find any Ibis implementations");
         }
     }
 
     private static boolean isVerbose(Properties properties) {
         // see if the user specified "verbose"
-        String verboseValue = properties.getProperty(IbisProperties.VERBOSE);
+        String verboseValue = properties.getProperty(AetherProperties.VERBOSE);
         return verboseValue != null
                 && (verboseValue.equals("1") || verboseValue.equals("on")
                         || verboseValue.equals("")
@@ -170,13 +170,13 @@ public final class IbisFactory {
      *            the list of port types required by the application.
      * @return the new Ibis instance.
      * 
-     * @exception IbisCreationFailedException
+     * @exception CreationFailedException
      *                is thrown when the chosen Ibis implementation cannot be
      *                created for some reason.
      */
-    public static Ibis createIbis(IbisCapabilities requiredCapabilities,
+    public static Aether createIbis(Capabilities requiredCapabilities,
             RegistryEventHandler registryEventHandler, PortType... portTypes)
-            throws IbisCreationFailedException {
+            throws CreationFailedException {
         return createIbis(requiredCapabilities, null, true,
                 registryEventHandler, portTypes);
     }
@@ -204,15 +204,15 @@ public final class IbisFactory {
      *            empty list, but not null.
      * @return the new Ibis instance.
      * 
-     * @exception IbisCreationFailedException
+     * @exception CreationFailedException
      *                is thrown when no Ibis was found that matches the
      *                capabilities required, or a matching Ibis could not be
      *                instantiated for some reason.
      */
-    public static Ibis createIbis(IbisCapabilities requiredCapabilities,
+    public static Aether createIbis(Capabilities requiredCapabilities,
             Properties properties, boolean addDefaultConfigProperties,
             RegistryEventHandler registryEventHandler, PortType... portTypes)
-            throws IbisCreationFailedException {
+            throws CreationFailedException {
         return createIbis(requiredCapabilities, properties,
                 addDefaultConfigProperties, registryEventHandler, null,
                 (byte[]) null, portTypes);
@@ -244,14 +244,14 @@ public final class IbisFactory {
      *            empty list, but not null.
      * @return the new Ibis instance.
      * 
-     * @exception IbisCreationFailedException
+     * @exception CreationFailedException
      *                is thrown when the chosen Ibis implementation cannot be
      *                created for some reason.
      */
-    public static Ibis createIbis(IbisCapabilities requiredCapabilities,
+    public static Aether createIbis(Capabilities requiredCapabilities,
             Properties properties, boolean addDefaultConfigProperties,
             RegistryEventHandler registryEventHandler, Credentials credentials,
-            PortType... portTypes) throws IbisCreationFailedException {
+            PortType... portTypes) throws CreationFailedException {
         return createIbis(requiredCapabilities, properties,
                 addDefaultConfigProperties, registryEventHandler, credentials,
                 (byte[]) null, portTypes);
@@ -285,21 +285,21 @@ public final class IbisFactory {
      *            empty list, but not null.
      * @return the new Ibis instance.
      * 
-     * @exception IbisCreationFailedException
+     * @exception CreationFailedException
      *                is thrown when the chosen Ibis implementation cannot be
      *                created for some reason.
      */
-    public static Ibis createIbis(IbisCapabilities requiredCapabilities,
+    public static Aether createIbis(Capabilities requiredCapabilities,
             Properties properties, boolean addDefaultConfigProperties,
             RegistryEventHandler registryEventHandler, Credentials credentials,
             String tag, PortType... portTypes)
-            throws IbisCreationFailedException {
+            throws CreationFailedException {
         byte[] tagBytes = null;
         if (tag != null) {
             try {
                 tagBytes = tag.getBytes("UTF-8");
             } catch (UnsupportedEncodingException e) {
-                throw new IbisCreationFailedException(
+                throw new CreationFailedException(
                         "could not create tag from string", e);
             }
         }
@@ -336,21 +336,21 @@ public final class IbisFactory {
      *            empty list, but not null.
      * @return the new Ibis instance.
 
-     * @exception IbisCreationFailedException
+     * @exception CreationFailedException
      *                is thrown when the chosen Ibis implementation cannot be
      *                created for some reason.
      */
-    public static Ibis createIbis(IbisCapabilities requiredCapabilities,
+    public static Aether createIbis(Capabilities requiredCapabilities,
             Properties properties, boolean addDefaultConfigProperties,
             RegistryEventHandler registryEventHandler, Credentials credentials,
             byte[] tag, PortType... portTypes)
-            throws IbisCreationFailedException {
+            throws CreationFailedException {
 
         Properties combinedProperties = new Properties();
 
         // add default properties, if required
         if (addDefaultConfigProperties) {
-            Properties defaults = IbisProperties.getDefaultProperties();
+            Properties defaults = AetherProperties.getDefaultProperties();
 
             for (Enumeration<?> e = defaults.propertyNames(); e.hasMoreElements();) {
                 String key = (String) e.nextElement();
@@ -369,13 +369,13 @@ public final class IbisFactory {
         }
 
         String implPath = combinedProperties
-                .getProperty(IbisProperties.IMPLEMENTATION_PATH);
+                .getProperty(AetherProperties.IMPLEMENTATION_PATH);
 
         // get/create factory
-        IbisFactory factory = getFactory(implPath, combinedProperties);
+        AetherFactory factory = getFactory(implPath, combinedProperties);
 
         String specifiedImplementation = combinedProperties
-                .getProperty(IbisProperties.IMPLEMENTATION);
+                .getProperty(AetherProperties.IMPLEMENTATION);
 
         // create the ibis instance
         return factory.createIbis(registryEventHandler, requiredCapabilities,
@@ -388,8 +388,8 @@ public final class IbisFactory {
      * single connection capability, and must specify a serialization.
      */
     private void checkSanity(RegistryEventHandler registryEventHandler,
-            IbisCapabilities capabilities, PortType[] portTypes)
-            throws IbisConfigurationException {
+            Capabilities capabilities, PortType[] portTypes)
+            throws ConfigurationException {
         for (PortType portType : portTypes) {
             // Check sanity of port types.
             int count = 0;
@@ -406,7 +406,7 @@ public final class IbisFactory {
                 count++;
             }
             if (count != 1) {
-                throw new IbisConfigurationException("PortType " + portType
+                throw new ConfigurationException("PortType " + portType
                         + " should specify exactly one connection type");
             }
             String[] strings = portType.getCapabilities();
@@ -418,7 +418,7 @@ public final class IbisFactory {
                 }
             }
             if (!serializationSpecified) {
-                throw new IbisConfigurationException("Port type " + portType
+                throw new ConfigurationException("Port type " + portType
                         + " should specify serialization");
             }
         }
@@ -428,10 +428,10 @@ public final class IbisFactory {
 
         if (registryEventHandler != null
                 && !capabilities
-                        .hasCapability(IbisCapabilities.MEMBERSHIP_UNRELIABLE)
+                        .hasCapability(Capabilities.MEMBERSHIP_UNRELIABLE)
                 && !capabilities
-                        .hasCapability(IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED)) {
-            throw new IbisConfigurationException(
+                        .hasCapability(Capabilities.MEMBERSHIP_TOTALLY_ORDERED)) {
+            throw new ConfigurationException(
                     "RegistryEventHandler specified but no "
                             + " membership capability requested");
         }
@@ -462,22 +462,22 @@ public final class IbisFactory {
      *            comma-separated implementation stack.
      * @return the new Ibis instance.
 
-     * @exception IbisCreationFailedException
+     * @exception CreationFailedException
      *                is thrown when the chosen Ibis implementation cannot be
      *                created for some reason.
      */
-    public Ibis createIbis(RegistryEventHandler registryEventHandler,
-            IbisCapabilities requiredCapabilities, Properties properties,
+    public Aether createIbis(RegistryEventHandler registryEventHandler,
+            Capabilities requiredCapabilities, Properties properties,
             Credentials credentials, byte[] applicationTag,
             PortType[] portTypes, String specifiedImplementation)
-            throws IbisCreationFailedException {
+            throws CreationFailedException {
 
         if (requiredCapabilities == null) {
-            throw new IbisConfigurationException("capabilities not specified");
+            throw new ConfigurationException("capabilities not specified");
         }
 
         if (portTypes == null) {
-            throw new IbisConfigurationException("port types not specified");
+            throw new ConfigurationException("port types not specified");
         }
 
         // print some info
@@ -497,7 +497,7 @@ public final class IbisFactory {
 
             StringBuffer str = new StringBuffer();
             str.append("IPL implementations:");
-            for (IbisStarter starter : implementations.values()) {
+            for (AetherStarter starter : implementations.values()) {
                 str.append(" ");
                 str.append(starter.getNickName());
             }
@@ -520,7 +520,7 @@ public final class IbisFactory {
             }
         }
 
-        IbisStarter starter = selectImplementation(requiredCapabilities,
+        AetherStarter starter = selectImplementation(requiredCapabilities,
                 portTypes, specifiedImplementation);
 
         if (isVerbose(properties)) {
@@ -534,17 +534,17 @@ public final class IbisFactory {
 
     }
 
-    private IbisStarter selectImplementation(
-            IbisCapabilities requiredCapabilities, PortType[] portTypes,
-            String specifiedImplementation) throws IbisCreationFailedException {
+    private AetherStarter selectImplementation(
+            Capabilities requiredCapabilities, PortType[] portTypes,
+            String specifiedImplementation) throws CreationFailedException {
 
         // The user specified an implementation. Try to find it, and see if it
         // matches the requirements
         if (specifiedImplementation != null) {
-            IbisStarter starter = implementations.get(specifiedImplementation);
+            AetherStarter starter = implementations.get(specifiedImplementation);
 
             if (starter == null) {
-                throw new IbisCreationFailedException(
+                throw new CreationFailedException(
                         "User specified implementation \""
                                 + specifiedImplementation
                                 + "\" cannot be found");
@@ -562,7 +562,7 @@ public final class IbisFactory {
                     portTypeString = portTypeString + " " + portType;
                 }
 
-                throw new IbisCreationFailedException(
+                throw new CreationFailedException(
                         "User specified implementation \""
                                 + specifiedImplementation
                                 + "\" does not fulfill specified requirements. Unmatched capabilities = "
@@ -576,8 +576,8 @@ public final class IbisFactory {
         // auto detect implementation
 
         // find all matching implementations
-        ArrayList<IbisStarter> matchingIbises = new ArrayList<IbisStarter>();
-        for (IbisStarter starter : implementations.values()) {
+        ArrayList<AetherStarter> matchingIbises = new ArrayList<AetherStarter>();
+        for (AetherStarter starter : implementations.values()) {
             if (starter.matches(requiredCapabilities, portTypes)) {
                 matchingIbises.add(starter);
             }
@@ -585,7 +585,7 @@ public final class IbisFactory {
 
         // if no implementations match, throw an error
         if (matchingIbises.size() == 0) {
-            throw new IbisCreationFailedException(
+            throw new CreationFailedException(
                     "Cannot find Ibis Implementation matching requirements");
         }
 
@@ -595,7 +595,7 @@ public final class IbisFactory {
         }
 
         // if multiple implementation match, return the default implementation
-        for (IbisStarter starter : matchingIbises) {
+        for (AetherStarter starter : matchingIbises) {
             if (starter.getNickName().equals(DEFAULT_IMPLEMENTATION)) {
                 return starter;
             }
@@ -604,17 +604,17 @@ public final class IbisFactory {
         // default not found in possible choices, we give up...
 
         String possibilities = "";
-        for (IbisStarter starter : matchingIbises) {
+        for (AetherStarter starter : matchingIbises) {
             possibilities = possibilities + " " + starter.getNickName();
         }
 
-        throw new IbisCreationFailedException(
+        throw new CreationFailedException(
                 "Multiple ibis implementations matchs requirements, but the default implementation (\""
                         + DEFAULT_IMPLEMENTATION
                         + "\") is not in list of possibilities: \""
                         + possibilities
                         + "\", please select an ibis manually with the \""
-                        + IbisProperties.IMPLEMENTATION + "\" property");
+                        + AetherProperties.IMPLEMENTATION + "\" property");
     }
 
     /**
@@ -672,7 +672,7 @@ public final class IbisFactory {
         return result.toArray(new JarFile[0]);
     }
 
-    private static IbisStarter loadIbisFromJar(JarFile jar,
+    private static AetherStarter loadIbisFromJar(JarFile jar,
             ClassLoader classLoader) {
 
         try {
@@ -692,7 +692,7 @@ public final class IbisFactory {
                 return null;
             }
 
-            return IbisStarter.createInstance(starterClass, classLoader,
+            return AetherStarter.createInstance(starterClass, classLoader,
                     nickName, iplVersion, implementationVersion);
         } catch (Exception e) {
             System.err.println("IbisFactory: Could not load ibis from jar: " + jar.getName()
@@ -726,7 +726,7 @@ public final class IbisFactory {
                 .getClassLoader());
 
         for (int i = 0; i < jarFiles.length; i++) {
-            IbisStarter starter = loadIbisFromJar(jarFiles[i], classLoader);
+            AetherStarter starter = loadIbisFromJar(jarFiles[i], classLoader);
 
             if (starter != null) {
                 implementations.put(starter.getNickName(), starter);
@@ -764,7 +764,7 @@ public final class IbisFactory {
                     continue;
                 }
 
-                IbisStarter starter = IbisStarter.createInstance(starterClass,
+                AetherStarter starter = AetherStarter.createInstance(starterClass,
                         classLoader, nickName, iplVersion,
                         implementationVersion);
 

@@ -53,7 +53,7 @@ public class ConnectionRefusedException extends ConnectionFailedException {
      *          the cause of the failure.
      */
     public ConnectionRefusedException(String detailMessage,
-            IbisIdentifier ibisIdentifier, String receivePortName,
+            AetherIdentifier ibisIdentifier, String receivePortName,
             Throwable cause) {
         super(detailMessage, ibisIdentifier, receivePortName, cause);
     }
@@ -70,7 +70,7 @@ public class ConnectionRefusedException extends ConnectionFailedException {
      *          the name of the receive port of the failed connection attempt.
      */
     public ConnectionRefusedException(String detailMessage,
-            IbisIdentifier ibisIdentifier, String receivePortName) {
+            AetherIdentifier ibisIdentifier, String receivePortName) {
         super(detailMessage, ibisIdentifier, receivePortName);
     }
 }

@@ -26,7 +26,7 @@ public interface Registry extends Manageable {
      * @exception IOException
      *                is thrown in case of trouble.
      */
-    public IbisIdentifier elect(String electionName) throws IOException;
+    public AetherIdentifier elect(String electionName) throws IOException;
 
     /**
      * Elects a single candidate from a number of candidates calling this method
@@ -49,7 +49,7 @@ public interface Registry extends Manageable {
      * @exception IOException
      *                is thrown in case of trouble.
      */
-    public IbisIdentifier elect(String electionName, long timeoutMillis)
+    public AetherIdentifier elect(String electionName, long timeoutMillis)
             throws IOException;
 
     /**
@@ -62,7 +62,7 @@ public interface Registry extends Manageable {
      * @exception IOException
      *                is thrown in case of trouble.
      */
-    public IbisIdentifier getElectionResult(String electionName)
+    public AetherIdentifier getElectionResult(String electionName)
             throws IOException;
 
     /**
@@ -79,7 +79,7 @@ public interface Registry extends Manageable {
      * @exception IOException
      *                is thrown in case of trouble.
      */
-    public IbisIdentifier getElectionResult(String electionName,
+    public AetherIdentifier getElectionResult(String electionName,
             long timeoutMillis) throws IOException;
 
     /**
@@ -91,7 +91,7 @@ public interface Registry extends Manageable {
      * @exception IOException
      *                is thrown in case of trouble.
      */
-    public void maybeDead(IbisIdentifier ibisIdentifier) throws IOException;
+    public void maybeDead(AetherIdentifier ibisIdentifier) throws IOException;
 
     /**
      * Instructs the registry to assume that the specified Ibis instance is
@@ -103,11 +103,11 @@ public interface Registry extends Manageable {
      * @exception IOException
      *                is thrown in case of trouble.
      */
-    public void assumeDead(IbisIdentifier ibisIdentifier) throws IOException;
+    public void assumeDead(AetherIdentifier ibisIdentifier) throws IOException;
 
     /**
      * Send a signal to one or more Ibis instances. This results in a
-     * {@link RegistryEventHandler#gotSignal(String,IbisIdentifier)} upcall on
+     * {@link RegistryEventHandler#gotSignal(String,AetherIdentifier)} upcall on
      * all Ibis instances in the given list. It is up to the application to
      * react accordingly.
      * 
@@ -119,7 +119,7 @@ public interface Registry extends Manageable {
      * @exception IOException
      *                is thrown in case of trouble.
      */
-    public void signal(String signal, IbisIdentifier... ibisIdentifiers)
+    public void signal(String signal, AetherIdentifier... ibisIdentifiers)
             throws IOException;
 
     /**
@@ -129,12 +129,12 @@ public interface Registry extends Manageable {
      * support registry downcalls. If no Ibis instances joined, an array with 0
      * entries is returned.
      * 
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *                is thrown when the port was not configured to support
      *                membership administration.
      * @return the joined Ibises.
      */
-    public IbisIdentifier[] joinedIbises();
+    public AetherIdentifier[] joinedIbises();
 
     /**
      * Returns the Ibis instances that left the pool. Returns the changes since
@@ -143,12 +143,12 @@ public interface Registry extends Manageable {
      * support registry downcalls. If no Ibis instances left, an array with 0
      * entries is returned.
      * 
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *                is thrown when ibis was not configured to support
      *                membership administration.
      * @return the left Ibises.
      */
-    public IbisIdentifier[] leftIbises();
+    public AetherIdentifier[] leftIbises();
 
     /**
      * Returns the Ibis instances that died. Returns the changes since the last
@@ -157,12 +157,12 @@ public interface Registry extends Manageable {
      * downcalls. If no Ibis instances died, an array with 0 entries is
      * returned.
      * 
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *                is thrown when ibis was not configured to support
      *                membership administration.
      * @return the Ibises that died.
      */
-    public IbisIdentifier[] diedIbises();
+    public AetherIdentifier[] diedIbises();
 
     /**
      * Returns the signals received. Returns the changes since the last
@@ -171,7 +171,7 @@ public interface Registry extends Manageable {
      * registry downcalls. If no signals were received, an array with 0 entries
      * is returned.
      * 
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *                is thrown when ibis was not configured to support signals.
      * @return the received signals.
      */
@@ -186,7 +186,7 @@ public interface Registry extends Manageable {
      *                is thrown when the property
      *                <code>ibis.pool.total_hosts</code> is not defined or
      *                does not represent a number.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *                is thrown when this is not a closed-world run.
      */
     public int getPoolSize();
@@ -203,7 +203,7 @@ public interface Registry extends Manageable {
      * When running closed-world, wait for the pool to close. A pool closes
      * after all Ibisses have joined.
      * 
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *                is thrown when this is not a closed-world run, or when
      *                registry events are not enabled yet.
      */
@@ -254,7 +254,7 @@ public interface Registry extends Manageable {
      * 
      * @exception IOException
      *                may be thrown when communication with the registry fails.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *                is thrown when ibis was not configured to support
      *                termination.
      * 
@@ -267,7 +267,7 @@ public interface Registry extends Manageable {
      * 
      * @return true if this pool has terminated, false if not.
      * 
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *                is thrown when ibis was not configured to support
      *                termination.
      */
@@ -279,12 +279,12 @@ public interface Registry extends Manageable {
      * 
      * @return The ibis which terminated the pool.
      * 
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *                is thrown when ibis was not configured to support
      *                termination.
      * 
      * 
      */
-    public IbisIdentifier waitUntilTerminated();
+    public AetherIdentifier waitUntilTerminated();
 
 }

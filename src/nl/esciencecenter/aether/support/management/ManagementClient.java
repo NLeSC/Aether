@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 import java.util.Properties;
 
 import nl.esciencecenter.aether.NoSuchPropertyException;
-import nl.esciencecenter.aether.impl.Ibis;
+import nl.esciencecenter.aether.impl.Aether;
 import nl.esciencecenter.aether.io.Conversion;
 import nl.esciencecenter.aether.support.Client;
 import nl.esciencecenter.aether.support.Connection;
@@ -29,14 +29,14 @@ public class ManagementClient implements Runnable {
 
     private final VirtualServerSocket serverSocket;
 
-    private final Ibis ibis;
+    private final Aether ibis;
 
     private boolean ended;
 
-    public ManagementClient(Properties properties, Ibis ibis)
+    public ManagementClient(Properties properties, Aether ibis)
             throws IOException {
         this.ibis = ibis;
-        String clientID = properties.getProperty(Ibis.ID_PROPERTY);
+        String clientID = properties.getProperty(Aether.ID_PROPERTY);
         Client client = Client.getOrCreateClient(clientID, properties, 0);
         this.virtualSocketFactory = client.getFactory();
 

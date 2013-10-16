@@ -1,9 +1,9 @@
 package ibis.ipl.examples;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
@@ -25,8 +25,8 @@ public class HelloUpcall implements MessageUpcall {
             PortType.SERIALIZATION_DATA, PortType.RECEIVE_AUTO_UPCALLS,
             PortType.CONNECTION_ONE_TO_ONE);
 
-    IbisCapabilities ibisCapabilities = new IbisCapabilities(
-            IbisCapabilities.ELECTIONS_STRICT);
+    Capabilities ibisCapabilities = new Capabilities(
+            Capabilities.ELECTIONS_STRICT);
 
     /** Set to true when server received message. */
     boolean finished = false;
@@ -50,7 +50,7 @@ public class HelloUpcall implements MessageUpcall {
         notifyAll();
     }
 
-    private void server(Ibis myIbis) throws IOException {
+    private void server(Aether myIbis) throws IOException {
 
         // Create a receive port, pass ourselves as the message upcall
         // handler
@@ -75,7 +75,7 @@ public class HelloUpcall implements MessageUpcall {
         receiver.close();
     }
 
-    private void client(Ibis myIbis, IbisIdentifier server) throws IOException {
+    private void client(Aether myIbis, AetherIdentifier server) throws IOException {
 
         // Create a send port for sending requests and connect.
         SendPort sender = myIbis.createSendPort(portType);
@@ -92,10 +92,10 @@ public class HelloUpcall implements MessageUpcall {
 
     private void run() throws Exception {
         // Create an ibis instance.
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portType);
+        Aether ibis = AetherFactory.createIbis(ibisCapabilities, null, portType);
 
         // Elect a server
-        IbisIdentifier server = ibis.registry().elect("Server");
+        AetherIdentifier server = ibis.registry().elect("Server");
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {

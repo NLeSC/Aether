@@ -1,8 +1,8 @@
 package nl.esciencecenter.aether.util.rpc;
 
-import nl.esciencecenter.aether.IbisIOException;
+import nl.esciencecenter.aether.AetherIOException;
 
-public class RemoteException extends IbisIOException {
+public class RemoteException extends AetherIOException {
 
     public RemoteException() {
 	super();

@@ -8,28 +8,28 @@ import java.util.Properties;
 
 import nl.esciencecenter.aether.CapabilitySet;
 import nl.esciencecenter.aether.Credentials;
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisCreationFailedException;
-import nl.esciencecenter.aether.IbisFactory;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.CreationFailedException;
+import nl.esciencecenter.aether.AetherFactory;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.RegistryEventHandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class SmartSocketsIbisStarter extends nl.esciencecenter.aether.IbisStarter {
+public final class SmartSocketsIbisStarter extends nl.esciencecenter.aether.AetherStarter {
 
     static final Logger logger = LoggerFactory
             .getLogger("ibis.ipl.impl.smartsockets.SmartSocketsIbisStarter");
 
-    static final IbisCapabilities ibisCapabilities = new IbisCapabilities(
-            IbisCapabilities.CLOSED_WORLD,
-            IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED,
-            IbisCapabilities.MEMBERSHIP_UNRELIABLE, IbisCapabilities.SIGNALS,
-            IbisCapabilities.ELECTIONS_UNRELIABLE,
-            IbisCapabilities.ELECTIONS_STRICT, IbisCapabilities.MALLEABLE,
-            IbisCapabilities.TERMINATION);
+    static final Capabilities ibisCapabilities = new Capabilities(
+            Capabilities.CLOSED_WORLD,
+            Capabilities.MEMBERSHIP_TOTALLY_ORDERED,
+            Capabilities.MEMBERSHIP_UNRELIABLE, Capabilities.SIGNALS,
+            Capabilities.ELECTIONS_UNRELIABLE,
+            Capabilities.ELECTIONS_STRICT, Capabilities.MALLEABLE,
+            Capabilities.TERMINATION);
 
     static final PortType portCapabilities = new PortType(
             PortType.SERIALIZATION_OBJECT_SUN,
@@ -51,7 +51,7 @@ public final class SmartSocketsIbisStarter extends nl.esciencecenter.aether.Ibis
     }
 
     @Override
-    public boolean matches(IbisCapabilities capabilities, PortType[] types) {
+    public boolean matches(Capabilities capabilities, PortType[] types) {
         if (!capabilities.matchCapabilities(ibisCapabilities)) {
             return false;
         }
@@ -65,12 +65,12 @@ public final class SmartSocketsIbisStarter extends nl.esciencecenter.aether.Ibis
 
     @Override
     public CapabilitySet unmatchedIbisCapabilities(
-            IbisCapabilities capabilities, PortType[] types) {
+            Capabilities capabilities, PortType[] types) {
         return capabilities.unmatchedCapabilities(ibisCapabilities);
     }
 
     @Override
-    public PortType[] unmatchedPortTypes(IbisCapabilities capabilities,
+    public PortType[] unmatchedPortTypes(Capabilities capabilities,
             PortType[] types) {
         ArrayList<PortType> result = new ArrayList<PortType>();
 
@@ -83,11 +83,11 @@ public final class SmartSocketsIbisStarter extends nl.esciencecenter.aether.Ibis
     }
 
     @Override
-    public Ibis startIbis(IbisFactory factory,
+    public Aether startIbis(AetherFactory factory,
             RegistryEventHandler registryEventHandler,
-            Properties userProperties, IbisCapabilities capabilities,
+            Properties userProperties, Capabilities capabilities,
             Credentials credentials, byte[] applicationTag,
-            PortType[] portTypes, String specifiedSubImplementation) throws IbisCreationFailedException {
+            PortType[] portTypes, String specifiedSubImplementation) throws CreationFailedException {
         return new SmartSocketsIbis(registryEventHandler, capabilities,
                 credentials, applicationTag, portTypes, userProperties, this);
     }

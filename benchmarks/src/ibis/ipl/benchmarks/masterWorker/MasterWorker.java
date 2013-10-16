@@ -3,10 +3,10 @@ package ibis.ipl.benchmarks.masterWorker;
 /* $Id: MasterWorker.java 11529 2009-11-18 15:53:11Z ceriel $ */
 
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
 import nl.esciencecenter.aether.ReceivePort;
@@ -26,7 +26,7 @@ final class MasterWorker {
 
     static final boolean ASSERT = false;
 
-    Ibis ibis;
+    Aether ibis;
 
     Registry registry;
 
@@ -34,14 +34,14 @@ final class MasterWorker {
 
     PortType manyToOneType;
 
-    IbisIdentifier masterID;
+    AetherIdentifier masterID;
 
     MasterWorker() {
 
         try {
 
-            IbisCapabilities s = new IbisCapabilities(
-                    IbisCapabilities.ELECTIONS_STRICT
+            Capabilities s = new Capabilities(
+                    Capabilities.ELECTIONS_STRICT
                     );
             
             manyToOneType = new PortType(
@@ -55,7 +55,7 @@ final class MasterWorker {
                     PortType.COMMUNICATION_RELIABLE,
                     PortType.RECEIVE_EXPLICIT);
 
-            ibis = IbisFactory.createIbis(s, null, manyToOneType, oneToOneType);
+            ibis = AetherFactory.createIbis(s, null, manyToOneType, oneToOneType);
 
             registry = ibis.registry();
 

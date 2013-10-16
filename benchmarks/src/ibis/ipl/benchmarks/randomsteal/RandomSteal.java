@@ -2,10 +2,10 @@ package ibis.ipl.benchmarks.randomsteal;
 
 import nl.esciencecenter.aether.AlreadyConnectedException;
 import nl.esciencecenter.aether.ConnectionFailedException;
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
 import nl.esciencecenter.aether.ReceivePort;
@@ -69,10 +69,10 @@ public class RandomSteal implements RegistryEventHandler {
             PortType.RECEIVE_TIMEOUT,
             PortType.CONNECTION_MANY_TO_MANY);
     
-    private static final IbisCapabilities ibisCapabilities =
-        new IbisCapabilities(IbisCapabilities.ELECTIONS_STRICT, 
-        		IbisCapabilities.MALLEABLE, 
-        		IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED);
+    private static final Capabilities ibisCapabilities =
+        new Capabilities(Capabilities.ELECTIONS_STRICT, 
+        		Capabilities.MALLEABLE, 
+        		Capabilities.MEMBERSHIP_TOTALLY_ORDERED);
 
     private final PortType portType; 
     private final int nodes;
@@ -82,7 +82,7 @@ public class RandomSteal implements RegistryEventHandler {
     
    // private final boolean reconnect;
     
-    private Ibis ibis;
+    private Aether ibis;
     
     private ReceivePort barrierR;
     private SendPort barrierS;
@@ -101,7 +101,7 @@ public class RandomSteal implements RegistryEventHandler {
     
     private final byte [] message;
     
-    private final ArrayList<IbisIdentifier> nodeList = new ArrayList<IbisIdentifier>();
+    private final ArrayList<AetherIdentifier> nodeList = new ArrayList<AetherIdentifier>();
     
     /// ************* DO NOT USE ************** NOT FINISHED ********** 
     
@@ -117,10 +117,10 @@ public class RandomSteal implements RegistryEventHandler {
     
     private static class PortIdentifier { 
     	
-    	final IbisIdentifier id;
+    	final AetherIdentifier id;
     	final String name;
 		
-    	public PortIdentifier(final IbisIdentifier id, final String name) {
+    	public PortIdentifier(final AetherIdentifier id, final String name) {
 			super();
 			this.id = id;
 			this.name = name;
@@ -178,7 +178,7 @@ public class RandomSteal implements RegistryEventHandler {
     	message = new byte[bytes];
     }
         
-    private SendPort connect(IbisIdentifier id, String name) { 
+    private SendPort connect(AetherIdentifier id, String name) { 
     
     	if (!reconnect) { 
     		
@@ -252,7 +252,7 @@ public class RandomSteal implements RegistryEventHandler {
     	}
     }
     
-    private void disconnect(SendPort port, IbisIdentifier id, String name) { 
+    private void disconnect(SendPort port, AetherIdentifier id, String name) { 
     	
     	if (reconnect) { 
     		try {
@@ -265,7 +265,7 @@ public class RandomSteal implements RegistryEventHandler {
     	}
     }
     
-    private void initBarrier(IbisIdentifier server) { 
+    private void initBarrier(AetherIdentifier server) { 
   	
     	this.server = server.equals(ibis.identifier());
 
@@ -282,7 +282,7 @@ public class RandomSteal implements RegistryEventHandler {
     	
     	if (this.server) { 
     		// I have also seen all joins, so connect to all clients
-    		for (IbisIdentifier id : nodeList) { 
+    		for (AetherIdentifier id : nodeList) { 
     			try {
     				// We do not connect to ourselves...
     				if (!id.equals(ibis.identifier())) { 
@@ -417,11 +417,11 @@ public class RandomSteal implements RegistryEventHandler {
     	}
     }
     
-    private IbisIdentifier selectVictim() { 
+    private AetherIdentifier selectVictim() { 
     	
     	int tmp = random.nextInt(nodes);
     	
-    	IbisIdentifier victim = nodeList.get(tmp);
+    	AetherIdentifier victim = nodeList.get(tmp);
     	
     	if (victim.equals(ibis.identifier())) { 
     		return nodeList.get((tmp+1)%nodes);        	
@@ -449,7 +449,7 @@ public class RandomSteal implements RegistryEventHandler {
 
     				rm.readArray(message);
 
-    				IbisIdentifier id = rm.origin().ibisIdentifier();
+    				AetherIdentifier id = rm.origin().ibisIdentifier();
 
     				rm.finish();
 
@@ -470,7 +470,7 @@ public class RandomSteal implements RegistryEventHandler {
     	}
     }
     
-    private void steal(IbisIdentifier id) { 
+    private void steal(AetherIdentifier id) { 
 
     	try { 
     		SendPort tmp = connect(id, "steal");
@@ -523,7 +523,7 @@ public class RandomSteal implements RegistryEventHandler {
 	public void run() throws Exception {
     	
         // Create an ibis instance.
-        ibis = IbisFactory.createIbis(ibisCapabilities, this, portType, portTypeBarrier);
+        ibis = AetherFactory.createIbis(ibisCapabilities, this, portType, portTypeBarrier);
 
         System.out.println("Started on: " + ibis.identifier());
         
@@ -542,7 +542,7 @@ public class RandomSteal implements RegistryEventHandler {
         new RequestHandler().start();
         
         // Elect a server
-        IbisIdentifier server = ibis.registry().elect("Server");
+        AetherIdentifier server = ibis.registry().elect("Server");
 
         System.out.println("Server is " + server);
         
@@ -581,25 +581,25 @@ public class RandomSteal implements RegistryEventHandler {
         ibis.end();
     }
 
-	public void died(IbisIdentifier corpse) {
+	public void died(AetherIdentifier corpse) {
 		if (!getDone()) { 
 			System.err.println("Ibis died unexpectedly!" + corpse);
 		}
 	}
 	
-	public void electionResult(String electionName, IbisIdentifier winner) {
+	public void electionResult(String electionName, AetherIdentifier winner) {
 		// ignore
 	}
 
-	public void gotSignal(String signal, IbisIdentifier source) {
+	public void gotSignal(String signal, AetherIdentifier source) {
 		// ignore
 	}
 
-	public synchronized void joined(IbisIdentifier joinedIbis) {
+	public synchronized void joined(AetherIdentifier joinedIbis) {
 		nodeList.add(joinedIbis);		
 	}
 
-	public void left(IbisIdentifier leftIbis) {
+	public void left(AetherIdentifier leftIbis) {
 		if (!getDone()) { 
 			System.err.println("Ibis died unexpectedly!" + leftIbis);
 		}
@@ -609,7 +609,7 @@ public class RandomSteal implements RegistryEventHandler {
 		// ignored
 	}
 
-	public void poolTerminated(IbisIdentifier source) {
+	public void poolTerminated(AetherIdentifier source) {
 		// ignored
 	}
 

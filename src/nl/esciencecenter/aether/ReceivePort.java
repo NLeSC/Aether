@@ -78,10 +78,10 @@ public interface ReceivePort extends Manageable {
      * This method blocks until a message arrives on this receiveport.
      * When a receiveport is configured to generate upcalls, 
      * using this method is NOT allowed; in that case an
-     * {@link IbisConfigurationException} is thrown.
+     * {@link ConfigurationException} is thrown.
      * @return
      *          the message received.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *          is thrown when the receiveport is configured to use upcalls.
      * @exception IOException
      *          is thrown in case of other trouble.
@@ -102,7 +102,7 @@ public interface ReceivePort extends Manageable {
      *          the message received.
      * @exception ReceiveTimedOutException
      *          is thrown when the timeout expires and no message arrives.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *          is thrown when the receiveport is configured to use upcalls.
      * @exception IOException
      *          is thrown in case of other trouble.
@@ -116,7 +116,7 @@ public interface ReceivePort extends Manageable {
      * normal poll: it will always return null, but it might generate an upcall.
      * @return
      *          the message received, or <code>null</code>.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *          is thrown when the receiveport is not configured to support
      *          polls.
      * @exception IOException
@@ -234,7 +234,7 @@ public interface ReceivePort extends Manageable {
      * If no connections were lost, an array with 0 entries is returned.
      * @return
      *          the lost connections.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *          is thrown when the port was not configured to support
      *          connection downcalls.
      */
@@ -250,7 +250,7 @@ public interface ReceivePort extends Manageable {
      * If there are no new connections, an array with 0 entries is returned.
      * @return
      *          the new connections.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *          is thrown when the port was not configured to support
      *          connection downcalls.
      */

@@ -11,12 +11,12 @@ import java.util.Map;
 import java.util.Properties;
 
 import nl.esciencecenter.aether.Credentials;
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisConfigurationException;
-import nl.esciencecenter.aether.IbisCreationFailedException;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.ConfigurationException;
+import nl.esciencecenter.aether.CreationFailedException;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.NoSuchPropertyException;
 import nl.esciencecenter.aether.PortType;
@@ -31,7 +31,7 @@ import nl.esciencecenter.aether.impl.stacking.lrmc.util.DynamicObjectArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LrmcIbis implements Ibis {
+public class LrmcIbis implements Aether {
 
     private static final Logger logger = LoggerFactory
             .getLogger(LrmcIbis.class);
@@ -50,34 +50,34 @@ public class LrmcIbis implements Ibis {
             this.ibis = ibis;
         }
 
-        public void joined(IbisIdentifier id) {
+        public void joined(AetherIdentifier id) {
             ibis.addIbis(id);
             if (h != null) {
                 h.joined(id);
             }
         }
 
-        public void left(IbisIdentifier id) {
+        public void left(AetherIdentifier id) {
             ibis.removeIbis(id);
             if (h != null) {
                 h.left(id);
             }
         }
 
-        public void died(IbisIdentifier id) {
+        public void died(AetherIdentifier id) {
             ibis.removeIbis(id);
             if (h != null) {
                 h.died(id);
             }
         }
 
-        public void gotSignal(String s, IbisIdentifier id) {
+        public void gotSignal(String s, AetherIdentifier id) {
             if (h != null) {
                 h.gotSignal(s, id);
             }
         }
 
-        public void electionResult(String electionName, IbisIdentifier winner) {
+        public void electionResult(String electionName, AetherIdentifier winner) {
             if (h != null) {
                 h.electionResult(electionName, winner);
             }
@@ -89,42 +89,42 @@ public class LrmcIbis implements Ibis {
             }
         }
 
-        public void poolTerminated(IbisIdentifier source) {
+        public void poolTerminated(AetherIdentifier source) {
             if (h != null) {
                 h.poolTerminated(source);
             }
         }
     }
 
-    Ibis base;
+    Aether base;
 
     int myID;
 
     PortType[] portTypes;
 
-    IbisCapabilities capabilities;
+    Capabilities capabilities;
 
     private int nextIbisID = 0;
 
     private BitSet diedIbises = new BitSet();
 
-    HashMap<IbisIdentifier, Integer> knownIbis = new HashMap<IbisIdentifier, Integer>();
+    HashMap<AetherIdentifier, Integer> knownIbis = new HashMap<AetherIdentifier, Integer>();
 
-    DynamicObjectArray<IbisIdentifier> ibisList = new DynamicObjectArray<IbisIdentifier>();
+    DynamicObjectArray<AetherIdentifier> ibisList = new DynamicObjectArray<AetherIdentifier>();
 
     HashMap<String, Multicaster> multicasters = new HashMap<String, Multicaster>();
 
-    public LrmcIbis(IbisFactory factory,
+    public LrmcIbis(AetherFactory factory,
             RegistryEventHandler registryEventHandler,
-            Properties userProperties, IbisCapabilities capabilities,
+            Properties userProperties, Capabilities capabilities,
             Credentials credentials, byte[] applicationTag, PortType[] portTypes,
             String specifiedSubImplementation, LrmcIbisStarter lrmcIbisStarter)
-            throws IbisCreationFailedException {
+            throws CreationFailedException {
         List<PortType> requiredPortTypes = new ArrayList<PortType>();
         logger.info("Constructor LRMC Ibis");
 
         if (specifiedSubImplementation == null) {
-            throw new IbisCreationFailedException(
+            throw new CreationFailedException(
                     "LrmcIbis: child Ibis implementation not specified");
         }
 
@@ -152,7 +152,7 @@ public class LrmcIbis implements Ibis {
                 specifiedSubImplementation);
     }
 
-    public synchronized void addIbis(IbisIdentifier ibis) {
+    public synchronized void addIbis(AetherIdentifier ibis) {
 
         if (!knownIbis.containsKey(ibis)) {
             knownIbis.put(ibis, new Integer(nextIbisID));
@@ -170,13 +170,13 @@ public class LrmcIbis implements Ibis {
         }
     }
 
-    synchronized IbisIdentifier getId(int id) {
+    synchronized AetherIdentifier getId(int id) {
 
         if (diedIbises.get(id)) {
             return null;
         }
 
-        IbisIdentifier ibisID = ibisList.get(id);
+        AetherIdentifier ibisID = ibisList.get(id);
 
         if (ibisID == null) {
             try {
@@ -189,7 +189,7 @@ public class LrmcIbis implements Ibis {
         return ibisID;
     }
 
-    synchronized int getIbisID(IbisIdentifier ibis) {
+    synchronized int getIbisID(AetherIdentifier ibis) {
 
         Integer s = knownIbis.get(ibis);
 
@@ -201,7 +201,7 @@ public class LrmcIbis implements Ibis {
         }
     }
 
-    public synchronized void removeIbis(IbisIdentifier ibis) {
+    public synchronized void removeIbis(AetherIdentifier ibis) {
 
         Integer tmp = knownIbis.remove(ibis);
 
@@ -239,7 +239,7 @@ public class LrmcIbis implements Ibis {
             }
             if (cU != null
                     && !portType.hasCapability(PortType.CONNECTION_UPCALLS)) {
-                throw new IbisConfigurationException(
+                throw new ConfigurationException(
                         "connection upcalls not supported by this porttype");
             }
             synchronized (this) {
@@ -265,16 +265,16 @@ public class LrmcIbis implements Ibis {
             }
             if (cU != null
                     && !portType.hasCapability(PortType.CONNECTION_UPCALLS)) {
-                throw new IbisConfigurationException(
+                throw new ConfigurationException(
                         "connection upcalls not supported by this porttype");
             }
             if (u != null
                     && !portType.hasCapability(PortType.RECEIVE_AUTO_UPCALLS)) {
-                throw new IbisConfigurationException(
+                throw new ConfigurationException(
                         "upcalls not supported by this porttype");
             }
             if (u == null && !portType.hasCapability(PortType.RECEIVE_EXPLICIT)) {
-                throw new IbisConfigurationException(
+                throw new ConfigurationException(
                         "explicit receive not supported by this porttype");
             }
             synchronized (this) {
@@ -327,7 +327,7 @@ public class LrmcIbis implements Ibis {
             }
         }
         if (!matched) {
-            throw new IbisConfigurationException("PortType " + tp
+            throw new ConfigurationException("PortType " + tp
                     + " not specified when creating this Ibis instance");
         }
     }
@@ -372,7 +372,7 @@ public class LrmcIbis implements Ibis {
         base.poll();
     }
 
-    public IbisIdentifier identifier() {
+    public AetherIdentifier identifier() {
         return base.identifier();
     }
 

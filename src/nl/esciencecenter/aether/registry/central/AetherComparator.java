@@ -3,16 +3,16 @@ package nl.esciencecenter.aether.registry.central;
 
 import java.util.Comparator;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 
 /**
  * Compares two IbisIdentifiers made by this registry by numerically sorting
  * ID's
  * 
  */
-public class IbisComparator implements Comparator<IbisIdentifier> {
+public class AetherComparator implements Comparator<AetherIdentifier> {
 
-    public int compare(IbisIdentifier one, IbisIdentifier other) {
+    public int compare(AetherIdentifier one, AetherIdentifier other) {
         try {
 
             int oneID = Integer.parseInt(one.getID());

@@ -3,7 +3,7 @@ package nl.esciencecenter.aether.impl.stacking.lrmc;
 
 import java.io.IOException;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
@@ -111,7 +111,7 @@ public class LabelRoutingMulticast extends Thread implements MessageUpcall {
             }
 
             boolean failed = false;
-            IbisIdentifier ibisID = null;
+            AetherIdentifier ibisID = null;
 
             try {
                 sp = ibis.base.createSendPort(LrmcIbis.additionalPortType);
@@ -219,7 +219,7 @@ public class LabelRoutingMulticast extends Thread implements MessageUpcall {
         }
     }
 
-    public void setDestination(IbisIdentifier[] destinations) {
+    public void setDestination(AetherIdentifier[] destinations) {
 
         logger.debug("setDestination called, destinations.length = "
                 + destinations.length, new Throwable());

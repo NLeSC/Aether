@@ -7,22 +7,22 @@ import java.io.IOException;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 
 public class Election {
     
     private final String name;
-    private SortedSet<IbisIdentifier> candidates;
+    private SortedSet<AetherIdentifier> candidates;
     
     Election(String name) {
         this.name = name;
         
-        candidates = new TreeSet<IbisIdentifier>(new IbisComparator());
+        candidates = new TreeSet<AetherIdentifier>(new AetherComparator());
     }
     
     Election(DataInputStream in) throws IOException {
         name = in.readUTF();
-        candidates = new TreeSet<IbisIdentifier>(new IbisComparator());
+        candidates = new TreeSet<AetherIdentifier>(new AetherComparator());
         
         int nrOfCandidates = in.readInt();
         
@@ -31,20 +31,20 @@ public class Election {
         }
         
         for(int i = 0; i < nrOfCandidates; i++) {
-            candidates.add(new IbisIdentifier(in));
+            candidates.add(new AetherIdentifier(in));
         }
     }
     
     synchronized void writeTo(DataOutputStream out) throws IOException {
         out.writeUTF(name);
         out.writeInt(candidates.size());
-        for(IbisIdentifier candidate: candidates) {
+        for(AetherIdentifier candidate: candidates) {
             candidate.writeTo(out);
         }
     }
 
     synchronized void merge(Election other) {
-        for(IbisIdentifier candidate: other.candidates) {
+        for(AetherIdentifier candidate: other.candidates) {
             candidates.add(candidate);
         }
     }
@@ -57,7 +57,7 @@ public class Election {
         return candidates.size();
     }
     
-    public synchronized IbisIdentifier getWinner() {
+    public synchronized AetherIdentifier getWinner() {
         if (candidates.isEmpty()) {
             return null;
         }
@@ -66,23 +66,23 @@ public class Election {
         return candidates.first();
     }
     
-    public synchronized IbisIdentifier[] getCandidates() {
+    public synchronized AetherIdentifier[] getCandidates() {
         if (candidates.isEmpty()) {
-            return new IbisIdentifier[0];
+            return new AetherIdentifier[0];
         }
         
         //use sorting function of set to determine winner
-        return candidates.toArray(new IbisIdentifier[0]);
+        return candidates.toArray(new AetherIdentifier[0]);
     }
     
-    public synchronized void addCandidate(IbisIdentifier candidate) {
+    public synchronized void addCandidate(AetherIdentifier candidate) {
         candidates.add(candidate);
     }
     
     public synchronized String toString() {
         String result = name + " candidates: ";
         
-        for(IbisIdentifier candidate: candidates) {
+        for(AetherIdentifier candidate: candidates) {
             result += candidate;
         }
         

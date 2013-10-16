@@ -16,7 +16,7 @@ import java.util.Map.Entry;
 
 import nl.esciencecenter.aether.ConnectionFailedException;
 import nl.esciencecenter.aether.ConnectionsFailedException;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.NoSuchPropertyException;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortIdentifier;
@@ -76,13 +76,13 @@ public class SmartSocketsUltraLightSendPort implements SendPort {
 		connect(receiver);
 	}
 
-	public ReceivePortIdentifier connect(IbisIdentifier ibisIdentifier, String receivePortName) throws ConnectionFailedException {
-		ReceivePortIdentifier id = new nl.esciencecenter.aether.impl.ReceivePortIdentifier(receivePortName, (nl.esciencecenter.aether.impl.IbisIdentifier) ibisIdentifier);
+	public ReceivePortIdentifier connect(AetherIdentifier ibisIdentifier, String receivePortName) throws ConnectionFailedException {
+		ReceivePortIdentifier id = new nl.esciencecenter.aether.impl.ReceivePortIdentifier(receivePortName, (nl.esciencecenter.aether.impl.AetherIdentifier) ibisIdentifier);
 		connect(id);
 		return id; 
 	}
 
-	public ReceivePortIdentifier connect(IbisIdentifier ibisIdentifier, String receivePortName, long timeoutMillis, boolean fillTimeout) throws ConnectionFailedException {
+	public ReceivePortIdentifier connect(AetherIdentifier ibisIdentifier, String receivePortName, long timeoutMillis, boolean fillTimeout) throws ConnectionFailedException {
 		return connect(ibisIdentifier, receivePortName);
 	}
 
@@ -121,21 +121,21 @@ public class SmartSocketsUltraLightSendPort implements SendPort {
 		connect(receivePortIdentifiers);
 	}
 
-	public ReceivePortIdentifier[] connect(Map<IbisIdentifier, String> ports) throws ConnectionsFailedException {
+	public ReceivePortIdentifier[] connect(Map<AetherIdentifier, String> ports) throws ConnectionsFailedException {
 
 		ReceivePortIdentifier [] tmp = new ReceivePortIdentifier[ports.size()];
 		
 		int index = 0;
 		
-		for (Entry<IbisIdentifier, String> e : ports.entrySet()) { 
-			tmp[index++] = new nl.esciencecenter.aether.impl.ReceivePortIdentifier(e.getValue(), (nl.esciencecenter.aether.impl.IbisIdentifier) e.getKey());
+		for (Entry<AetherIdentifier, String> e : ports.entrySet()) { 
+			tmp[index++] = new nl.esciencecenter.aether.impl.ReceivePortIdentifier(e.getValue(), (nl.esciencecenter.aether.impl.AetherIdentifier) e.getKey());
 		}
 		
 		connect(tmp);
 		return tmp;
 	}
 
-	public ReceivePortIdentifier[] connect(Map<IbisIdentifier, String> ports, long timeoutMillis, boolean fillTimeout) throws ConnectionsFailedException {
+	public ReceivePortIdentifier[] connect(Map<AetherIdentifier, String> ports, long timeoutMillis, boolean fillTimeout) throws ConnectionsFailedException {
 		return connect(ports);
 	}
 
@@ -149,8 +149,8 @@ public class SmartSocketsUltraLightSendPort implements SendPort {
 		}
 	}
 
-	public void disconnect(IbisIdentifier ibisIdentifier, String receivePortName) throws IOException {
-		disconnect(new nl.esciencecenter.aether.impl.ReceivePortIdentifier(receivePortName, (nl.esciencecenter.aether.impl.IbisIdentifier) ibisIdentifier));
+	public void disconnect(AetherIdentifier ibisIdentifier, String receivePortName) throws IOException {
+		disconnect(new nl.esciencecenter.aether.impl.ReceivePortIdentifier(receivePortName, (nl.esciencecenter.aether.impl.AetherIdentifier) ibisIdentifier));
 	}
 
 	public PortType getPortType() {
@@ -233,7 +233,7 @@ public class SmartSocketsUltraLightSendPort implements SendPort {
 
 		for (ReceivePortIdentifier id : connections) { 		
 
-			nl.esciencecenter.aether.impl.IbisIdentifier dst = (nl.esciencecenter.aether.impl.IbisIdentifier) id.ibisIdentifier();
+			nl.esciencecenter.aether.impl.AetherIdentifier dst = (nl.esciencecenter.aether.impl.AetherIdentifier) id.ibisIdentifier();
 			VirtualSocketAddress a = VirtualSocketAddress.fromBytes(dst.getImplementationData(), 0);
 			
 			if (logger.isDebugEnabled()) { 

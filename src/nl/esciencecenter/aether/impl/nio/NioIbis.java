@@ -12,20 +12,20 @@ import java.util.HashMap;
 import java.util.Properties;
 
 import nl.esciencecenter.aether.Credentials;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisCreationFailedException;
-import nl.esciencecenter.aether.IbisStarter;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.CreationFailedException;
+import nl.esciencecenter.aether.AetherStarter;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortConnectUpcall;
 import nl.esciencecenter.aether.RegistryEventHandler;
 import nl.esciencecenter.aether.SendPortDisconnectUpcall;
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class NioIbis extends nl.esciencecenter.aether.impl.Ibis {
+public final class NioIbis extends nl.esciencecenter.aether.impl.Aether {
 
     static final String prefix = "ibis.ipl.impl.nio.";
 
@@ -40,13 +40,13 @@ public final class NioIbis extends nl.esciencecenter.aether.impl.Ibis {
 
     ChannelFactory factory;
 
-    private HashMap<nl.esciencecenter.aether.IbisIdentifier, InetSocketAddress> addresses
-        = new HashMap<nl.esciencecenter.aether.IbisIdentifier, InetSocketAddress>();
+    private HashMap<nl.esciencecenter.aether.AetherIdentifier, InetSocketAddress> addresses
+        = new HashMap<nl.esciencecenter.aether.AetherIdentifier, InetSocketAddress>();
 
     private SendReceiveThread sendReceiveThread = null;
 
-    public NioIbis(RegistryEventHandler r, IbisCapabilities p, Credentials credentials, byte[] applicationTag, PortType[] types, Properties tp,
-            IbisStarter starter) throws IbisCreationFailedException {
+    public NioIbis(RegistryEventHandler r, Capabilities p, Credentials credentials, byte[] applicationTag, PortType[] types, Properties tp,
+            AetherStarter starter) throws CreationFailedException {
 
         super(r, p, credentials, applicationTag, types, tp, starter);
         properties.checkProperties(prefix, props, null, true);
@@ -109,7 +109,7 @@ public final class NioIbis extends nl.esciencecenter.aether.impl.Ibis {
         return sendReceiveThread;
     }
 
-    InetSocketAddress getAddress(IbisIdentifier id) throws IOException {
+    InetSocketAddress getAddress(AetherIdentifier id) throws IOException {
         InetSocketAddress idAddr;
         synchronized(addresses) {
             idAddr = addresses.get(id);

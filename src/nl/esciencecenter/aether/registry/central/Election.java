@@ -1,6 +1,6 @@
 package nl.esciencecenter.aether.registry.central;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 
 public class Election {
     
@@ -14,7 +14,7 @@ public class Election {
         return event.getDescription();
     }
 
-    public IbisIdentifier getWinner() {
+    public AetherIdentifier getWinner() {
         return event.getIbis();
     }
     

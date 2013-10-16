@@ -3,7 +3,7 @@ package nl.esciencecenter.aether.impl.stacking.lrmc;
 
 import java.io.IOException;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.impl.stacking.lrmc.io.BufferedArrayInputStream;
 import nl.esciencecenter.aether.impl.stacking.lrmc.io.BufferedArrayOutputStream;
@@ -48,7 +48,7 @@ public class Multicaster implements MessageReceiver {
 
     private InputStreams inputStreams = new InputStreams();
 
-    private IbisIdentifier[] destination = null;
+    private AetherIdentifier[] destination = null;
 
     LrmcSendPort sendPort = null;
     LrmcReceivePort receivePort = null;
@@ -89,7 +89,7 @@ public class Multicaster implements MessageReceiver {
         this.name = name;
     }
 
-    public synchronized void setDestination(IbisIdentifier[] dest) {
+    public synchronized void setDestination(AetherIdentifier[] dest) {
         destination = dest;
         cache.setDestinationSize(dest.length);
     }
@@ -113,7 +113,7 @@ public class Multicaster implements MessageReceiver {
         return inputStreams.hasData(tmp, m);
     }
 
-    void initializeSend(IbisIdentifier[] destinations) throws IOException {
+    void initializeSend(AetherIdentifier[] destinations) throws IOException {
         if (destination != destinations) {
             destination = destinations;
             lrmc.setDestination(destinations);

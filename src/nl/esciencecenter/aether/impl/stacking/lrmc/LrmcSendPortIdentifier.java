@@ -1,21 +1,21 @@
 package nl.esciencecenter.aether.impl.stacking.lrmc;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.SendPortIdentifier;
 
 class LrmcSendPortIdentifier implements SendPortIdentifier {
 
     private static final long serialVersionUID = 1L;
 
-    IbisIdentifier ibis;
+    AetherIdentifier ibis;
     String name;
 
-    LrmcSendPortIdentifier(IbisIdentifier ibis, String name) {
+    LrmcSendPortIdentifier(AetherIdentifier ibis, String name) {
         this.ibis = ibis;
         this.name = name;
     }
 
-    public IbisIdentifier ibisIdentifier() {
+    public AetherIdentifier ibisIdentifier() {
         return ibis;
     }
 

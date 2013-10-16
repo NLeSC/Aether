@@ -8,7 +8,7 @@ import java.util.Properties;
 
 import nl.esciencecenter.aether.ConnectionFailedException;
 import nl.esciencecenter.aether.ConnectionsFailedException;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.NoSuchPropertyException;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortIdentifier;
@@ -71,12 +71,12 @@ public class StackingSendPort implements SendPort {
 
     }
 
-    public ReceivePortIdentifier connect(IbisIdentifier id, String name)
+    public ReceivePortIdentifier connect(AetherIdentifier id, String name)
             throws ConnectionFailedException {
         return connect(id, name, 0L, true);
     }
 
-    public ReceivePortIdentifier connect(IbisIdentifier id, String name,
+    public ReceivePortIdentifier connect(AetherIdentifier id, String name,
             long timeoutMillis, boolean fillTimeout)
             throws ConnectionFailedException {
         return base.connect(id, name, timeoutMillis, fillTimeout);
@@ -92,12 +92,12 @@ public class StackingSendPort implements SendPort {
         base.connect(ports, timeoutMillis, fillTimeout);
     }
 
-    public ReceivePortIdentifier[] connect(Map<IbisIdentifier, String> ports)
+    public ReceivePortIdentifier[] connect(Map<AetherIdentifier, String> ports)
             throws ConnectionsFailedException {
         return connect(ports, 0L, true);
     }
 
-    public ReceivePortIdentifier[] connect(Map<IbisIdentifier, String> ports,
+    public ReceivePortIdentifier[] connect(Map<AetherIdentifier, String> ports,
             long timeoutMillis, boolean fillTimeout)
             throws ConnectionsFailedException {
         return base.connect(ports, timeoutMillis, fillTimeout);
@@ -111,7 +111,7 @@ public class StackingSendPort implements SendPort {
         base.disconnect(receiver);
     }
 
-    public void disconnect(IbisIdentifier id, String name) throws IOException {
+    public void disconnect(AetherIdentifier id, String name) throws IOException {
         base.disconnect(id, name);
     }
 

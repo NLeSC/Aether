@@ -1,9 +1,9 @@
 package ibis.ipl.examples;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
@@ -27,19 +27,19 @@ public class OneToMany implements MessageUpcall {
             PortType.SERIALIZATION_DATA, PortType.RECEIVE_AUTO_UPCALLS,
             PortType.CONNECTION_ONE_TO_MANY, PortType.CONNECTION_DOWNCALLS);
 
-    IbisCapabilities ibisCapabilities = new IbisCapabilities(
-            IbisCapabilities.ELECTIONS_STRICT,
-            IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED);
+    Capabilities ibisCapabilities = new Capabilities(
+            Capabilities.ELECTIONS_STRICT,
+            Capabilities.MEMBERSHIP_TOTALLY_ORDERED);
 
-    private void server(Ibis myIbis) throws Exception {
+    private void server(Aether myIbis) throws Exception {
         // create a sendport to send messages with
         SendPort sendPort = myIbis.createSendPort(portType);
 
         // ones every 10 seconds, send the time to all the members in the pool
         // including ourselves. Stops after two minutes (12 * 10 seconds)
         for (int i = 0; i < 12; i++) {
-            IbisIdentifier[] joinedIbises = myIbis.registry().joinedIbises();
-            for (IbisIdentifier joinedIbis : joinedIbises) {
+            AetherIdentifier[] joinedIbises = myIbis.registry().joinedIbises();
+            for (AetherIdentifier joinedIbis : joinedIbises) {
                 sendPort.connect(joinedIbis, "receive port");
             }
 
@@ -71,7 +71,7 @@ public class OneToMany implements MessageUpcall {
     /**
      * Client function. Pretends to be busy for a while, and exits.
      */
-    private void client(Ibis myIbis, IbisIdentifier server) throws Exception {
+    private void client(Aether myIbis, AetherIdentifier server) throws Exception {
         // no nothing for a while
         Thread.sleep(120000);
     }
@@ -88,7 +88,7 @@ public class OneToMany implements MessageUpcall {
 
     private void run() throws Exception {
         // Create an ibis instance.
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portType);
+        Aether ibis = AetherFactory.createIbis(ibisCapabilities, null, portType);
 
         // create a receive port to receive messages with
         ReceivePort receiver = ibis.createReceivePort(portType, "receive port",
@@ -100,7 +100,7 @@ public class OneToMany implements MessageUpcall {
         receiver.enableMessageUpcalls();
 
         // Elect a server
-        IbisIdentifier server = ibis.registry().elect("Server");
+        AetherIdentifier server = ibis.registry().elect("Server");
 
         // If I am the server, run server, else run client.
         if (server.equals(ibis.identifier())) {

@@ -6,7 +6,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.io.Serializable;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 
 public final class Event implements Serializable, Comparable<Event> {
 
@@ -39,13 +39,13 @@ public final class Event implements Serializable, Comparable<Event> {
 	private final String description;
 
 	// single ibis field, denoting which ibis this event is about
-	private final IbisIdentifier ibis;
+	private final AetherIdentifier ibis;
 
 	// multiple ibisses field (only used for destinations in signals)
-	private final IbisIdentifier[] destinations;
+	private final AetherIdentifier[] destinations;
 
-	public Event(int time, int type, String description, IbisIdentifier ibis,
-			IbisIdentifier... destinations) {
+	public Event(int time, int type, String description, AetherIdentifier ibis,
+			AetherIdentifier... destinations) {
 		this.time = time;
 		this.type = type;
 		this.ibis = ibis;
@@ -66,14 +66,14 @@ public final class Event implements Serializable, Comparable<Event> {
 		type = in.readInt();
 		description = in.readUTF();
 		if (in.readBoolean()) {
-			ibis = new IbisIdentifier(in);
+			ibis = new AetherIdentifier(in);
 		} else {
 			ibis = null;
 		}
 
-		destinations = new IbisIdentifier[in.readInt()];
+		destinations = new AetherIdentifier[in.readInt()];
 		for (int i = 0; i < destinations.length; i++) {
-			destinations[i] = new IbisIdentifier(in);
+			destinations[i] = new AetherIdentifier(in);
 		}
 	}
 
@@ -102,11 +102,11 @@ public final class Event implements Serializable, Comparable<Event> {
 		return description;
 	}
 
-	public IbisIdentifier getIbis() {
+	public AetherIdentifier getIbis() {
 		return ibis;
 	}
 
-	public IbisIdentifier[] getDestinations() {
+	public AetherIdentifier[] getDestinations() {
 		return destinations.clone();
 	}
 

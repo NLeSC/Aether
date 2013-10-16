@@ -2,18 +2,18 @@ package nl.esciencecenter.aether.util.rpc;
 
 import java.util.Date;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 
 
 public class Example {
 
-	IbisCapabilities ibisCapabilities = new IbisCapabilities(
-			IbisCapabilities.ELECTIONS_STRICT);
+	Capabilities ibisCapabilities = new Capabilities(
+			Capabilities.ELECTIONS_STRICT);
 
-	private final Ibis myIbis;
+	private final Aether myIbis;
 
 	public interface ExampleInterface {
 		
@@ -32,11 +32,11 @@ public class Example {
 	 */
 	private Example() throws Exception {
 		// Create an ibis instance.
-		myIbis = IbisFactory.createIbis(ibisCapabilities, null,
+		myIbis = AetherFactory.createIbis(ibisCapabilities, null,
 				RPC.rpcPortTypes);
 
 		// Elect a server
-		IbisIdentifier server = myIbis.registry().elect("Server");
+		AetherIdentifier server = myIbis.registry().elect("Server");
 
 		// If I am the server, run server, else run client.
 		if (server.equals(myIbis.identifier())) {
@@ -65,7 +65,7 @@ public class Example {
 		remoteObject.unexport();
 	}
 	
-	private void client(IbisIdentifier server) throws Exception {
+	private void client(AetherIdentifier server) throws Exception {
 
 		//create proxy to remote object
 		ExampleInterface interfaceObject = RPC.createProxy(

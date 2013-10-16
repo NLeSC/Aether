@@ -1,9 +1,9 @@
 package ibis.ipl.examples;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 
 import java.io.IOException;
 
@@ -16,10 +16,10 @@ import java.io.IOException;
 
 public class Termination {
 
-    IbisCapabilities ibisCapabilities = new IbisCapabilities(
-            IbisCapabilities.ELECTIONS_STRICT, IbisCapabilities.TERMINATION);
+    Capabilities ibisCapabilities = new Capabilities(
+            Capabilities.ELECTIONS_STRICT, Capabilities.TERMINATION);
 
-    private void server(Ibis myIbis) throws IOException {
+    private void server(Aether myIbis) throws IOException {
 
         // wait 30 seconds
         try {
@@ -39,7 +39,7 @@ public class Termination {
 
     }
 
-    private void client(Ibis myIbis, IbisIdentifier server) throws IOException {
+    private void client(Aether myIbis, AetherIdentifier server) throws IOException {
 
         // poll once every second for the termination of the pool.
         while (!myIbis.registry().hasTerminated()) {
@@ -60,12 +60,12 @@ public class Termination {
 
     private void run() throws Exception {
         // Create an ibis instance.
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null);
+        Aether ibis = AetherFactory.createIbis(ibisCapabilities, null);
 
         System.out.println("I am " + ibis.identifier());
 
         // Elect a server
-        IbisIdentifier server = ibis.registry().elect("Server");
+        AetherIdentifier server = ibis.registry().elect("Server");
 
         System.out.println("Server is " + server);
 

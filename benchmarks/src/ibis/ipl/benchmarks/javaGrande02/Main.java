@@ -2,10 +2,10 @@ package ibis.ipl.benchmarks.javaGrande02;
 
 /* $Id: Main.java 11529 2009-11-18 15:53:11Z ceriel $ */
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
@@ -102,7 +102,7 @@ final class Main {
     public static boolean verbose = false;
     public static final double MB = (1024.0*1024.0);
 
-    static Ibis ibis;
+    static Aether ibis;
     static Registry registry;
 
     private static long one_way(ReceivePort rport, SendPort sport, int count, Object data, boolean stream) throws Exception { 
@@ -255,9 +255,9 @@ final class Main {
 		}
 	    } 
 
-	    IbisCapabilities s = new IbisCapabilities(
-                    IbisCapabilities.CLOSED_WORLD,
-                    IbisCapabilities.ELECTIONS_STRICT);
+	    Capabilities s = new Capabilities(
+                    Capabilities.CLOSED_WORLD,
+                    Capabilities.ELECTIONS_STRICT);
             
             PortType t = new PortType(       
                     PortType.COMMUNICATION_RELIABLE,
@@ -267,7 +267,7 @@ final class Main {
                     ibisSer ? PortType.SERIALIZATION_OBJECT_IBIS
                             : PortType.SERIALIZATION_OBJECT_SUN);
             
-	    ibis = IbisFactory.createIbis(s, null, t);
+	    ibis = AetherFactory.createIbis(s, null, t);
 
 	    if (verbose) { 
 		System.out.println("Ibis created; getting registry ...");
@@ -286,12 +286,12 @@ final class Main {
 		System.out.println("Got sendport");
 	    }
 
-            IbisIdentifier master = registry.elect("0");
+            AetherIdentifier master = registry.elect("0");
 
 	    if (master.equals(ibis.identifier())) {
 		rport = ibis.createReceivePort(t, "test port");
 		rport.enableConnections();
-                IbisIdentifier other = registry.getElectionResult("1");
+                AetherIdentifier other = registry.getElectionResult("1");
 		sport.connect(other, "test port");
 
 		Object data;
@@ -394,7 +394,7 @@ final class Main {
 
 	    } else { 
                 registry.elect("1");
-                IbisIdentifier other = registry.getElectionResult("0");
+                AetherIdentifier other = registry.getElectionResult("0");
 		sport.connect(other, "test port");
 
 		if (upcalls) {

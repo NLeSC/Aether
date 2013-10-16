@@ -3,12 +3,22 @@
 package nl.esciencecenter.aether.impl.tcp;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
+import java.net.Socket;
+import java.net.ServerSocket;
+
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import nl.esciencecenter.aether.AlreadyConnectedException;
@@ -16,71 +26,110 @@ import nl.esciencecenter.aether.CapabilitySet;
 import nl.esciencecenter.aether.ConnectionRefusedException;
 import nl.esciencecenter.aether.ConnectionTimedOutException;
 import nl.esciencecenter.aether.Credentials;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisCreationFailedException;
-import nl.esciencecenter.aether.IbisStarter;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.CreationFailedException;
+import nl.esciencecenter.aether.AetherStarter;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortMismatchException;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortConnectUpcall;
 import nl.esciencecenter.aether.RegistryEventHandler;
 import nl.esciencecenter.aether.SendPortDisconnectUpcall;
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.impl.ReceivePort;
 import nl.esciencecenter.aether.impl.SendPort;
 import nl.esciencecenter.aether.impl.SendPortIdentifier;
 import nl.esciencecenter.aether.io.BufferedArrayInputStream;
 import nl.esciencecenter.aether.io.BufferedArrayOutputStream;
+import nl.esciencecenter.aether.util.IPUtils;
 import nl.esciencecenter.aether.util.ThreadPool;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class TcpIbis extends nl.esciencecenter.aether.impl.Ibis implements Runnable,
+public final class TcpAether extends nl.esciencecenter.aether.impl.Aether implements Runnable,
         TcpProtocol {
 
     static final Logger logger = LoggerFactory
             .getLogger("ibis.ipl.impl.tcp.TcpIbis");
 
-    private IbisSocketFactory factory;
+    private ServerSocket systemServer;
 
-    private IbisServerSocket systemServer;
-
-    private IbisSocketAddress myAddress;
+    private SocketAddress myAddress;
 
     private boolean quiting = false;
 
-    private HashMap<nl.esciencecenter.aether.IbisIdentifier, IbisSocketAddress> addresses = new HashMap<nl.esciencecenter.aether.IbisIdentifier, IbisSocketAddress>();
+    private HashMap<nl.esciencecenter.aether.AetherIdentifier, SocketAddress> addresses = 
+            new HashMap<nl.esciencecenter.aether.AetherIdentifier, SocketAddress>();
 
-    public TcpIbis(RegistryEventHandler registryEventHandler,
-            IbisCapabilities capabilities, Credentials credentials,
-            byte[] applicationTag, PortType[] types, Properties userProperties, IbisStarter starter) throws IbisCreationFailedException {
+    private static SocketAddress bytesToSocketAddress(byte[] buf) throws IOException {
+        
+        ByteArrayInputStream in = new ByteArrayInputStream(buf);
+        ObjectInputStream is = new ObjectInputStream(in);
+        
+        SocketAddress address = null;
+        
+        try {
+            address = (SocketAddress) is.readObject();
+        } catch(ClassNotFoundException e) {
+            throw new IOException("Could not read address" + e);
+        } 
+        
+        is.close();
+        
+        return address;
+    }
+
+    private static byte[] socketAddressToBytes(SocketAddress address) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(out);
+        os.writeObject(address);
+        os.close();
+        return out.toByteArray();
+    }
+    
+    private static ServerSocket createServerSocket(int port, int backlog, boolean retry, Properties properties) 
+            throws IOException {
+        
+        ServerSocket server = new ServerSocket();
+        InetSocketAddress local = new InetSocketAddress(IPUtils.getLocalHostAddress(), port);
+        server.bind(local, backlog);
+        return server;
+    }
+
+    private static Socket createClientSocket(java.net.SocketAddress addr, int timeout, boolean fillTimeout, 
+            Map<String, String> properties) throws IOException {
+        Socket s = new Socket();
+        s.connect(addr, timeout);
+        return s;
+    }
+    
+    public TcpAether(RegistryEventHandler registryEventHandler,
+            Capabilities capabilities, Credentials credentials,
+            byte[] applicationTag, PortType[] types, Properties userProperties, AetherStarter starter) throws CreationFailedException {
         super(registryEventHandler, capabilities, credentials, applicationTag, types,
                 userProperties, starter);
 
         this.properties.checkProperties("ibis.ipl.impl.tcp.",
                 new String[] { }, null, true);
 
-        factory.setIdent(ident);
-
         // Create a new accept thread
         ThreadPool.createNew(this, "TcpIbis Accept Thread");
     }
-
+    
     protected byte[] getData() throws IOException {
 
-        factory = new IbisSocketFactory(properties);
-
-        systemServer = factory.createServerSocket(0, 50, true, null);
+        systemServer = createServerSocket(0, 50, true, null);
         myAddress = systemServer.getLocalSocketAddress();
 
         if (logger.isInfoEnabled()) {
             logger.info("--> TcpIbis: address = " + myAddress);
         }
 
-        return myAddress.toBytes();
+        return socketAddressToBytes(myAddress);
     }
 
+        
     /*
      * // NOTE: this is wrong ? Even though the ibis has left, the
      * IbisIdentifier may still be floating around in the system... We should
@@ -93,17 +142,18 @@ public final class TcpIbis extends nl.esciencecenter.aether.impl.Ibis implements
      * synchronized(addresses) { addresses.remove(id); } }
      */
 
-    IbisSocket connect(TcpSendPort sp, nl.esciencecenter.aether.impl.ReceivePortIdentifier rip,
+    Socket connect(TcpSendPort sp, nl.esciencecenter.aether.impl.ReceivePortIdentifier rip,
             int timeout, boolean fillTimeout) throws IOException {
 
-        IbisIdentifier id = (IbisIdentifier) rip.ibisIdentifier();
+        AetherIdentifier id = (AetherIdentifier) rip.ibisIdentifier();
         String name = rip.name();
-        IbisSocketAddress idAddr;
+        SocketAddress idAddr;
 
-        synchronized (addresses) {
+        synchronized (addresses) {            
             idAddr = addresses.get(id);
+           
             if (idAddr == null) {
-                idAddr = new IbisSocketAddress(id.getImplementationData());
+                idAddr = bytesToSocketAddress(id.getImplementationData());
                 addresses.put(id, idAddr);
             }
         }
@@ -119,12 +169,11 @@ public final class TcpIbis extends nl.esciencecenter.aether.impl.Ibis implements
 
         do {
             DataOutputStream out = null;
-            IbisSocket s = null;
+            Socket s = null;
             int result = -1;
 
             try {
-                s = factory.createClientSocket(idAddr, timeout, fillTimeout, sp
-                        .managementProperties());
+                s = createClientSocket(idAddr, timeout, fillTimeout, sp.managementProperties());
                 s.setTcpNoDelay(true);
                 out = new DataOutputStream(
                         new BufferedArrayOutputStream(s.getOutputStream()));
@@ -214,13 +263,13 @@ public final class TcpIbis extends nl.esciencecenter.aether.impl.Ibis implements
         try {
             quiting = true;
             // Connect so that the TcpIbis thread wakes up.
-            factory.createClientSocket(myAddress, 0, false, null);
+            createClientSocket(myAddress, 0, false, null);
         } catch (Throwable e) {
             // Ignore
         }
     }
 
-    private void handleConnectionRequest(IbisSocket s) throws IOException {
+    private void handleConnectionRequest(Socket s) throws IOException {
 
         if (logger.isDebugEnabled()) {
             logger.debug("--> TcpIbis got connection request from " + s);
@@ -260,6 +309,7 @@ public final class TcpIbis extends nl.esciencecenter.aether.impl.Ibis implements
             dout.flush();
         }
         out.flush();
+        
         if (result == ReceivePort.ACCEPTED) {
             // add the connection to the receiveport.
             rp.connect(send, s, bais);
@@ -280,7 +330,7 @@ public final class TcpIbis extends nl.esciencecenter.aether.impl.Ibis implements
         boolean stop = false;
 
         while (!stop) {
-            IbisSocket s = null;
+            Socket s = null;
 
             if (logger.isDebugEnabled()) {
                 logger.debug("--> TcpIbis doing new accept()");

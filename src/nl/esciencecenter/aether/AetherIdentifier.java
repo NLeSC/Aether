@@ -14,8 +14,8 @@ package nl.esciencecenter.aether;
  * IbisIdentifiers also implement the {@link Comparable} interface, which
  * means they can be sorted.
  */
-public interface IbisIdentifier extends java.io.Serializable,
-       Comparable<IbisIdentifier> {
+public interface AetherIdentifier extends java.io.Serializable,
+       Comparable<AetherIdentifier> {
     /**
      * Returns the {@link Location} of this Ibis instance.
      * @return

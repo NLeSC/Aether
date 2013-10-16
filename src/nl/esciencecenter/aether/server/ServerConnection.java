@@ -13,7 +13,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Properties;
 
-import nl.esciencecenter.aether.IbisConfigurationException;
+import nl.esciencecenter.aether.ConfigurationException;
 import nl.esciencecenter.aether.support.Connection;
 import nl.esciencecenter.aether.util.ThreadPool;
 
@@ -43,7 +43,7 @@ public class ServerConnection implements ServerInterface {
             String serverString, int defaultPort) throws IOException {
 
         if (serverString == null) {
-            throw new IbisConfigurationException("serverString undefined");
+            throw new ConfigurationException("serverString undefined");
         }
 
         DirectSocketAddress address = null;

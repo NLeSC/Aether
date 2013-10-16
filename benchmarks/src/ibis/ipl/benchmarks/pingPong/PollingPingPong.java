@@ -2,10 +2,10 @@ package ibis.ipl.benchmarks.pingPong;
 
 /* $Id: PollingPingPong.java 11529 2009-11-18 15:53:11Z ceriel $ */
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
 import nl.esciencecenter.aether.ReceivePort;
@@ -81,7 +81,7 @@ static class ExplicitReceiver {
     }
 }
 
-    static Ibis ibis;
+    static Aether ibis;
 
     static Registry registry;
 
@@ -91,9 +91,9 @@ static class ExplicitReceiver {
         int rank = 0;
 
         try {
-            IbisCapabilities s = new IbisCapabilities(
-                    IbisCapabilities.CLOSED_WORLD,
-                    IbisCapabilities.ELECTIONS_STRICT);
+            Capabilities s = new Capabilities(
+                    Capabilities.CLOSED_WORLD,
+                    Capabilities.ELECTIONS_STRICT);
             
             PortType t = new PortType(
                     PortType.SERIALIZATION_OBJECT,
@@ -102,7 +102,7 @@ static class ExplicitReceiver {
                     PortType.RECEIVE_EXPLICIT,
                     PortType.RECEIVE_POLL);
             
-            ibis = IbisFactory.createIbis(s, null, t);
+            ibis = AetherFactory.createIbis(s, null, t);
 
             registry = ibis.registry();
 
@@ -110,8 +110,8 @@ static class ExplicitReceiver {
             ReceivePort rport;
 //            Latency lat = null;
 
-            IbisIdentifier master = registry.elect("latency");
-            IbisIdentifier remote;
+            AetherIdentifier master = registry.elect("latency");
+            AetherIdentifier remote;
 
             if (master.equals(ibis.identifier())) {
                 rank = 0;

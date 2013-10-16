@@ -2,10 +2,10 @@ package ibis.ipl.benchmarks.concurrentSenders;
 
 /* $Id: ConcurrentSenders.java 14734 2012-05-23 12:59:09Z ceriel $ */
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
@@ -20,18 +20,18 @@ import org.slf4j.LoggerFactory;
 class Sender extends Thread {
     int count, repeat;
 
-    Ibis ibis;
+    Aether ibis;
 
     PortType t;
 
     boolean sendTree;
 
-    IbisIdentifier master;
+    AetherIdentifier master;
     
     int me;
 
-    Sender(Ibis ibis, PortType t, int count, int repeat, boolean sendTree,
-            IbisIdentifier master, int me) {
+    Sender(Aether ibis, PortType t, int count, int repeat, boolean sendTree,
+            AetherIdentifier master, int me) {
         this.ibis = ibis;
         this.t = t;
         this.count = count;
@@ -106,7 +106,7 @@ class Receiver implements MessageUpcall {
 
     boolean doFinish;
 
-    Ibis ibis;
+    Aether ibis;
 
     PortType t;
 
@@ -114,7 +114,7 @@ class Receiver implements MessageUpcall {
 
     int senders;
 
-    Receiver(Ibis ibis, PortType t, int count, int repeat, int senders,
+    Receiver(Aether ibis, PortType t, int count, int repeat, int senders,
             boolean doFinish) {
         this.ibis = ibis;
         this.t = t;
@@ -182,13 +182,13 @@ class Receiver implements MessageUpcall {
 
 class ConcurrentSenders {
 
-    static Ibis ibis;
+    static Aether ibis;
 
     static Logger logger = LoggerFactory.getLogger(ConcurrentSenders.class.getName());
 
     static Registry registry;
 
-    static IbisIdentifier master;
+    static AetherIdentifier master;
 
     static void usage() {
         System.out.println("Usage: ConcurrentReceives [-ibis]");
@@ -233,16 +233,16 @@ class ConcurrentSenders {
         }
 
         try {
-            IbisCapabilities sp = new IbisCapabilities(
-                    IbisCapabilities.CLOSED_WORLD,
-                    IbisCapabilities.ELECTIONS_STRICT);
+            Capabilities sp = new Capabilities(
+                    Capabilities.CLOSED_WORLD,
+                    Capabilities.ELECTIONS_STRICT);
 
             PortType t = new PortType(PortType.SERIALIZATION_OBJECT,
                     PortType.COMMUNICATION_RELIABLE,
                     PortType.RECEIVE_AUTO_UPCALLS, PortType.RECEIVE_EXPLICIT,
                     PortType.CONNECTION_MANY_TO_ONE);
 
-            ibis = IbisFactory.createIbis(sp, null, t);
+            ibis = AetherFactory.createIbis(sp, null, t);
 
             registry = ibis.registry();
 

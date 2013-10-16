@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.util.TypedProperties;
 
 import org.slf4j.Logger;
@@ -71,7 +71,7 @@ public class ElectionSet implements Iterable<Election> {
         }
     }
 
-    public synchronized IbisIdentifier[] getElectionResult(String electionName,
+    public synchronized AetherIdentifier[] getElectionResult(String electionName,
             long timeoutMillis) {
 	if (logger.isDebugEnabled()) {
 	    logger.debug("trying to get election result for: " + electionName
@@ -99,13 +99,13 @@ public class ElectionSet implements Iterable<Election> {
         return election.getCandidates();
     }
     
-    public IbisIdentifier[] getElectionResult(String electionName) {
+    public AetherIdentifier[] getElectionResult(String electionName) {
         return getElectionResult(
             electionName,
             properties.getIntProperty(RegistryProperties.ELECTION_TIMEOUT) * 1000);
     }
 
-    public synchronized IbisIdentifier[] elect(String electionName,
+    public synchronized AetherIdentifier[] elect(String electionName,
             long timeoutMillis) {
 	if (logger.isDebugEnabled()) {
 	    logger.debug("electing result for: " + electionName + ", waiting "
@@ -150,7 +150,7 @@ public class ElectionSet implements Iterable<Election> {
         return election.getCandidates();
     }
 
-    public IbisIdentifier[] elect(String electionName) {
+    public AetherIdentifier[] elect(String electionName) {
         return elect(
             electionName,
             properties.getIntProperty(RegistryProperties.ELECTION_TIMEOUT) * 1000);

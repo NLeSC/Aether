@@ -12,7 +12,7 @@ import java.util.Properties;
 import nl.esciencecenter.aether.AlreadyConnectedException;
 import nl.esciencecenter.aether.ConnectionFailedException;
 import nl.esciencecenter.aether.ConnectionsFailedException;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.NoSuchPropertyException;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortIdentifier;
@@ -24,8 +24,8 @@ public class LrmcSendPort implements SendPort {
 
     private final LrmcSendPortIdentifier identifier;
     private final Multicaster om;
-    IbisIdentifier[] connectedTo = new IbisIdentifier[0];
-    HashSet<IbisIdentifier> connections = new HashSet<IbisIdentifier>();
+    AetherIdentifier[] connectedTo = new AetherIdentifier[0];
+    HashSet<AetherIdentifier> connections = new HashSet<AetherIdentifier>();
     boolean connectionsChanged = false;
     boolean closed = false;
     LrmcWriteMessage message = null;
@@ -69,7 +69,7 @@ public class LrmcSendPort implements SendPort {
         connectionsChanged = true;
     }
 
-    public ReceivePortIdentifier connect(IbisIdentifier ibisIdentifier,
+    public ReceivePortIdentifier connect(AetherIdentifier ibisIdentifier,
             String receivePortName) throws ConnectionFailedException {
         ReceivePortIdentifier id = new LrmcReceivePortIdentifier(
                 ibisIdentifier, receivePortName);
@@ -77,7 +77,7 @@ public class LrmcSendPort implements SendPort {
         return id;
     }
 
-    public ReceivePortIdentifier connect(IbisIdentifier ibisIdentifier,
+    public ReceivePortIdentifier connect(AetherIdentifier ibisIdentifier,
             String receivePortName, long timeoutMillis, boolean fillTimeout)
             throws ConnectionFailedException {
         ReceivePortIdentifier id = new LrmcReceivePortIdentifier(
@@ -141,12 +141,12 @@ public class LrmcSendPort implements SendPort {
         }
     }
 
-    public ReceivePortIdentifier[] connect(Map<IbisIdentifier, String> ports)
+    public ReceivePortIdentifier[] connect(Map<AetherIdentifier, String> ports)
             throws ConnectionsFailedException {
         return connect(ports, 0, true);
     }
 
-    public ReceivePortIdentifier[] connect(Map<IbisIdentifier, String> ports,
+    public ReceivePortIdentifier[] connect(Map<AetherIdentifier, String> ports,
             long timeoutMillis, boolean fillTimeout)
             throws ConnectionsFailedException {
         nl.esciencecenter.aether.ReceivePortIdentifier[] ids = new nl.esciencecenter.aether.ReceivePortIdentifier[ports
@@ -154,7 +154,7 @@ public class LrmcSendPort implements SendPort {
 
         int index = 0;
 
-        for (Map.Entry<nl.esciencecenter.aether.IbisIdentifier, String> entry : ports
+        for (Map.Entry<nl.esciencecenter.aether.AetherIdentifier, String> entry : ports
                 .entrySet()) {
             ids[index++] = new LrmcReceivePortIdentifier(entry.getKey(), entry
                     .getValue());
@@ -186,7 +186,7 @@ public class LrmcSendPort implements SendPort {
         connectionsChanged = true;
     }
 
-    public void disconnect(IbisIdentifier ibisIdentifier, String receivePortName)
+    public void disconnect(AetherIdentifier ibisIdentifier, String receivePortName)
             throws IOException {
         disconnect(new LrmcReceivePortIdentifier(ibisIdentifier,
                 receivePortName));
@@ -224,7 +224,7 @@ public class LrmcSendPort implements SendPort {
 
         if (connectionsChanged) {
             connectionsChanged = false;
-            connectedTo = connections.toArray(new IbisIdentifier[connections
+            connectedTo = connections.toArray(new AetherIdentifier[connections
                     .size()]);
         }
 

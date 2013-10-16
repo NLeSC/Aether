@@ -1,9 +1,9 @@
 package ibis.ipl.examples;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
@@ -38,10 +38,10 @@ public class ClientServer implements MessageUpcall {
             PortType.SERIALIZATION_DATA, PortType.RECEIVE_EXPLICIT,
             PortType.CONNECTION_ONE_TO_ONE);
 
-    IbisCapabilities ibisCapabilities = new IbisCapabilities(
-            IbisCapabilities.ELECTIONS_STRICT);
+    Capabilities ibisCapabilities = new Capabilities(
+            Capabilities.ELECTIONS_STRICT);
 
-    private final Ibis myIbis;
+    private final Aether myIbis;
 
     /**
      * Constructor. Actually does all the work too :)
@@ -49,11 +49,11 @@ public class ClientServer implements MessageUpcall {
     private ClientServer() throws Exception {
         // Create an ibis instance.
         // Notice createIbis uses varargs for its parameters.
-        myIbis = IbisFactory.createIbis(ibisCapabilities, null,
+        myIbis = AetherFactory.createIbis(ibisCapabilities, null,
                 requestPortType, replyPortType);
 
         // Elect a server
-        IbisIdentifier server = myIbis.registry().elect("Server");
+        AetherIdentifier server = myIbis.registry().elect("Server");
 
         // If I am the server, run server, else run client.
         if (server.equals(myIbis.identifier())) {
@@ -120,7 +120,7 @@ public class ClientServer implements MessageUpcall {
         System.err.println("server stopped");
     }
 
-    private void client(IbisIdentifier server) throws IOException {
+    private void client(AetherIdentifier server) throws IOException {
 
         // Create a send port for sending the request and connect.
         SendPort sendPort = myIbis.createSendPort(requestPortType);

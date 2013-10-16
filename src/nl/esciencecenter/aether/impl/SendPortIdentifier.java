@@ -25,14 +25,14 @@ public class SendPortIdentifier implements nl.esciencecenter.aether.SendPortIden
     public final String name;
 
     /** The IbisIdentifier of the Ibis instance that created the sendport. */
-    public final IbisIdentifier ibis;
+    public final AetherIdentifier ibis;
 
     /**
      * Constructor, initializing the fields with the specified parameters.
      * @param name the name of the sendport.
      * @param ibis the Ibis instance that created the sendport.
      */
-    public SendPortIdentifier(String name, IbisIdentifier ibis) {
+    public SendPortIdentifier(String name, AetherIdentifier ibis) {
         if (name == null) {
             throw new NullPointerException("name is null in SendPortIdentifier");
         }
@@ -75,7 +75,7 @@ public class SendPortIdentifier implements nl.esciencecenter.aether.SendPortIden
      */
     public SendPortIdentifier(DataInput dis) throws IOException {
         name = dis.readUTF();
-        ibis = new IbisIdentifier(dis);
+        ibis = new AetherIdentifier(dis);
     }
 
     /**
@@ -135,7 +135,7 @@ public class SendPortIdentifier implements nl.esciencecenter.aether.SendPortIden
         return name;
     }
 
-    public nl.esciencecenter.aether.IbisIdentifier ibisIdentifier() {
+    public nl.esciencecenter.aether.AetherIdentifier ibisIdentifier() {
         return ibis;
     }
 

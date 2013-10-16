@@ -12,7 +12,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.io.Conversion;
 import nl.esciencecenter.aether.io.IOProperties;
 
@@ -42,7 +42,7 @@ public final class Connection {
     static final byte REPLY_OK = 1;
 
     private static VirtualSocketAddress addressFromIdentifier(
-            IbisIdentifier ibis, int virtualPort) throws IOException {
+            AetherIdentifier ibis, int virtualPort) throws IOException {
         VirtualSocketAddress registryAddress = VirtualSocketAddress.fromBytes(
                 ibis.getRegistryData(), 0);
 
@@ -55,7 +55,7 @@ public final class Connection {
                 registryAddress.hub(), registryAddress.cluster());
     }
 
-    public Connection(IbisIdentifier ibis, int timeout, boolean fillTimeout,
+    public Connection(AetherIdentifier ibis, int timeout, boolean fillTimeout,
             VirtualSocketFactory factory, int virtualPort) throws IOException {
         this(addressFromIdentifier(ibis, virtualPort), timeout, fillTimeout,
                 factory);

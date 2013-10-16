@@ -4,7 +4,7 @@ package nl.esciencecenter.aether.registry.gossip;
 import java.util.LinkedList;
 import java.util.List;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.RegistryEventHandler;
 import nl.esciencecenter.aether.util.ThreadPool;
 
@@ -22,11 +22,11 @@ final class Upcaller implements Runnable {
         
         int type;
 
-        IbisIdentifier ibis;
+        AetherIdentifier ibis;
 
         String string;
 
-        Event(int type, IbisIdentifier ibis, String string) {
+        Event(int type, AetherIdentifier ibis, String string) {
             this.type = type;
             this.ibis = ibis;
             this.string = string;
@@ -143,23 +143,23 @@ final class Upcaller implements Runnable {
         }
     }
 
-    synchronized void ibisJoined(IbisIdentifier ibis) {
+    synchronized void ibisJoined(AetherIdentifier ibis) {
         pendingEvents.add(new Event(Event.JOIN, ibis, null));
     }
 
-    synchronized void ibisLeft(IbisIdentifier ibis) {
+    synchronized void ibisLeft(AetherIdentifier ibis) {
         pendingEvents.add(new Event(Event.LEAVE, ibis, null));
     }
 
-    synchronized void ibisDied(IbisIdentifier ibis) {
+    synchronized void ibisDied(AetherIdentifier ibis) {
         pendingEvents.add(new Event(Event.DIED, ibis, null));
     }
 
-    synchronized void signal(String signal, IbisIdentifier source) {
+    synchronized void signal(String signal, AetherIdentifier source) {
         pendingEvents.add(new Event(Event.SIGNAL, source, signal));
     }
     
-    synchronized void electionResult(String name, IbisIdentifier winner) {
+    synchronized void electionResult(String name, AetherIdentifier winner) {
         pendingEvents.add(new Event(Event.ELECT, winner, name));
     }
 

@@ -1,46 +1,46 @@
 package nl.esciencecenter.aether;
 
 /**
- * There are three base classes for Ibis exceptions: this one (which is a checked
- * exception), IbisRuntimeException (which is an unchecked exception), and IbisIOException.
+ * There are three base classes for Ibis exceptions: this one (which is an unchecked
+ * exception), IbisException (which is a checked exception), and IbisIOException.
  * The latter exists because we want it to be a subclass of java.io.IOException.
  */
-public class IbisException extends Exception {
+public class AetherRuntimeException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Constructs an <code>IbisException</code> with
+     * Constructs an <code>IbisRuntimeException</code> with
      * <code>null</code> as its error detail message.
      */
-    public IbisException() {
+    public AetherRuntimeException() {
 	super();
     }
 
     /**
-     * Constructs an <code>IbisException</code> with
+     * Constructs an <code>IbisRuntimeException</code> with
      * the specified detail message.
      *
      * @param message
      *          the detail message
      */
-    public IbisException(String message) {
+    public AetherRuntimeException(String message) {
 	super(message);
     }
 
     /**
-     * Constructs an <code>IbisException</code> with
+     * Constructs an <code>IbisRuntimeException</code> with
      * the specified cause.
      *
      * @param cause
      *          the cause
      */
-    public IbisException(Throwable cause) {
+    public AetherRuntimeException(Throwable cause) {
 	super(cause);
     }
 
     /**
-     * Constructs an <code>IbisException</code> with
+     * Constructs an <code>IbisRuntimeException</code> with
      * the specified detail message and cause.
      *
      * @param message
@@ -48,7 +48,7 @@ public class IbisException extends Exception {
      * @param cause
      *          the cause
      */
-    public IbisException(String message, Throwable cause) {
+    public AetherRuntimeException(String message, Throwable cause) {
 	super(message, cause);
     }
 }

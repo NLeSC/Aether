@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.util.TypedProperties;
 
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ class Member {
 
     private static final Logger logger = LoggerFactory.getLogger(Member.class);
 
-    private final IbisIdentifier identifier;
+    private final AetherIdentifier identifier;
 
     private final TypedProperties properties;
     
@@ -35,7 +35,7 @@ class Member {
 
     private boolean left;
 
-    Member(IbisIdentifier identifier, TypedProperties properties) {
+    Member(AetherIdentifier identifier, TypedProperties properties) {
         this.properties = properties;
 
         this.identifier = identifier;
@@ -51,7 +51,7 @@ class Member {
     Member(DataInputStream in, TypedProperties properties) throws IOException {
         this.properties = properties;
         
-        identifier = new IbisIdentifier(in);
+        identifier = new AetherIdentifier(in);
         
         //assume there was no transfer time. Good enough
         //for this timeout
@@ -133,7 +133,7 @@ class Member {
         }
     }
     
-    synchronized IbisIdentifier getIdentifier() {
+    synchronized AetherIdentifier getIdentifier() {
         return identifier;
     }
 
@@ -177,7 +177,7 @@ class Member {
         witnesses.clear();
     }
 
-    synchronized void suspectDead(IbisIdentifier witness) {
+    synchronized void suspectDead(AetherIdentifier witness) {
         if (dead) {
             // already dead
             return;

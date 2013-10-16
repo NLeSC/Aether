@@ -2,10 +2,10 @@ package ibis.ipl.benchmarks.rpc;
 
 /* $Id: RPC.java 12048 2010-05-17 08:32:21Z ceriel $ */
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
@@ -26,10 +26,10 @@ import java.util.Hashtable;
 
 class RszHandler implements RegistryEventHandler {
 
-    java.util.Vector<IbisIdentifier> idents
-            = new java.util.Vector<IbisIdentifier>();
+    java.util.Vector<AetherIdentifier> idents
+            = new java.util.Vector<AetherIdentifier>();
 
-    public void joined(IbisIdentifier id) {
+    public void joined(AetherIdentifier id) {
         synchronized (this) {
             idents.add(id);
             notifyAll();
@@ -38,7 +38,7 @@ class RszHandler implements RegistryEventHandler {
                 + idents.size());
     }
 
-    public void left(IbisIdentifier id) {
+    public void left(AetherIdentifier id) {
         synchronized (this) {
             idents.remove(id);
             notifyAll();
@@ -46,15 +46,15 @@ class RszHandler implements RegistryEventHandler {
         // System.err.println(this + " See leave of " + id + "; n := " + idents.size());
     }
 
-    public void died(IbisIdentifier corpse) {
+    public void died(AetherIdentifier corpse) {
         left(corpse);
     }
 
-    public void electionResult(String electionName, IbisIdentifier winner) {
+    public void electionResult(String electionName, AetherIdentifier winner) {
         // IGNORE
     }
     
-	public void gotSignal(String signal, IbisIdentifier source) {
+	public void gotSignal(String signal, AetherIdentifier source) {
         // IGNORE
 	}
 
@@ -62,7 +62,7 @@ class RszHandler implements RegistryEventHandler {
         // IGNORE
 	}
 
-	public void poolTerminated(IbisIdentifier source) {
+	public void poolTerminated(AetherIdentifier source) {
         // IGNORE
 	}
     
@@ -90,7 +90,7 @@ class RPC implements MessageUpcall, Runnable, ReceivePortConnectUpcall,
     private final static boolean VARIANCE_TIMER = tp.getBooleanProperty(
             "variance-timer", false);
 
-    private Ibis myIbis;
+    private Aether myIbis;
 
     private Registry registry;
 
@@ -676,7 +676,7 @@ class RPC implements MessageUpcall, Runnable, ReceivePortConnectUpcall,
         rport.enableConnections();
 
         for (int i = 0; i < servers; i++) {
-            IbisIdentifier id = registry.getElectionResult("server" + i);
+            AetherIdentifier id = registry.getElectionResult("server" + i);
             sport.connect(id, "server port");
             // System.err.println(rank + ": t = " + ((ibis.impl.net.NetIbis)myIbis).now() + " connected to \"server port " + i + "\"");
         }
@@ -772,7 +772,7 @@ class RPC implements MessageUpcall, Runnable, ReceivePortConnectUpcall,
         rport.enableConnections();
 
         for (int i = 0; i < clients; i++) {
-            IbisIdentifier id = registry.getElectionResult("client" + i);
+            AetherIdentifier id = registry.getElectionResult("client" + i);
             sport.connect(id, "client port");
             // System.err.println(rank + ": t = " + ((ibis.impl.net.NetIbis)myIbis).now() + " connect to \"client port " + i + "\"");
         }
@@ -1038,10 +1038,10 @@ class RPC implements MessageUpcall, Runnable, ReceivePortConnectUpcall,
 
         rszHandler = new RszHandler();
 
-        IbisCapabilities s = new IbisCapabilities(
-                IbisCapabilities.CLOSED_WORLD,
-                IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED,
-                IbisCapabilities.ELECTIONS_STRICT);
+        Capabilities s = new Capabilities(
+                Capabilities.CLOSED_WORLD,
+                Capabilities.MEMBERSHIP_TOTALLY_ORDERED,
+                Capabilities.ELECTIONS_STRICT);
         requestPortType = new PortType(PortType.SERIALIZATION_OBJECT,
                 PortType.COMMUNICATION_RELIABLE, PortType.RECEIVE_AUTO_UPCALLS,
                 PortType.RECEIVE_EXPLICIT, PortType.CONNECTION_UPCALLS,
@@ -1053,7 +1053,7 @@ class RPC implements MessageUpcall, Runnable, ReceivePortConnectUpcall,
                 sequenced ? PortType.COMMUNICATION_NUMBERED : PortType.COMMUNICATION_FIFO,
                 PortType.CONNECTION_MANY_TO_ONE);
 
-        myIbis = IbisFactory.createIbis(s, rszHandler,
+        myIbis = AetherFactory.createIbis(s, rszHandler,
                 requestPortType, replyPortType);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -1092,7 +1092,7 @@ class RPC implements MessageUpcall, Runnable, ReceivePortConnectUpcall,
                         + myIbis.identifier() + "; I am "
                         + (i_am_client ? "client" : "server"));
 
-                IbisIdentifier master = registry.elect("RPC");
+                AetherIdentifier master = registry.elect("RPC");
                 // System.err.println("Election master id=" + master + " name=" + master);
                 // System.err.println("Election contender = " + myIbis + " id=" + myIbis.identifier() + " name=" + myIbis.identifier());
                 if (master.equals(myIbis.identifier())) {

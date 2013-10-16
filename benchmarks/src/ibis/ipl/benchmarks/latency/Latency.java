@@ -2,10 +2,10 @@ package ibis.ipl.benchmarks.latency;
 
 /* $Id: Latency.java 13722 2011-10-11 08:56:00Z ceriel $ */
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
@@ -396,7 +396,7 @@ class Latency {
 
     static Logger logger = LoggerFactory.getLogger(Latency.class.getName());
 
-    static Ibis ibis;
+    static Aether ibis;
 
     static Registry registry;
 
@@ -463,8 +463,8 @@ class Latency {
 
         try {
 
-            IbisCapabilities s = new IbisCapabilities(
-                    IbisCapabilities.ELECTIONS_STRICT
+            Capabilities s = new Capabilities(
+                    Capabilities.ELECTIONS_STRICT
             );
             PortType t = new PortType(
                     noneSer ? PortType.SERIALIZATION_BYTE : PortType.SERIALIZATION_OBJECT,
@@ -479,7 +479,7 @@ class Latency {
                 p.setProperty("ibis.serialization", "sun");
             }
 
-            ibis = IbisFactory.createIbis(s, p, true, null, t);
+            ibis = AetherFactory.createIbis(s, p, true, null, t);
 
             registry = ibis.registry();
 
@@ -487,8 +487,8 @@ class Latency {
             SendPort sport = ibis.createSendPort(t, "send port");
             ReceivePort rport;
             logger.debug("LAT: pre elect");
-            IbisIdentifier master = registry.elect("latency");
-            IbisIdentifier remote;
+            AetherIdentifier master = registry.elect("latency");
+            AetherIdentifier remote;
             logger.debug("LAT: post elect");
 
             if (master.equals(ibis.identifier())) {

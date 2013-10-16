@@ -1,12 +1,12 @@
 package nl.esciencecenter.aether.impl.multi;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 
 final class IbisIdentifierWrapper implements Comparable<IbisIdentifierWrapper> {
-    final IbisIdentifier id;
+    final AetherIdentifier id;
     final String ibisName;
 
-    IbisIdentifierWrapper(String ibisName, IbisIdentifier id) {
+    IbisIdentifierWrapper(String ibisName, AetherIdentifier id) {
         this.id = id;
         this.ibisName = ibisName;
     }

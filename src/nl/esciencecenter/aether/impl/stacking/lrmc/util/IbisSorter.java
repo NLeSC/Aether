@@ -4,10 +4,10 @@ package nl.esciencecenter.aether.impl.stacking.lrmc.util;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.Location;
 
-public class IbisSorter implements Comparator<IbisIdentifier> {
+public class IbisSorter implements Comparator<AetherIdentifier> {
 
     // General sorter to use when no cluster order is preferred.
     private static final IbisSorter sorter = new IbisSorter("unknown", null);
@@ -20,19 +20,19 @@ public class IbisSorter implements Comparator<IbisIdentifier> {
         this.preferredName = preferredName;
     }
 
-    public static void sort(IbisIdentifier[] ids) {
+    public static void sort(AetherIdentifier[] ids) {
         sort(ids, 0, ids.length);
     }
 
-    public static void sort(IbisIdentifier local, IbisIdentifier[] ids) {
+    public static void sort(AetherIdentifier local, AetherIdentifier[] ids) {
         sort(local, ids, 0, ids.length);
     }
 
-    public static void sort(IbisIdentifier[] ids, int from, int to) {
+    public static void sort(AetherIdentifier[] ids, int from, int to) {
         Arrays.sort(ids, from, to, sorter);
     }
 
-    public static void sort(IbisIdentifier local, IbisIdentifier[] ids,
+    public static void sort(AetherIdentifier local, AetherIdentifier[] ids,
             int from, int to) {
         /*
          * IbisSorter tmp = sorter;
@@ -43,7 +43,7 @@ public class IbisSorter implements Comparator<IbisIdentifier> {
          * 
          * Arrays.sort(ids, from, to, tmp);
          */
-        IbisIdentifier[] tmp = new IbisIdentifier[(to - from) + 1];
+        AetherIdentifier[] tmp = new AetherIdentifier[(to - from) + 1];
         tmp[0] = local;
 
         System.arraycopy(ids, from, tmp, 1, to - from);
@@ -84,7 +84,7 @@ public class IbisSorter implements Comparator<IbisIdentifier> {
         return s1.length();
     }
 
-    public int compare(IbisIdentifier id1, IbisIdentifier id2) {
+    public int compare(AetherIdentifier id1, AetherIdentifier id2) {
 
         Location cluster1 = id1.location().getParent();
         Location cluster2 = id2.location().getParent();

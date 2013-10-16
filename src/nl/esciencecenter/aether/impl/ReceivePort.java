@@ -14,7 +14,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import nl.esciencecenter.aether.ConnectionClosedException;
-import nl.esciencecenter.aether.IbisConfigurationException;
+import nl.esciencecenter.aether.ConfigurationException;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortConnectUpcall;
@@ -103,7 +103,7 @@ public abstract class ReceivePort extends Manageable
     protected boolean allowUpcalls = false;
 
     /** The Ibis instance of this receive port. */
-    protected Ibis ibis;
+    protected Aether ibis;
 
     /** Set when messages are numbered. */
     protected final boolean numbered;
@@ -148,7 +148,7 @@ public abstract class ReceivePort extends Manageable
      * @param properties the port properties.
      */
     @SuppressWarnings("unchecked")
-	protected ReceivePort(Ibis ibis, PortType type, String name,
+	protected ReceivePort(Aether ibis, PortType type, String name,
             MessageUpcall upcall, ReceivePortConnectUpcall connectUpcall,
             Properties properties) throws IOException {
         this.ibis = ibis;
@@ -200,12 +200,12 @@ public abstract class ReceivePort extends Manageable
         notifyAll();
     }
     
-    public synchronized Map<IbisIdentifier, Set<String>> getConnectionTypes() {
-        HashMap<IbisIdentifier, Set<String>> result = new HashMap<IbisIdentifier, Set<String>>();
+    public synchronized Map<AetherIdentifier, Set<String>> getConnectionTypes() {
+        HashMap<AetherIdentifier, Set<String>> result = new HashMap<AetherIdentifier, Set<String>>();
         for (SendPortIdentifier port : connections.keySet()) {
             ReceivePortConnectionInfo i = connections.get(port);
             if (i != null) {
-                IbisIdentifier id = port.ibis;
+                AetherIdentifier id = port.ibis;
                 Set<String> s = result.get(id);
                 if (s == null) {
                     s = new HashSet<String>();
@@ -251,7 +251,7 @@ public abstract class ReceivePort extends Manageable
 
     public synchronized nl.esciencecenter.aether.SendPortIdentifier[] lostConnections() {
         if (! connectionDowncalls) {
-            throw new IbisConfigurationException("ReceivePort.lostConnections()"
+            throw new ConfigurationException("ReceivePort.lostConnections()"
                     + " called but connectiondowncalls not configured");
         }
         nl.esciencecenter.aether.SendPortIdentifier[] result = lostConnections.toArray(
@@ -262,7 +262,7 @@ public abstract class ReceivePort extends Manageable
 
     public synchronized nl.esciencecenter.aether.SendPortIdentifier[] newConnections() {
         if (! connectionDowncalls) {
-            throw new IbisConfigurationException("ReceivePort.newConnections()"
+            throw new ConfigurationException("ReceivePort.newConnections()"
                     + " called but connectiondowncalls not configured");
         }
         nl.esciencecenter.aether.SendPortIdentifier[] result = newConnections.toArray(
@@ -293,7 +293,7 @@ public abstract class ReceivePort extends Manageable
 
     public ReadMessage receive(long timeout) throws IOException {
         if (upcall != null) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "Configured Receiveport for upcalls, downcall not allowed");
         }
 
@@ -302,7 +302,7 @@ public abstract class ReceivePort extends Manageable
         }
         if (timeout > 0 &&
                 ! type.hasCapability(PortType.RECEIVE_TIMEOUT)) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "This port is not configured for receive() with timeout");
         }
 
@@ -397,7 +397,7 @@ public abstract class ReceivePort extends Manageable
 
     public ReadMessage poll() throws IOException {
         if (! type.hasCapability(PortType.RECEIVE_POLL)) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "Receiveport not configured for polls");
         }
         return doPoll();
@@ -687,7 +687,7 @@ public abstract class ReceivePort extends Manageable
      * removed.
      * @param id the IbisIdentifier of the Ibis that left/died.
      */
-    protected synchronized void killConnectionsWith(nl.esciencecenter.aether.IbisIdentifier id) {
+    protected synchronized void killConnectionsWith(nl.esciencecenter.aether.AetherIdentifier id) {
 	SendPortIdentifier[] keys = connections.keySet().toArray(new SendPortIdentifier[connections.size()]);
 	for (SendPortIdentifier s : keys) {
 	    if (s.ibisIdentifier().equals(id)) {

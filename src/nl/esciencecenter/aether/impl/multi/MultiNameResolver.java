@@ -4,8 +4,8 @@ package nl.esciencecenter.aether.impl.multi;
 import java.io.IOException;
 import java.util.HashMap;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.ReadMessage;
 import nl.esciencecenter.aether.ReceivePort;
 import nl.esciencecenter.aether.SendPort;
@@ -25,7 +25,7 @@ public  class MultiNameResolver {
     private SendPort replyPort;
     private SendPort requestPort;
 
-    private HashMap<Integer, IbisIdentifier> resolveQueue = new HashMap<Integer, IbisIdentifier>();
+    private HashMap<Integer, AetherIdentifier> resolveQueue = new HashMap<Integer, AetherIdentifier>();
 
     private boolean quit = false;
     private static final String resolvePortName = "ibis.multi.name.resolve";
@@ -39,7 +39,7 @@ public  class MultiNameResolver {
         this.ibis = multiIbis;
         this.ibisName = ibisName;
         ibis.resolverMap.put(ibisName, this);
-        Ibis subIbis = ibis.subIbisMap.get(ibisName);
+        Aether subIbis = ibis.subIbisMap.get(ibisName);
         requestListenPort = subIbis.createReceivePort(MultiIbis.resolvePortType, resolvePortName);
         requestListenPort.enableConnections();
         replyListenPort = subIbis.createReceivePort(MultiIbis.resolvePortType, replyPortName);
@@ -102,7 +102,7 @@ public  class MultiNameResolver {
                             logger.debug("Locking for: " + ibisName);
                         }
                         synchronized (resolveQueue) {
-                            IbisIdentifier toResolve = resolveQueue.remove(new Integer(hashCode));
+                            AetherIdentifier toResolve = resolveQueue.remove(new Integer(hashCode));
                             synchronized(toResolve) {
                                 if (logger.isDebugEnabled()) {
                                     logger.debug("Notifying for resolution: " + ibisName + " on: " + this);
@@ -162,7 +162,7 @@ public  class MultiNameResolver {
                             logger.debug("Processing Request for: " + ibisName);
                         }
                         int hashCode = readMessage.readInt();
-                        IbisIdentifier requestor = readMessage.origin().ibisIdentifier();
+                        AetherIdentifier requestor = readMessage.origin().ibisIdentifier();
                         readMessage.finish();
                         if (logger.isDebugEnabled()) {
                             logger.debug("Sending Reply For: " + ibisName + " from: " + requestor + " id:" + ibis.id);
@@ -209,7 +209,7 @@ public  class MultiNameResolver {
         // TODO Wake up all threads.
     }
 
-    public void resolve(IbisIdentifier toResolve, String ibisName) throws IOException {
+    public void resolve(AetherIdentifier toResolve, String ibisName) throws IOException {
         if (logger.isDebugEnabled()) {
             logger.debug("Making Resolve Request for: " + ibisName);
         }

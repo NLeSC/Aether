@@ -13,7 +13,7 @@ import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortConnectUpcall;
 import nl.esciencecenter.aether.ReceiveTimedOutException;
-import nl.esciencecenter.aether.impl.Ibis;
+import nl.esciencecenter.aether.impl.Aether;
 import nl.esciencecenter.aether.impl.SendPortIdentifier;
 import nl.esciencecenter.aether.util.Queue;
 
@@ -25,7 +25,7 @@ final class ThreadNioReceivePort extends NioReceivePort {
 
     private boolean closing = false;
 
-    ThreadNioReceivePort(Ibis ibis, PortType type, String name,
+    ThreadNioReceivePort(Aether ibis, PortType type, String name,
             MessageUpcall upcall, ReceivePortConnectUpcall connUpcall,
             Properties props) throws IOException {
         super(ibis, type, name, upcall, connUpcall, props);

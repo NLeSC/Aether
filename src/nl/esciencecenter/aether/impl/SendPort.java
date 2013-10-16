@@ -20,7 +20,7 @@ import nl.esciencecenter.aether.ConnectionClosedException;
 import nl.esciencecenter.aether.ConnectionFailedException;
 import nl.esciencecenter.aether.ConnectionTimedOutException;
 import nl.esciencecenter.aether.ConnectionsFailedException;
-import nl.esciencecenter.aether.IbisConfigurationException;
+import nl.esciencecenter.aether.ConfigurationException;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.SendPortDisconnectUpcall;
 import nl.esciencecenter.aether.io.DataOutputStream;
@@ -92,7 +92,7 @@ public abstract class SendPort extends Manageable implements nl.esciencecenter.a
     private boolean closed = false;
 
     /** The Ibis instance of this send port. */
-    protected Ibis ibis;
+    protected Aether ibis;
 
     /** Object replacer for serialization streams. */
     private final Replacer replacer;
@@ -176,7 +176,7 @@ public abstract class SendPort extends Manageable implements nl.esciencecenter.a
      * @exception IOException is thrown in case of trouble.
      */
     @SuppressWarnings("unchecked")
-    protected SendPort(Ibis ibis, PortType type, String name,
+    protected SendPort(Aether ibis, PortType type, String name,
             SendPortDisconnectUpcall connectUpcall, Properties properties) throws IOException {
         this.ibis = ibis;
         this.type = type;
@@ -239,12 +239,12 @@ public abstract class SendPort extends Manageable implements nl.esciencecenter.a
         return result;
     }
     
-    public synchronized Map<IbisIdentifier, Set<String>> getConnectionTypes() {
-        HashMap<IbisIdentifier, Set<String>> result = new HashMap<IbisIdentifier, Set<String>>();
+    public synchronized Map<AetherIdentifier, Set<String>> getConnectionTypes() {
+        HashMap<AetherIdentifier, Set<String>> result = new HashMap<AetherIdentifier, Set<String>>();
         for (ReceivePortIdentifier port : receivers.keySet()) {
             SendPortConnectionInfo i = receivers.get(port);
             if (i != null) {
-                IbisIdentifier id = port.ibis;
+                AetherIdentifier id = port.ibis;
                 Set<String> s = result.get(id);
                 if (s == null) {
                     s = new HashSet<String>();
@@ -343,7 +343,7 @@ public abstract class SendPort extends Manageable implements nl.esciencecenter.a
 
     public synchronized nl.esciencecenter.aether.ReceivePortIdentifier[] lostConnections() {
         if (! connectionDowncalls) {
-            throw new IbisConfigurationException("SendPort.lostConnections()"
+            throw new ConfigurationException("SendPort.lostConnections()"
                     + " called but connectiondowncalls not configured");
         }
         nl.esciencecenter.aether.ReceivePortIdentifier[] result = lostConnections.toArray(
@@ -365,7 +365,7 @@ public abstract class SendPort extends Manageable implements nl.esciencecenter.a
         connect(receiver, 0, true);
     }
 
-    public nl.esciencecenter.aether.ReceivePortIdentifier connect(nl.esciencecenter.aether.IbisIdentifier id,
+    public nl.esciencecenter.aether.ReceivePortIdentifier connect(nl.esciencecenter.aether.AetherIdentifier id,
             String name) throws ConnectionFailedException {
         if (logger.isDebugEnabled()) {
             logger.debug("Sendport '" + this.name + "' connecting to "
@@ -379,7 +379,7 @@ public abstract class SendPort extends Manageable implements nl.esciencecenter.a
         if (receivers.size() > 0
                 && ! type.hasCapability(PortType.CONNECTION_ONE_TO_MANY)
                 && ! type.hasCapability(PortType.CONNECTION_MANY_TO_MANY)) {
-            throw new IbisConfigurationException("Sendport already has a "
+            throw new ConfigurationException("Sendport already has a "
                     + "connection and OneToMany or ManyToMany not requested");
         }
 
@@ -425,13 +425,13 @@ public abstract class SendPort extends Manageable implements nl.esciencecenter.a
     }
 
     public nl.esciencecenter.aether.ReceivePortIdentifier[] connect(
-            Map<nl.esciencecenter.aether.IbisIdentifier, String> ports)
+            Map<nl.esciencecenter.aether.AetherIdentifier, String> ports)
             throws ConnectionsFailedException {
         return connect(ports, 0, true);
     }
 
     public nl.esciencecenter.aether.ReceivePortIdentifier[] connect(
-            Map<nl.esciencecenter.aether.IbisIdentifier, String> ports, long timeout, 
+            Map<nl.esciencecenter.aether.AetherIdentifier, String> ports, long timeout, 
             boolean fillTimeout) throws ConnectionsFailedException {
 
         nl.esciencecenter.aether.ReceivePortIdentifier [] ids = 
@@ -439,9 +439,9 @@ public abstract class SendPort extends Manageable implements nl.esciencecenter.a
         
         int index = 0;
         
-        for (Map.Entry<nl.esciencecenter.aether.IbisIdentifier, String> entry : ports.entrySet()) {
+        for (Map.Entry<nl.esciencecenter.aether.AetherIdentifier, String> entry : ports.entrySet()) {
             ids[index++] = ibis.createReceivePortIdentifier(entry.getValue(), 
-                    (IbisIdentifier) entry.getKey());
+                    (AetherIdentifier) entry.getKey());
         }
 
         connect(ids, timeout, fillTimeout); // may throw an exception
@@ -564,11 +564,11 @@ public abstract class SendPort extends Manageable implements nl.esciencecenter.a
     }
 
     public nl.esciencecenter.aether.ReceivePortIdentifier connect(
-            nl.esciencecenter.aether.IbisIdentifier id, String name, long timeout, 
+            nl.esciencecenter.aether.AetherIdentifier id, String name, long timeout, 
             boolean fillTimeout) throws ConnectionFailedException {
      
         ReceivePortIdentifier r = 
-            ibis.createReceivePortIdentifier(name, (IbisIdentifier) id);
+            ibis.createReceivePortIdentifier(name, (AetherIdentifier) id);
 
         connect(r, timeout, fillTimeout);
         
@@ -677,9 +677,9 @@ public abstract class SendPort extends Manageable implements nl.esciencecenter.a
         }
     }
 
-    public void disconnect(nl.esciencecenter.aether.IbisIdentifier id, String name)
+    public void disconnect(nl.esciencecenter.aether.AetherIdentifier id, String name)
             throws IOException {
-        disconnect(ibis.createReceivePortIdentifier(name, (IbisIdentifier) id));
+        disconnect(ibis.createReceivePortIdentifier(name, (AetherIdentifier) id));
     }
 
     public synchronized void disconnect(nl.esciencecenter.aether.ReceivePortIdentifier receiver)
@@ -731,7 +731,7 @@ public abstract class SendPort extends Manageable implements nl.esciencecenter.a
      * removed.
      * @param id the IbisIdentifier of the Ibis that left/died.
      */
-    protected synchronized void killConnectionsWith(nl.esciencecenter.aether.IbisIdentifier id) {
+    protected synchronized void killConnectionsWith(nl.esciencecenter.aether.AetherIdentifier id) {
 	ReceivePortIdentifier[] keys = receivers.keySet().toArray(new ReceivePortIdentifier[receivers.size()]);
 	for (ReceivePortIdentifier r : keys) {
 	    if (r.ibisIdentifier().equals(id)) {

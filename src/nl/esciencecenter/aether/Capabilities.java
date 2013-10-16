@@ -9,11 +9,11 @@ import java.util.Properties;
  * This class describes the capabilities of an ibis instance.
  * Combined with a list of {@link PortType} it is
  * used to select a particular Ibis implementation.
- * See the {@link IbisFactory#createIbis(IbisCapabilities, Properties, boolean,
+ * See the {@link AetherFactory#createIbis(Capabilities, Properties, boolean,
  * RegistryEventHandler, PortType...) createIbis} method from
- * {@link IbisFactory}.       
+ * {@link AetherFactory}.       
  */
-public final class IbisCapabilities extends CapabilitySet {
+public final class Capabilities extends CapabilitySet {
 
     /**
      * Capability, set when the Ibises that can join the pool are
@@ -86,7 +86,7 @@ public final class IbisCapabilities extends CapabilitySet {
      * @param capabilities
      *          the capabilities.
      */
-    public IbisCapabilities(String... capabilities) {
+    public Capabilities(String... capabilities) {
         super(capabilities);
     }
     
@@ -95,7 +95,7 @@ public final class IbisCapabilities extends CapabilitySet {
      * @param properties
      *          the properties.
      */
-    protected IbisCapabilities(Properties properties) {
+    protected Capabilities(Properties properties) {
         super(properties);
     }
 
@@ -104,7 +104,7 @@ public final class IbisCapabilities extends CapabilitySet {
      * @param capabilitySet
      *          the capabilityset.
      */
-    protected IbisCapabilities(CapabilitySet capabilitySet) {
+    protected Capabilities(CapabilitySet capabilitySet) {
          super(capabilitySet);
     }
     
@@ -116,7 +116,7 @@ public final class IbisCapabilities extends CapabilitySet {
      * @exception IOException
      *          is thrown when an IO error occurs.
      */
-    public static IbisCapabilities load(String capabilityFileName)
+    public static Capabilities load(String capabilityFileName)
             throws IOException {
         InputStream input = ClassLoader.getSystemClassLoader()
                 .getResourceAsStream(capabilityFileName);
@@ -133,10 +133,10 @@ public final class IbisCapabilities extends CapabilitySet {
      * @exception IOException
      *          is thrown when an IO error occurs.
      */
-    public static IbisCapabilities load(InputStream input) throws IOException {
+    public static Capabilities load(InputStream input) throws IOException {
         Properties properties = new Properties();
         properties.load(input);
         input.close();
-        return new IbisCapabilities(properties);
+        return new Capabilities(properties);
     }
 }

@@ -132,7 +132,7 @@ public interface ReadMessage {
      * message, this information can no longer be trusted.
      * @return
      *          the sequence number for this message.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *          is thrown if the port type of the receive port does not have
      *          the {@link PortType#COMMUNICATION_NUMBERED} capability.
      */

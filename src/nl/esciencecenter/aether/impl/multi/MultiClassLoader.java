@@ -6,22 +6,22 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import nl.esciencecenter.aether.IbisConfigurationException;
+import nl.esciencecenter.aether.ConfigurationException;
 import nl.esciencecenter.aether.util.TypedProperties;
 
 public class MultiClassLoader extends URLClassLoader {
 
-    public MultiClassLoader(String ibisName, TypedProperties userProperties) throws IbisConfigurationException, IOException {
+    public MultiClassLoader(String ibisName, TypedProperties userProperties) throws ConfigurationException, IOException {
         super(new URL[0], Thread.currentThread().getContextClassLoader());
 
         String[] jarFiles = userProperties.getStringList(MultiIbisProperties.IMPLEMENTATION_JARS + ibisName);
         if (jarFiles == null || jarFiles.length == 0) {
-            throw new IbisConfigurationException("Implementation jar files not specified in property: " + MultiIbisProperties.IMPLEMENTATION_JARS + ibisName);
+            throw new ConfigurationException("Implementation jar files not specified in property: " + MultiIbisProperties.IMPLEMENTATION_JARS + ibisName);
         }
         for (String jarFile:jarFiles) {
             File implJarFile = new File(jarFile);
             if (!implJarFile.exists()) {
-                throw new IbisConfigurationException("Implementation jar file: " + jarFile + " does not exist.");
+                throw new ConfigurationException("Implementation jar file: " + jarFile + " does not exist.");
             }
             super.addURL(implJarFile.toURI().toURL());
         }

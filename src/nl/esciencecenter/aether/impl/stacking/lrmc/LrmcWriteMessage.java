@@ -4,7 +4,7 @@ package nl.esciencecenter.aether.impl.stacking.lrmc;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.WriteMessage;
 import nl.esciencecenter.aether.io.SerializationOutput;
 
@@ -15,10 +15,10 @@ public class LrmcWriteMessage implements WriteMessage {
     long count = 0;
     SerializationOutput out;
     LrmcSendPort port;
-    IbisIdentifier[] destinations;
+    AetherIdentifier[] destinations;
 
     public LrmcWriteMessage(LrmcSendPort port, Multicaster om,
-            IbisIdentifier[] dests) throws IOException {
+            AetherIdentifier[] dests) throws IOException {
         this.om = om;
         this.out = om.sout;
         this.port = port;

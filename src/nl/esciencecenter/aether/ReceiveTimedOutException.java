@@ -7,7 +7,7 @@ package nl.esciencecenter.aether;
  * This exception is thrown when, during an invocation of one of the
  * receive() variants with a timeout, the timeout expires.
  */
-public class ReceiveTimedOutException extends IbisIOException {
+public class ReceiveTimedOutException extends AetherIOException {
     private static final long serialVersionUID = 1L;
 
     /**

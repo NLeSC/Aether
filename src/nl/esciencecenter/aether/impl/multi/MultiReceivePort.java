@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import nl.esciencecenter.aether.Ibis;
+import nl.esciencecenter.aether.Aether;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.NoSuchPropertyException;
 import nl.esciencecenter.aether.PortType;
@@ -155,7 +155,7 @@ public class MultiReceivePort implements ReceivePort {
         }
 
         for (String ibisName:ibis.subIbisMap.keySet()) {
-            Ibis subIbis = ibis.subIbisMap.get(ibisName);
+            Aether subIbis = ibis.subIbisMap.get(ibisName);
             ConnectUpcaller upcaller = null;
             if (connectUpcall != null) {
                 upcaller = new ConnectUpcaller(ibisName, this, connectUpcall);

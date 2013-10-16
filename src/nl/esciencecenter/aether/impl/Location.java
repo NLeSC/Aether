@@ -16,12 +16,12 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
-import nl.esciencecenter.aether.IbisProperties;
+import nl.esciencecenter.aether.AetherProperties;
 import nl.esciencecenter.aether.util.TypedProperties;
 
 /**
  * Represents a location on which an Ibis instance runs. This is the
- * data type returned by {@link IbisIdentifier#location()}.
+ * data type returned by {@link AetherIdentifier#location()}.
  * It represents a number of levels, for instance hostname, domain,
  * in that order, t.i., from detailed to coarse.
  */
@@ -217,7 +217,7 @@ public final class Location implements nl.esciencecenter.aether.Location {
         
         TypedProperties p = new TypedProperties(props);
 
-        String s = p.getProperty(IbisProperties.LOCATION);
+        String s = p.getProperty(AetherProperties.LOCATION);
         if (s == null) {
             s = DEFAULT_LOCATION;
         }

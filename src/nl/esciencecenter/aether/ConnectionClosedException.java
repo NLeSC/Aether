@@ -8,7 +8,7 @@ package nl.esciencecenter.aether;
  * that an input or output operation has been terminated because
  * the connection was broken.
  */
-public class ConnectionClosedException extends IbisIOException {
+public class ConnectionClosedException extends AetherIOException {
     private static final long serialVersionUID = 1L;
 
     /**

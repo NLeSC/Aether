@@ -6,10 +6,11 @@ package nl.esciencecenter.aether.impl.tcp;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
+import java.net.Socket;
 
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.SendPortDisconnectUpcall;
-import nl.esciencecenter.aether.impl.Ibis;
+import nl.esciencecenter.aether.impl.Aether;
 import nl.esciencecenter.aether.impl.ReceivePortIdentifier;
 import nl.esciencecenter.aether.impl.SendPort;
 import nl.esciencecenter.aether.impl.SendPortConnectionInfo;
@@ -23,11 +24,11 @@ import nl.esciencecenter.aether.io.SplitterException;
 final class TcpSendPort extends SendPort implements TcpProtocol {
 
     private class Conn extends SendPortConnectionInfo {
-        IbisSocket s;
+        Socket s;
 
         OutputStream out;
 
-        Conn(IbisSocket s, TcpSendPort port, ReceivePortIdentifier target)
+        Conn(Socket s, TcpSendPort port, ReceivePortIdentifier target)
                 throws IOException {
             super(port, target);
             this.s = s;
@@ -54,7 +55,7 @@ final class TcpSendPort extends SendPort implements TcpProtocol {
 
     final BufferedArrayOutputStream bufferedStream;
 
-    TcpSendPort(Ibis ibis, PortType type, String name,
+    TcpSendPort(Aether ibis, PortType type, String name,
             SendPortDisconnectUpcall cU, Properties props) throws IOException {
         super(ibis, type, name, cU, props);
 
@@ -87,8 +88,8 @@ final class TcpSendPort extends SendPort implements TcpProtocol {
     protected SendPortConnectionInfo doConnect(ReceivePortIdentifier receiver,
             long timeoutMillis, boolean fillTimeout) throws IOException {
 
-        IbisSocket s =
-                ((TcpIbis) ibis).connect(this, receiver, (int) timeoutMillis,
+        Socket s =
+                ((TcpAether) ibis).connect(this, receiver, (int) timeoutMillis,
                         fillTimeout);
         Conn c = new Conn(s, this, receiver);
         if (out != null) {

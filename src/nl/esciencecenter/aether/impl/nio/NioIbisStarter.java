@@ -8,27 +8,27 @@ import java.util.Properties;
 
 import nl.esciencecenter.aether.CapabilitySet;
 import nl.esciencecenter.aether.Credentials;
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisCreationFailedException;
-import nl.esciencecenter.aether.IbisFactory;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.CreationFailedException;
+import nl.esciencecenter.aether.AetherFactory;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.RegistryEventHandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class NioIbisStarter extends nl.esciencecenter.aether.IbisStarter {
+public final class NioIbisStarter extends nl.esciencecenter.aether.AetherStarter {
 
     static final Logger logger = LoggerFactory
             .getLogger("ibis.ipl.impl.nio.NioIbisStarter");
 
-    static final IbisCapabilities ibisCapabilities = new IbisCapabilities(
-            IbisCapabilities.CLOSED_WORLD,
-            IbisCapabilities.MEMBERSHIP_UNRELIABLE,
-            IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED,
-            IbisCapabilities.SIGNALS, IbisCapabilities.ELECTIONS_UNRELIABLE,
-            IbisCapabilities.ELECTIONS_STRICT);
+    static final Capabilities ibisCapabilities = new Capabilities(
+            Capabilities.CLOSED_WORLD,
+            Capabilities.MEMBERSHIP_UNRELIABLE,
+            Capabilities.MEMBERSHIP_TOTALLY_ORDERED,
+            Capabilities.SIGNALS, Capabilities.ELECTIONS_UNRELIABLE,
+            Capabilities.ELECTIONS_STRICT);
 
     static final PortType portCapabilities = new PortType(
             PortType.SERIALIZATION_OBJECT_SUN,
@@ -51,7 +51,7 @@ public final class NioIbisStarter extends nl.esciencecenter.aether.IbisStarter {
     }
 
     @Override
-    public boolean matches(IbisCapabilities capabilities, PortType[] types) {
+    public boolean matches(Capabilities capabilities, PortType[] types) {
         if (!capabilities.matchCapabilities(ibisCapabilities)) {
             return false;
         }
@@ -65,12 +65,12 @@ public final class NioIbisStarter extends nl.esciencecenter.aether.IbisStarter {
 
     @Override
     public CapabilitySet unmatchedIbisCapabilities(
-            IbisCapabilities capabilities, PortType[] types) {
+            Capabilities capabilities, PortType[] types) {
         return capabilities.unmatchedCapabilities(ibisCapabilities);
     }
 
     @Override
-    public PortType[] unmatchedPortTypes(IbisCapabilities capabilities,
+    public PortType[] unmatchedPortTypes(Capabilities capabilities,
             PortType[] types) {
         ArrayList<PortType> result = new ArrayList<PortType>();
 
@@ -83,11 +83,11 @@ public final class NioIbisStarter extends nl.esciencecenter.aether.IbisStarter {
     }
 
     @Override
-    public Ibis startIbis(IbisFactory factory,
+    public Aether startIbis(AetherFactory factory,
             RegistryEventHandler registryEventHandler,
-            Properties userProperties, IbisCapabilities capabilities,
+            Properties userProperties, Capabilities capabilities,
             Credentials credentials, byte[] applicationTag, PortType[] portTypes,
-            String specifiedSubImplementation) throws IbisCreationFailedException {
+            String specifiedSubImplementation) throws CreationFailedException {
         return new NioIbis(registryEventHandler, capabilities, credentials,
                 applicationTag, portTypes, userProperties, this);
     }

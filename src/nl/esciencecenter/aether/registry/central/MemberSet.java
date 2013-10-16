@@ -6,7 +6,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 
 public interface MemberSet {
 
@@ -14,13 +14,13 @@ public interface MemberSet {
 
     public void add(Member member);
 
-    public Member remove(IbisIdentifier identifier);
+    public Member remove(AetherIdentifier identifier);
 
-    public boolean contains(IbisIdentifier identifier);
+    public boolean contains(AetherIdentifier identifier);
 
     public boolean contains(Member member);
 
-    public Member get(IbisIdentifier identifier);
+    public Member get(AetherIdentifier identifier);
 
     //return a member from what identifier.name() returns (!= identifier.getID())
     public Member get(String name);
@@ -43,7 +43,7 @@ public interface MemberSet {
 
     public List<Event> getJoinEvents();
     
-    public Member[] getChildren(IbisIdentifier ibis);
+    public Member[] getChildren(AetherIdentifier ibis);
 
     public Member[] getRootChildren();
 }

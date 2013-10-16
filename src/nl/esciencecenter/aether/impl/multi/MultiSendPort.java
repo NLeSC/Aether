@@ -12,8 +12,8 @@ import java.util.Properties;
 
 import nl.esciencecenter.aether.ConnectionFailedException;
 import nl.esciencecenter.aether.ConnectionsFailedException;
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.NoSuchPropertyException;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortIdentifier;
@@ -68,8 +68,8 @@ public class MultiSendPort implements SendPort {
         int opcode = OPP_NOOP;
 
         ReceivePortIdentifier[] rpids;
-        Map<IbisIdentifier, String>iidMap;
-        IbisIdentifier id;
+        Map<AetherIdentifier, String>iidMap;
+        AetherIdentifier id;
         String name;
         ReceivePortIdentifier rpid;
         long timeout;
@@ -176,8 +176,8 @@ public class MultiSendPort implements SendPort {
                     break;
                 case OPP_CONNECT_IID_NAME_MAP:
                     try {
-                        HashMap<IbisIdentifier, String>ids = new HashMap<IbisIdentifier, String>();
-                        for (IbisIdentifier id:iidMap.keySet()) {
+                        HashMap<AetherIdentifier, String>ids = new HashMap<AetherIdentifier, String>();
+                        for (AetherIdentifier id:iidMap.keySet()) {
                             MultiIbisIdentifier mid = (MultiIbisIdentifier)id;
                             ids.put(mid.subIdForIbis(ibisName), iidMap.get(id));
                         }
@@ -248,7 +248,7 @@ public class MultiSendPort implements SendPort {
         }
 
         for (String ibisName:ibis.subIbisMap.keySet()) {
-            Ibis subIbis = ibis.subIbisMap.get(ibisName);
+            Aether subIbis = ibis.subIbisMap.get(ibisName);
             DisconnectUpcaller upcaller = null;
             if (connectUpcall != null) {
                 upcaller = new DisconnectUpcaller(ibisName, this, connectUpcall);
@@ -338,11 +338,11 @@ public class MultiSendPort implements SendPort {
         }
     }
 
-    public ReceivePortIdentifier connect(IbisIdentifier id, String name) throws ConnectionFailedException {
+    public ReceivePortIdentifier connect(AetherIdentifier id, String name) throws ConnectionFailedException {
         return connect(id, name, 0L, true);
     }
 
-    public synchronized ReceivePortIdentifier connect(IbisIdentifier id, String name, long timeoutMillis, boolean fillTimeout) throws ConnectionFailedException {
+    public synchronized ReceivePortIdentifier connect(AetherIdentifier id, String name, long timeoutMillis, boolean fillTimeout) throws ConnectionFailedException {
         synchronized (idQueue) {
             if (id == null) {
                 throw new IllegalArgumentException("Null ibis identifier!");
@@ -448,11 +448,11 @@ public class MultiSendPort implements SendPort {
         }
     }
 
-    public ReceivePortIdentifier[] connect(Map<IbisIdentifier, String> ports) throws ConnectionsFailedException {
+    public ReceivePortIdentifier[] connect(Map<AetherIdentifier, String> ports) throws ConnectionsFailedException {
         return connect(ports, 0L, true);
     }
 
-    public ReceivePortIdentifier[] connect(Map<IbisIdentifier, String> ports, long timeoutMillis, boolean fillTimeout) throws ConnectionsFailedException {
+    public ReceivePortIdentifier[] connect(Map<AetherIdentifier, String> ports, long timeoutMillis, boolean fillTimeout) throws ConnectionsFailedException {
         synchronized (idQueue) {
             logger.debug("Connecting...");
             errorQueue.clear();
@@ -528,7 +528,7 @@ public class MultiSendPort implements SendPort {
         MultiIbisIdentifier id = (MultiIbisIdentifier)receiver.ibisIdentifier();
         for(String ibisName:subPortMap.keySet()) {
             SendPort subPort = subPortMap.get(ibisName);
-            IbisIdentifier subId = id.subIdForIbis(ibisName);
+            AetherIdentifier subId = id.subIdForIbis(ibisName);
             try {
                 subPort.disconnect(subId, receiver.name());
             }
@@ -538,11 +538,11 @@ public class MultiSendPort implements SendPort {
         }
     }
 
-    public void disconnect(IbisIdentifier identifier, String name) throws IOException {
+    public void disconnect(AetherIdentifier identifier, String name) throws IOException {
         MultiIbisIdentifier id = (MultiIbisIdentifier)identifier;
         for(String ibisName:subPortMap.keySet()) {
             SendPort subPort = subPortMap.get(ibisName);
-            IbisIdentifier subId = id.subIdForIbis(ibisName);
+            AetherIdentifier subId = id.subIdForIbis(ibisName);
             try {
                 subPort.disconnect(subId, name);
             }

@@ -9,11 +9,11 @@ import java.util.Map;
 import java.util.Properties;
 
 import nl.esciencecenter.aether.Credentials;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisConfigurationException;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.ConfigurationException;
 import nl.esciencecenter.aether.NoSuchPropertyException;
 import nl.esciencecenter.aether.RegistryEventHandler;
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.registry.central.Event;
 import nl.esciencecenter.aether.registry.central.Protocol;
 import nl.esciencecenter.aether.registry.central.RegistryProperties;
@@ -44,17 +44,17 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
     // client-side representation of the Pool the local Ibis is in.
     private final Pool pool;
 
-    private final IbisIdentifier identifier;
+    private final AetherIdentifier identifier;
 
-    private final IbisCapabilities capabilities;
+    private final Capabilities capabilities;
 
     // data structures that the user can poll
 
-    private final ArrayList<nl.esciencecenter.aether.IbisIdentifier> joinedIbises;
+    private final ArrayList<nl.esciencecenter.aether.AetherIdentifier> joinedIbises;
 
-    private final ArrayList<nl.esciencecenter.aether.IbisIdentifier> leftIbises;
+    private final ArrayList<nl.esciencecenter.aether.AetherIdentifier> leftIbises;
 
-    private final ArrayList<nl.esciencecenter.aether.IbisIdentifier> diedIbises;
+    private final ArrayList<nl.esciencecenter.aether.AetherIdentifier> diedIbises;
 
     private final ArrayList<String> signals;
 
@@ -79,13 +79,13 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
      *            A tag provided by the user constructing this Ibis.
      * @throws IOException
      *             in case of trouble.
-     * @throws IbisConfigurationException
+     * @throws ConfigurationException
      *             In case invalid properties/capabilities were given.
      */
-    public Registry(IbisCapabilities capabilities,
+    public Registry(Capabilities capabilities,
             RegistryEventHandler eventHandler, Properties userProperties,
             byte[] data, String implementationVersion, Credentials credentials,
-            byte[] tag) throws IbisConfigurationException, IOException {
+            byte[] tag) throws ConfigurationException, IOException {
         logger.debug("creating central registry");
 
         this.capabilities = capabilities;
@@ -95,23 +95,23 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
         properties.addProperties(userProperties);
 
         if (capabilities == null) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "Capabilities for registry not specified");
         }
 
-        if ((capabilities.hasCapability(IbisCapabilities.MEMBERSHIP_UNRELIABLE) || capabilities
-                .hasCapability(IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED))
+        if ((capabilities.hasCapability(Capabilities.MEMBERSHIP_UNRELIABLE) || capabilities
+                .hasCapability(Capabilities.MEMBERSHIP_TOTALLY_ORDERED))
                 && eventHandler == null) {
-            joinedIbises = new ArrayList<nl.esciencecenter.aether.IbisIdentifier>();
-            leftIbises = new ArrayList<nl.esciencecenter.aether.IbisIdentifier>();
-            diedIbises = new ArrayList<nl.esciencecenter.aether.IbisIdentifier>();
+            joinedIbises = new ArrayList<nl.esciencecenter.aether.AetherIdentifier>();
+            leftIbises = new ArrayList<nl.esciencecenter.aether.AetherIdentifier>();
+            diedIbises = new ArrayList<nl.esciencecenter.aether.AetherIdentifier>();
         } else {
             joinedIbises = null;
             leftIbises = null;
             diedIbises = null;
         }
 
-        if (capabilities.hasCapability(IbisCapabilities.SIGNALS)
+        if (capabilities.hasCapability(Capabilities.SIGNALS)
                 && eventHandler == null) {
             signals = new ArrayList<String>();
         } else {
@@ -149,7 +149,7 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
 
         } catch (RemoteException e) {
             // error caused by server "complaining"
-            throw new IbisConfigurationException(e.getMessage());
+            throw new ConfigurationException(e.getMessage());
         }
 
         // start writing statistics
@@ -168,11 +168,11 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
     }
 
     @Override
-    public IbisIdentifier getIbisIdentifier() {
+    public AetherIdentifier getIbisIdentifier() {
         return identifier;
     }
 
-    public IbisIdentifier elect(String electionName) throws IOException {
+    public AetherIdentifier elect(String electionName) throws IOException {
         return elect(electionName, 0);
     }
     
@@ -180,21 +180,21 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
         return pool.wonElections(identifier);
     }
 
-    public IbisIdentifier elect(String electionName, long timeoutMillis)
+    public AetherIdentifier elect(String electionName, long timeoutMillis)
             throws IOException {
         if (pool.isStopped()) {
             throw new IOException(
                     "cannot do election, registry already stopped");
         }
 
-        if (!capabilities.hasCapability(IbisCapabilities.ELECTIONS_UNRELIABLE)
+        if (!capabilities.hasCapability(Capabilities.ELECTIONS_UNRELIABLE)
                 && !capabilities
-                        .hasCapability(IbisCapabilities.ELECTIONS_STRICT)) {
-            throw new IbisConfigurationException(
+                        .hasCapability(Capabilities.ELECTIONS_STRICT)) {
+            throw new ConfigurationException(
                     "No election support requested");
         }
 
-        IbisIdentifier result = pool.getElectionResult(electionName, -1);
+        AetherIdentifier result = pool.getElectionResult(electionName, -1);
 
         if (result == null) {
             result = communicationHandler.elect(electionName, timeoutMillis);
@@ -203,21 +203,21 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
         return result;
     }
 
-    public IbisIdentifier getElectionResult(String election) throws IOException {
+    public AetherIdentifier getElectionResult(String election) throws IOException {
         return getElectionResult(election, 0);
     }
 
-    public IbisIdentifier getElectionResult(String electionName,
+    public AetherIdentifier getElectionResult(String electionName,
             long timeoutMillis) throws IOException {
         if (pool.isStopped()) {
             throw new IOException(
                     "cannot do getElectionResult, registry already stopped");
         }
 
-        if (!capabilities.hasCapability(IbisCapabilities.ELECTIONS_UNRELIABLE)
+        if (!capabilities.hasCapability(Capabilities.ELECTIONS_UNRELIABLE)
                 && !capabilities
-                        .hasCapability(IbisCapabilities.ELECTIONS_STRICT)) {
-            throw new IbisConfigurationException(
+                        .hasCapability(Capabilities.ELECTIONS_STRICT)) {
+            throw new ConfigurationException(
                     "No election support requested");
         }
 
@@ -226,7 +226,7 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
         return pool.getElectionResult(electionName, timeoutMillis);
     }
 
-    public void maybeDead(nl.esciencecenter.aether.IbisIdentifier ibisIdentifier)
+    public void maybeDead(nl.esciencecenter.aether.AetherIdentifier ibisIdentifier)
             throws IOException {
         if (pool.isStopped()) {
             throw new IOException(
@@ -239,7 +239,7 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
 
     }
 
-    public void assumeDead(nl.esciencecenter.aether.IbisIdentifier ibisIdentifier)
+    public void assumeDead(nl.esciencecenter.aether.AetherIdentifier ibisIdentifier)
             throws IOException {
         if (pool.isStopped()) {
             throw new IOException(
@@ -250,14 +250,14 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
     }
 
     public void signal(String signal,
-            nl.esciencecenter.aether.IbisIdentifier... ibisIdentifiers) throws IOException {
+            nl.esciencecenter.aether.AetherIdentifier... ibisIdentifiers) throws IOException {
         if (pool.isStopped()) {
             throw new IOException(
                     "cannot send signals, registry already stopped");
         }
 
-        if (!capabilities.hasCapability(IbisCapabilities.SIGNALS)) {
-            throw new IbisConfigurationException("No signal support requested");
+        if (!capabilities.hasCapability(Capabilities.SIGNALS)) {
+            throw new ConfigurationException("No signal support requested");
         }
 
         if (logger.isDebugEnabled()) {
@@ -268,44 +268,44 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
         communicationHandler.signal(signal, ibisIdentifiers);
     }
 
-    public synchronized nl.esciencecenter.aether.IbisIdentifier[] joinedIbises() {
+    public synchronized nl.esciencecenter.aether.AetherIdentifier[] joinedIbises() {
         if (joinedIbises == null) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "Resize downcalls not configured");
         }
 
-        nl.esciencecenter.aether.IbisIdentifier[] retval = joinedIbises
-                .toArray(new nl.esciencecenter.aether.IbisIdentifier[joinedIbises.size()]);
+        nl.esciencecenter.aether.AetherIdentifier[] retval = joinedIbises
+                .toArray(new nl.esciencecenter.aether.AetherIdentifier[joinedIbises.size()]);
         joinedIbises.clear();
         return retval;
     }
 
-    public synchronized nl.esciencecenter.aether.IbisIdentifier[] leftIbises() {
+    public synchronized nl.esciencecenter.aether.AetherIdentifier[] leftIbises() {
         if (leftIbises == null) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "Resize downcalls not configured");
         }
-        nl.esciencecenter.aether.IbisIdentifier[] retval = leftIbises
-                .toArray(new nl.esciencecenter.aether.IbisIdentifier[leftIbises.size()]);
+        nl.esciencecenter.aether.AetherIdentifier[] retval = leftIbises
+                .toArray(new nl.esciencecenter.aether.AetherIdentifier[leftIbises.size()]);
         leftIbises.clear();
         return retval;
     }
 
-    public synchronized nl.esciencecenter.aether.IbisIdentifier[] diedIbises() {
+    public synchronized nl.esciencecenter.aether.AetherIdentifier[] diedIbises() {
         if (diedIbises == null) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "Resize downcalls not configured");
         }
 
-        nl.esciencecenter.aether.IbisIdentifier[] retval = diedIbises
-                .toArray(new nl.esciencecenter.aether.IbisIdentifier[diedIbises.size()]);
+        nl.esciencecenter.aether.AetherIdentifier[] retval = diedIbises
+                .toArray(new nl.esciencecenter.aether.AetherIdentifier[diedIbises.size()]);
         diedIbises.clear();
         return retval;
     }
 
     public synchronized String[] receivedSignals() {
         if (signals == null) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "Registry downcalls not configured");
         }
 
@@ -316,7 +316,7 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
 
     public int getPoolSize() {
         if (!pool.isClosedWorld()) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "getPoolSize called but open world run");
         }
 
@@ -333,7 +333,7 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
 
     public void waitUntilPoolClosed() {
         if (!pool.isClosedWorld()) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "waitForAll called but open world run");
         }
 
@@ -342,7 +342,7 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
 
     public void enableEvents() {
         if (upcaller == null) {
-            throw new IbisConfigurationException("Registry not configured to "
+            throw new ConfigurationException("Registry not configured to "
                     + "produce events");
         }
 
@@ -351,7 +351,7 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
 
     public void disableEvents() {
         if (upcaller == null) {
-            throw new IbisConfigurationException("Registry not configured to "
+            throw new ConfigurationException("Registry not configured to "
                     + "produce events");
         }
 
@@ -394,7 +394,7 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
         if (event.getType() == Event.SIGNAL) {
             boolean match = false;
             // see if this signal is send to us.
-            for (IbisIdentifier ibis : event.getDestinations()) {
+            for (AetherIdentifier ibis : event.getDestinations()) {
                 if (ibis.equals(identifier)) {
                     match = true;
                 }
@@ -473,8 +473,8 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
     }
 
     public boolean hasTerminated() {
-        if (!capabilities.hasCapability(IbisCapabilities.TERMINATION)) {
-            throw new IbisConfigurationException("Registry not configured to "
+        if (!capabilities.hasCapability(Capabilities.TERMINATION)) {
+            throw new ConfigurationException("Registry not configured to "
                     + "support termination");
         }
 
@@ -482,8 +482,8 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
     }
 
     public void terminate() throws IOException {
-        if (!capabilities.hasCapability(IbisCapabilities.TERMINATION)) {
-            throw new IbisConfigurationException("Registry not configured to "
+        if (!capabilities.hasCapability(Capabilities.TERMINATION)) {
+            throw new ConfigurationException("Registry not configured to "
                     + "support termination");
         }
 
@@ -493,9 +493,9 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
         }
     }
 
-    public nl.esciencecenter.aether.IbisIdentifier waitUntilTerminated() {
-        if (!capabilities.hasCapability(IbisCapabilities.TERMINATION)) {
-            throw new IbisConfigurationException("Registry not configured to "
+    public nl.esciencecenter.aether.AetherIdentifier waitUntilTerminated() {
+        if (!capabilities.hasCapability(Capabilities.TERMINATION)) {
+            throw new ConfigurationException("Registry not configured to "
                     + "support termination");
         }
 
@@ -517,7 +517,7 @@ public final class Registry extends nl.esciencecenter.aether.registry.Registry {
     }
 
     @Override
-    public IbisIdentifier getRandomPoolMember() {
+    public AetherIdentifier getRandomPoolMember() {
         return pool.getRandomMember().getIbis();
     }
 

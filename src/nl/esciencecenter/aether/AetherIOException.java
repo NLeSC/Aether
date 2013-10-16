@@ -7,7 +7,7 @@ import java.io.IOException;
  * java.io.IOException), IbisException (which is a checked exception), and IbisRuntimException
  * (which is an unchecked exception).
  */
-public class IbisIOException extends IOException {
+public class AetherIOException extends IOException {
 
     private static final long serialVersionUID = 1L;
 
@@ -15,7 +15,7 @@ public class IbisIOException extends IOException {
      * Constructs an <code>IbisIOException</code> with
      * <code>null</code> as its error detail message.
      */
-    public IbisIOException() {
+    public AetherIOException() {
 	super();
     }
 
@@ -26,7 +26,7 @@ public class IbisIOException extends IOException {
      * @param message
      *          the detail message
      */
-    public IbisIOException(String message) {
+    public AetherIOException(String message) {
 	super(message);
     }
 
@@ -37,7 +37,7 @@ public class IbisIOException extends IOException {
      * @param cause
      *          the cause
      */
-    public IbisIOException(Throwable cause) {
+    public AetherIOException(Throwable cause) {
 	super(cause);
     }
 
@@ -50,7 +50,7 @@ public class IbisIOException extends IOException {
      * @param cause
      *          the cause
      */
-    public IbisIOException(String message, Throwable cause) {
+    public AetherIOException(String message, Throwable cause) {
 	super(message, cause);
     }
 }

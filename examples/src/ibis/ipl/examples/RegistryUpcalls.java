@@ -1,9 +1,9 @@
 package ibis.ipl.examples;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.RegistryEventHandler;
 
 /**
@@ -14,31 +14,31 @@ import nl.esciencecenter.aether.RegistryEventHandler;
 
 public class RegistryUpcalls implements RegistryEventHandler {
 
-    IbisCapabilities ibisCapabilities = new IbisCapabilities(
-            IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED);
+    Capabilities ibisCapabilities = new Capabilities(
+            Capabilities.MEMBERSHIP_TOTALLY_ORDERED);
 
     // Methods of the registry event handler. We only implement the
     // join/leave/died methods, as signals and elections are disabled
 
-    public void joined(IbisIdentifier joinedIbis) {
+    public void joined(AetherIdentifier joinedIbis) {
         System.err.println("Got event from registry: " + joinedIbis
                 + " joined pool");
     }
 
-    public void died(IbisIdentifier corpse) {
+    public void died(AetherIdentifier corpse) {
         System.err.println("Got event from registry: " + corpse + " died!");
     }
 
-    public void left(IbisIdentifier leftIbis) {
+    public void left(AetherIdentifier leftIbis) {
         System.err.println("Got event from registry: " + leftIbis + " left");
     }
 
-    public void electionResult(String electionName, IbisIdentifier winner) {
+    public void electionResult(String electionName, AetherIdentifier winner) {
         System.err.println("Got event from registry: " + winner
                 + " won election " + electionName);
     }
 
-    public void gotSignal(String signal, IbisIdentifier source) {
+    public void gotSignal(String signal, AetherIdentifier source) {
         System.err.println("Got event from registry: signal \"" + signal
                 + "\" from " + source);
     }
@@ -47,14 +47,14 @@ public class RegistryUpcalls implements RegistryEventHandler {
         System.err.println("Got event from registry: pool closed");
     }
 
-    public void poolTerminated(IbisIdentifier source) {
+    public void poolTerminated(AetherIdentifier source) {
         System.err.println("Got event from registry: pool terminated by "
                 + source);
     }
 
     private void run() throws Exception {
         // Create an ibis instance, pass ourselves as the event handler
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, this);
+        Aether ibis = AetherFactory.createIbis(ibisCapabilities, this);
         ibis.registry().enableEvents();
 
         // sleep for 30 seconds

@@ -1,6 +1,6 @@
 package nl.esciencecenter.aether.impl;
 
-public interface IbisMBean {
+public interface AetherMBean {
 	
 	public String getIdentifier();
 	public long getOutgoingMessageCount();

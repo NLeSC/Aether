@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.Properties;
 
 /**
- * Container for the capabilities of an {@link nl.esciencecenter.aether.Ibis Ibis} or a
+ * Container for the capabilities of an {@link nl.esciencecenter.aether.Aether Ibis} or a
  * representation of a port type. These are represented as boolean capabilities,
  * its presence indicating that a certain capability is present.
  * There are a number of predefined capabilities, but Ibis implementations may

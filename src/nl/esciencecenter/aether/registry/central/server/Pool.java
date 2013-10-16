@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.impl.Location;
 import nl.esciencecenter.aether.registry.central.Election;
 import nl.esciencecenter.aether.registry.central.ElectionSet;
@@ -194,7 +194,7 @@ final class Pool implements Runnable {
         return minEventTime;
     }
 
-    synchronized Event addEvent(int type, String description, IbisIdentifier ibis, IbisIdentifier... ibisses) {
+    synchronized Event addEvent(int type, String description, AetherIdentifier ibis, AetherIdentifier... ibisses) {
         Event event = new Event(currentEventTime, type, description, ibis, ibisses);
         if (logger.isDebugEnabled()) {
             logger.debug("adding new event: " + event);
@@ -317,7 +317,7 @@ final class Pool implements Runnable {
         String id = Integer.toString(nextID);
         nextID++;
 
-        IbisIdentifier identifier = new IbisIdentifier(id, implementationData, clientAddress, location, name,
+        AetherIdentifier identifier = new AetherIdentifier(id, implementationData, clientAddress, location, name,
                 applicationTag);
 
         Event event = addEvent(Event.JOIN, null, identifier);
@@ -352,7 +352,7 @@ final class Pool implements Runnable {
             return;
         }
         closed = true;
-        closeEvent = addEvent(Event.POOL_CLOSED, null, null, new IbisIdentifier[0]);
+        closeEvent = addEvent(Event.POOL_CLOSED, null, null, new AetherIdentifier[0]);
         if (printEvents) {
             print("pool \"" + name + "\" now closed");
         }
@@ -420,7 +420,7 @@ final class Pool implements Runnable {
      * ibis.ipl.impl.registry.central.SuperPool#leave(ibis.ipl.impl.IbisIdentifier
      * )
      */
-    synchronized void leave(IbisIdentifier identifier) throws Exception {
+    synchronized void leave(AetherIdentifier identifier) throws Exception {
         if (members.remove(identifier) == null) {
             // May happen if it was declared dead before. So, no exception.
             // --Ceriel
@@ -467,7 +467,7 @@ final class Pool implements Runnable {
      * ibis.ipl.impl.registry.central.SuperPool#dead(ibis.ipl.impl.IbisIdentifier
      * )
      */
-    synchronized void dead(IbisIdentifier identifier, Exception exception) {
+    synchronized void dead(AetherIdentifier identifier, Exception exception) {
         Member member = members.remove(identifier);
         if (member == null) {
             // member removed already
@@ -514,7 +514,7 @@ final class Pool implements Runnable {
      * @see ibis.ipl.impl.registry.central.SuperPool#elect(java.lang.String,
      * ibis.ipl.impl.IbisIdentifier)
      */
-    synchronized IbisIdentifier elect(String electionName, IbisIdentifier candidate) throws IOException {
+    synchronized AetherIdentifier elect(String electionName, AetherIdentifier candidate) throws IOException {
         Election election = elections.get(electionName);
 
         if (election == null) {
@@ -563,7 +563,7 @@ final class Pool implements Runnable {
      * @seeibis.ipl.impl.registry.central.SuperPool#maybeDead(ibis.ipl.impl.
      * IbisIdentifier)
      */
-    synchronized void maybeDead(IbisIdentifier identifier) {
+    synchronized void maybeDead(AetherIdentifier identifier) {
 
         Member member = members.get(identifier);
 
@@ -596,20 +596,20 @@ final class Pool implements Runnable {
      * @see ibis.ipl.impl.registry.central.SuperPool#signal(java.lang.String,
      * ibis.ipl.impl.IbisIdentifier[])
      */
-    synchronized void signal(String signal, IbisIdentifier source, IbisIdentifier[] targets) {
-        ArrayList<IbisIdentifier> result = new ArrayList<IbisIdentifier>();
+    synchronized void signal(String signal, AetherIdentifier source, AetherIdentifier[] targets) {
+        ArrayList<AetherIdentifier> result = new ArrayList<AetherIdentifier>();
 
-        for (IbisIdentifier target : targets) {
+        for (AetherIdentifier target : targets) {
             if (members.contains(target)) {
                 result.add(target);
             }
         }
-        addEvent(Event.SIGNAL, signal, source, result.toArray(new IbisIdentifier[result.size()]));
+        addEvent(Event.SIGNAL, signal, source, result.toArray(new AetherIdentifier[result.size()]));
         notifyAll();
 
     }
 
-    synchronized void terminate(IbisIdentifier source) {
+    synchronized void terminate(AetherIdentifier source) {
         if (terminated) {
             return;
         }
@@ -653,7 +653,7 @@ final class Pool implements Runnable {
             // get reply
             connection.getAndCheckReply();
 
-            IbisIdentifier result = new IbisIdentifier(connection.in());
+            AetherIdentifier result = new AetherIdentifier(connection.in());
 
             connection.close();
 
@@ -865,7 +865,7 @@ final class Pool implements Runnable {
         return null;
     }
 
-    synchronized void gotHeartbeat(IbisIdentifier identifier) {
+    synchronized void gotHeartbeat(AetherIdentifier identifier) {
         Member member = members.get(identifier);
 
         if (logger.isDebugEnabled()) {

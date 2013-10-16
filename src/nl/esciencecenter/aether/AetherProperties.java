@@ -20,7 +20,7 @@ import java.util.Properties;
  * Finally, the system properties are obtained. These, too, may override
  * the properties set so far.
  */
-public final class IbisProperties {
+public final class AetherProperties {
 
     /** Filename for the properties. */
     public static final String PROPERTIES_FILENAME = "ibis.properties";
@@ -110,7 +110,7 @@ public final class IbisProperties {
     /**
      * Private constructor, to prevent construction of an IbisProperties object.
      */
-    private IbisProperties() {
+    private AetherProperties() {
         // nothing
     }
 

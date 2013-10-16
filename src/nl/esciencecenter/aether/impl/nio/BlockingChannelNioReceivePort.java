@@ -16,7 +16,7 @@ import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortConnectUpcall;
 import nl.esciencecenter.aether.ReceiveTimedOutException;
-import nl.esciencecenter.aether.impl.Ibis;
+import nl.esciencecenter.aether.impl.Aether;
 import nl.esciencecenter.aether.impl.SendPortIdentifier;
 
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ final class BlockingChannelNioReceivePort extends NioReceivePort {
 
     private int nrOfConnections = 0;
 
-    BlockingChannelNioReceivePort(Ibis ibis, PortType type, String name,
+    BlockingChannelNioReceivePort(Aether ibis, PortType type, String name,
             MessageUpcall upcall, ReceivePortConnectUpcall connUpcall,
             Properties properties) throws IOException {
         super(ibis, type, name, upcall, connUpcall, properties);

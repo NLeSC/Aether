@@ -21,17 +21,17 @@ import nl.esciencecenter.aether.CapabilitySet;
 import nl.esciencecenter.aether.ConnectionRefusedException;
 import nl.esciencecenter.aether.ConnectionTimedOutException;
 import nl.esciencecenter.aether.Credentials;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisCreationFailedException;
-import nl.esciencecenter.aether.IbisProperties;
-import nl.esciencecenter.aether.IbisStarter;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.CreationFailedException;
+import nl.esciencecenter.aether.AetherProperties;
+import nl.esciencecenter.aether.AetherStarter;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortMismatchException;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortConnectUpcall;
 import nl.esciencecenter.aether.RegistryEventHandler;
 import nl.esciencecenter.aether.SendPortDisconnectUpcall;
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.impl.ReceivePort;
 import nl.esciencecenter.aether.impl.SendPortIdentifier;
 import nl.esciencecenter.aether.io.BufferedArrayInputStream;
@@ -43,7 +43,7 @@ import nl.esciencecenter.aether.util.TypedProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class SmartSocketsIbis extends nl.esciencecenter.aether.impl.Ibis implements
+public final class SmartSocketsIbis extends nl.esciencecenter.aether.impl.Aether implements
         Runnable, SmartSocketsProtocol {
 
     private static final String PORT_PROPERTY = "ibis.local.port";
@@ -67,16 +67,16 @@ public final class SmartSocketsIbis extends nl.esciencecenter.aether.impl.Ibis i
     
     private int soTimeout = -1;
 
-    private HashMap<nl.esciencecenter.aether.IbisIdentifier, VirtualSocketAddress> addresses = new HashMap<nl.esciencecenter.aether.IbisIdentifier, VirtualSocketAddress>();
+    private HashMap<nl.esciencecenter.aether.AetherIdentifier, VirtualSocketAddress> addresses = new HashMap<nl.esciencecenter.aether.AetherIdentifier, VirtualSocketAddress>();
 
     private final HashMap<String, Object> lightConnection = new HashMap<String, Object>();
 
     private final HashMap<String, Object> directConnection = new HashMap<String, Object>();
 
     public SmartSocketsIbis(RegistryEventHandler registryEventHandler,
-            IbisCapabilities capabilities, Credentials credentials,
+            Capabilities capabilities, Credentials credentials,
             byte[] applicationTag, PortType[] types, Properties userProperties,
-            IbisStarter starter) throws IbisCreationFailedException {
+            AetherStarter starter) throws CreationFailedException {
         super(registryEventHandler, capabilities, credentials, applicationTag,
                 types, userProperties, starter);
 
@@ -100,10 +100,10 @@ public final class SmartSocketsIbis extends nl.esciencecenter.aether.impl.Ibis i
                     ServiceLink sl = factory.getServiceLink();
                     if (sl != null) {
                         String colorString = "";
-                        if (properties.getProperty(IbisProperties.LOCATION_COLOR) != null) {
+                        if (properties.getProperty(AetherProperties.LOCATION_COLOR) != null) {
                             colorString = "^"
                                     + properties
-                                    .getProperty(IbisProperties.LOCATION_COLOR);
+                                    .getProperty(AetherProperties.LOCATION_COLOR);
                         }
 
                         sl.registerProperty("smartsockets.viz", "I^" + ident.name() + "^" + ident.name()
@@ -161,7 +161,7 @@ public final class SmartSocketsIbis extends nl.esciencecenter.aether.impl.Ibis i
             nl.esciencecenter.aether.impl.ReceivePortIdentifier rip, int timeout,
             boolean fillTimeout) throws IOException {
 
-        IbisIdentifier id = (IbisIdentifier) rip.ibisIdentifier();
+        AetherIdentifier id = (AetherIdentifier) rip.ibisIdentifier();
         String name = rip.name();
         VirtualSocketAddress idAddr;
 

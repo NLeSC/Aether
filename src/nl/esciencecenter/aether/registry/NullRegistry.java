@@ -9,13 +9,13 @@ import java.util.Properties;
 import java.util.UUID;
 
 import nl.esciencecenter.aether.Credentials;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisConfigurationException;
-import nl.esciencecenter.aether.IbisProperties;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.ConfigurationException;
+import nl.esciencecenter.aether.AetherProperties;
 import nl.esciencecenter.aether.NoSuchPropertyException;
 import nl.esciencecenter.aether.RegistryEventHandler;
-import nl.esciencecenter.aether.impl.Ibis;
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.Aether;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.impl.Location;
 
 /**
@@ -25,11 +25,11 @@ import nl.esciencecenter.aether.impl.Location;
  */
 public final class NullRegistry extends nl.esciencecenter.aether.registry.Registry {
 
-    private final IbisIdentifier identifier;
+    private final AetherIdentifier identifier;
 
     @Override
     public long getSequenceNumber(String name) throws IOException {
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
                 "sequence numbers not supported by NullRegistry");
     }
 
@@ -50,29 +50,29 @@ public final class NullRegistry extends nl.esciencecenter.aether.registry.Regist
      *                in a single pool.
      * @throws IOException
      *                 in case of trouble.
-     * @throws IbisConfigurationException
+     * @throws ConfigurationException
      *                 In case invalid properties were given.
      */
-    public NullRegistry(IbisCapabilities capabilities,
+    public NullRegistry(Capabilities capabilities,
             RegistryEventHandler handler, Properties properties, byte[] data,
             String implementationVersion, Credentials credentials, byte[] tag)
             throws IOException {
 
         if (handler != null) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "upcalls not supported by NullRegistry");
         }
 
-        String id = properties.getProperty(Ibis.ID_PROPERTY);
+        String id = properties.getProperty(Aether.ID_PROPERTY);
         if (id == null) {
             id = UUID.randomUUID().toString();
         }
 
         Location location = Location.defaultLocation(properties, null);
 
-        String pool = properties.getProperty(IbisProperties.POOL_NAME);
+        String pool = properties.getProperty(AetherProperties.POOL_NAME);
 
-        identifier = new IbisIdentifier(id, data, null, location,
+        identifier = new AetherIdentifier(id, data, null, location,
                 pool, tag);
     }
 
@@ -81,69 +81,69 @@ public final class NullRegistry extends nl.esciencecenter.aether.registry.Regist
         // NOTHING
     }
 
-    public void assumeDead(nl.esciencecenter.aether.IbisIdentifier ibis) throws IOException {
+    public void assumeDead(nl.esciencecenter.aether.AetherIdentifier ibis) throws IOException {
         // NOTHING
     }
 
-    public nl.esciencecenter.aether.IbisIdentifier elect(String election) throws IOException {
-        throw new IbisConfigurationException(
+    public nl.esciencecenter.aether.AetherIdentifier elect(String election) throws IOException {
+        throw new ConfigurationException(
                 "elections not supported by NullRegistry");
     }
 
-    public nl.esciencecenter.aether.IbisIdentifier elect(String election, long timeoutMillis) throws IOException {
-        throw new IbisConfigurationException(
+    public nl.esciencecenter.aether.AetherIdentifier elect(String election, long timeoutMillis) throws IOException {
+        throw new ConfigurationException(
                 "elections not supported by NullRegistry");
     }
     
-    public nl.esciencecenter.aether.IbisIdentifier getElectionResult(String election)
+    public nl.esciencecenter.aether.AetherIdentifier getElectionResult(String election)
             throws IOException {
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
                 "elections not supported by NullRegistry");
     }
 
-    public nl.esciencecenter.aether.IbisIdentifier getElectionResult(String election,
+    public nl.esciencecenter.aether.AetherIdentifier getElectionResult(String election,
             long timeoutMillis) throws IOException {
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
                 "elections not supported by NullRegistry");
     }
     
     public String[] wonElections() {
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
                 "elections not supported by NullRegistry");
     }
 
-    public void maybeDead(nl.esciencecenter.aether.IbisIdentifier ibis) throws IOException {
+    public void maybeDead(nl.esciencecenter.aether.AetherIdentifier ibis) throws IOException {
         // NOTHING
     }
 
-    public void signal(String string, nl.esciencecenter.aether.IbisIdentifier... ibisses)
+    public void signal(String string, nl.esciencecenter.aether.AetherIdentifier... ibisses)
             throws IOException {
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
                 "signals not supported by NullRegistry");
     }
 
     @Override
-    public IbisIdentifier getIbisIdentifier() {
+    public AetherIdentifier getIbisIdentifier() {
         return identifier;
     }
 
-    public nl.esciencecenter.aether.IbisIdentifier[] diedIbises() {
-        throw new IbisConfigurationException(
+    public nl.esciencecenter.aether.AetherIdentifier[] diedIbises() {
+        throw new ConfigurationException(
                 "died not supported by NullRegistry");
     }
 
-    public nl.esciencecenter.aether.IbisIdentifier[] joinedIbises() {
-        throw new IbisConfigurationException(
+    public nl.esciencecenter.aether.AetherIdentifier[] joinedIbises() {
+        throw new ConfigurationException(
                 "joins not supported by NullRegistry");
     }
 
-    public nl.esciencecenter.aether.IbisIdentifier[] leftIbises() {
-        throw new IbisConfigurationException(
+    public nl.esciencecenter.aether.AetherIdentifier[] leftIbises() {
+        throw new ConfigurationException(
                 "leaves not supported by NullRegistry");
     }
 
     public String[] receivedSignals() {
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
                 "signals not supported by NullRegistry");
     }
 
@@ -156,7 +156,7 @@ public final class NullRegistry extends nl.esciencecenter.aether.registry.Regist
     }
 
     public int getPoolSize() {
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
                 "pool size not supported by NullRegistry");
     }
     
@@ -165,12 +165,12 @@ public final class NullRegistry extends nl.esciencecenter.aether.registry.Regist
     }
 
     public void waitUntilPoolClosed() {
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
                 "waitUntilPoolClosed not supported by NullRegistry");
     }
     
     public boolean isClosed() {
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
         "closed world not supported by NullRegistry");
     }
 
@@ -195,22 +195,22 @@ public final class NullRegistry extends nl.esciencecenter.aether.registry.Regist
     }
 
     public boolean hasTerminated() {
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
         "termination not supported by NullRegistry");
     }
 
     public void terminate() throws IOException {
-        throw new IbisConfigurationException(
+        throw new ConfigurationException(
         "termination not supported by NullRegistry");
     }
 
-    public IbisIdentifier waitUntilTerminated() {
-        throw new IbisConfigurationException(
+    public AetherIdentifier waitUntilTerminated() {
+        throw new ConfigurationException(
         "termination not supported by NullRegistry");
     }
 
     @Override
-    public IbisIdentifier getRandomPoolMember() {
+    public AetherIdentifier getRandomPoolMember() {
         return null;
     }
 }

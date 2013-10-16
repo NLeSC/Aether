@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import nl.esciencecenter.aether.IbisConfigurationException;
+import nl.esciencecenter.aether.ConfigurationException;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.NoSuchPropertyException;
 import nl.esciencecenter.aether.PortType;
@@ -34,7 +34,7 @@ public class LrmcReceivePort implements nl.esciencecenter.aether.ReceivePort, Ru
         this.upcall = upcall;
         if (upcall != null
                 && !om.portType.hasCapability(PortType.RECEIVE_AUTO_UPCALLS)) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "no connection upcalls requested for this port type");
         }
         ThreadPool.createNew(this, "ReceivePort");
@@ -51,7 +51,7 @@ public class LrmcReceivePort implements nl.esciencecenter.aether.ReceivePort, Ru
     }
 
     public SendPortIdentifier[] connectedTo() {
-        throw new IbisConfigurationException("connection downcalls not supported");
+        throw new ConfigurationException("connection downcalls not supported");
     }
 
     public void disableConnections() {
@@ -80,7 +80,7 @@ public class LrmcReceivePort implements nl.esciencecenter.aether.ReceivePort, Ru
     }
 
     public SendPortIdentifier[] lostConnections() {
-        throw new IbisConfigurationException("connection downcalls not supported");
+        throw new ConfigurationException("connection downcalls not supported");
     }
 
     public String name() {
@@ -88,7 +88,7 @@ public class LrmcReceivePort implements nl.esciencecenter.aether.ReceivePort, Ru
     }
 
     public SendPortIdentifier[] newConnections() {
-        throw new IbisConfigurationException("connection downcalls not supported");
+        throw new ConfigurationException("connection downcalls not supported");
     }
 
     public synchronized ReadMessage poll() throws IOException {
@@ -108,7 +108,7 @@ public class LrmcReceivePort implements nl.esciencecenter.aether.ReceivePort, Ru
 
     public ReadMessage receive(long timeout) throws IOException {
         if (upcall != null) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "Configured Receiveport for upcalls, downcall not allowed");
         }
         boolean hasTimeout = false;
@@ -116,7 +116,7 @@ public class LrmcReceivePort implements nl.esciencecenter.aether.ReceivePort, Ru
             throw new IOException("timeout must be a non-negative number");
         }
         if (timeout > 0 && !om.portType.hasCapability(PortType.RECEIVE_TIMEOUT)) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "This port is not configured for receive() with timeout");
         }
         

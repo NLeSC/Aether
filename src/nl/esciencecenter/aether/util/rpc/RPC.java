@@ -3,8 +3,8 @@ package nl.esciencecenter.aether.util.rpc;
 import java.io.IOException;
 import java.lang.reflect.Proxy;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortIdentifier;
 
@@ -68,7 +68,7 @@ public class RPC {
 	 */
 	public static <InterfaceType extends Object> RemoteObject<InterfaceType> exportObject(
 			Class<InterfaceType> interfaceClass, InterfaceType theObject,
-			String name, Ibis ibis) throws IOException, RemoteException {
+			String name, Aether ibis) throws IOException, RemoteException {
 		return new RemoteObject<InterfaceType>(interfaceClass, theObject, name,
 				ibis);
 	}
@@ -95,7 +95,7 @@ public class RPC {
 	 */
 	public static <InterfaceType extends Object> InterfaceType createProxy(
 			Class<InterfaceType> interfaceClass, ReceivePortIdentifier address,
-			Ibis ibis) {
+			Aether ibis) {
 		return createProxy(interfaceClass, address.ibisIdentifier(), address
 				.name(), ibis);
 	}
@@ -124,8 +124,8 @@ public class RPC {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <InterfaceType extends Object> InterfaceType createProxy(
-			Class<InterfaceType> interfaceClass, IbisIdentifier address,
-			String name, Ibis ibis) {
+			Class<InterfaceType> interfaceClass, AetherIdentifier address,
+			String name, Aether ibis) {
 
 		RPCInvocationHandler handler = new RPCInvocationHandler(address, name,
 				ibis);

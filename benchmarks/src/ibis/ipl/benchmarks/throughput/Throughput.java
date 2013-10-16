@@ -3,10 +3,10 @@ package ibis.ipl.benchmarks.throughput;
 /* $Id: Throughput.java 12928 2011-01-24 10:12:31Z ceriel $ */
 
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
 import nl.esciencecenter.aether.ReceivePort;
@@ -117,8 +117,8 @@ public class Throughput {
 
     public void run() {
         try {
-            IbisCapabilities s = new IbisCapabilities(
-                    IbisCapabilities.ELECTIONS_STRICT
+            Capabilities s = new Capabilities(
+                    Capabilities.ELECTIONS_STRICT
                     );
             PortType t = new PortType(
                     PortType.SERIALIZATION_BYTE,
@@ -126,12 +126,12 @@ public class Throughput {
                     PortType.COMMUNICATION_RELIABLE,
                     PortType.RECEIVE_EXPLICIT);
                      
-            Ibis ibis = IbisFactory.createIbis(s, null, true, null, t);
+            Aether ibis = AetherFactory.createIbis(s, null, true, null, t);
 
             Registry r = ibis.registry();
 
-            IbisIdentifier master = r.elect("throughput");
-            IbisIdentifier remote;
+            AetherIdentifier master = r.elect("throughput");
+            AetherIdentifier remote;
 
             if (master.equals(ibis.identifier())) {
                 rank = 0;

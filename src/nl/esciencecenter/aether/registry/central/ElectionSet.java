@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 
 public class ElectionSet implements Iterable<Election> {
 
@@ -58,7 +58,7 @@ public class ElectionSet implements Iterable<Election> {
         elections.remove(electionName);
     }
 
-    public Election[] getElectionsWonBy(IbisIdentifier identifier) {
+    public Election[] getElectionsWonBy(AetherIdentifier identifier) {
         ArrayList<Election> result = new ArrayList<Election>();
 
         for (Election election : elections.values()) {

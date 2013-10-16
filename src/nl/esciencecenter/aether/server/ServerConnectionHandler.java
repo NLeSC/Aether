@@ -6,7 +6,7 @@ import ibis.smartsockets.virtual.VirtualSocketFactory;
 import java.io.IOException;
 import java.util.Map;
 
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.support.Connection;
 import nl.esciencecenter.aether.support.management.AttributeDescription;
 import nl.esciencecenter.aether.util.ThreadPool;
@@ -172,12 +172,12 @@ class ServerConnectionHandler implements Runnable {
             throws IOException {
         String pool = connection.in().readUTF();
 
-        IbisIdentifier[] result = server.getRegistryService().getMembers(pool);
+        AetherIdentifier[] result = server.getRegistryService().getMembers(pool);
 
         connection.sendOKReply();
 
         connection.out().writeInt(result.length);
-        for (IbisIdentifier element : result) {
+        for (AetherIdentifier element : result) {
             byte[] bytes = element.toBytes();
             connection.out().write(bytes);
         }
@@ -186,7 +186,7 @@ class ServerConnectionHandler implements Runnable {
     private void handleManagementGetAttributes(Connection connection)
             throws IOException, ClassNotFoundException {
 
-        IbisIdentifier ibis = (IbisIdentifier) connection.readObject();
+        AetherIdentifier ibis = (AetherIdentifier) connection.readObject();
         AttributeDescription[] attributes = (AttributeDescription[]) connection
                 .readObject();
 

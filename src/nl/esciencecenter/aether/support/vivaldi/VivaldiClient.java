@@ -10,8 +10,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-import nl.esciencecenter.aether.impl.Ibis;
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.Aether;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.registry.Registry;
 import nl.esciencecenter.aether.support.Client;
 import nl.esciencecenter.aether.support.Connection;
@@ -51,7 +51,7 @@ public class VivaldiClient implements Runnable {
 
         this.coordinates = new Coordinates();
 
-        String clientID = properties.getProperty(Ibis.ID_PROPERTY);
+        String clientID = properties.getProperty(Aether.ID_PROPERTY);
         Client client = Client.getOrCreateClient(clientID, properties, 0);
         this.virtualSocketFactory = client.getFactory();
 
@@ -64,7 +64,7 @@ public class VivaldiClient implements Runnable {
         ThreadPool.createNew(this, "Vivaldi Client");
     }
 
-    public double ping(IbisIdentifier identifier, boolean updateCoordinates)
+    public double ping(AetherIdentifier identifier, boolean updateCoordinates)
             throws IOException {
         double result = Double.MAX_VALUE;
 
@@ -191,7 +191,7 @@ public class VivaldiClient implements Runnable {
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         while (!ended()) {
 
-            IbisIdentifier randomNode = registry.getRandomPoolMember();
+            AetherIdentifier randomNode = registry.getRandomPoolMember();
             if (randomNode != null
                     && !randomNode.equals(registry.getIbisIdentifier())) {
                 try {

@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ReadOnlyBufferException;
 
-import nl.esciencecenter.aether.IbisConfigurationException;
+import nl.esciencecenter.aether.ConfigurationException;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.io.SerializationInput;
 
@@ -248,7 +248,7 @@ public class ReadMessage implements nl.esciencecenter.aether.ReadMessage {
 
     public long sequenceNumber() {
         if (! info.port.type.hasCapability(PortType.COMMUNICATION_NUMBERED)) {
-            throw new IbisConfigurationException("No COMMUNICATION_NUMBERED "
+            throw new ConfigurationException("No COMMUNICATION_NUMBERED "
                     + "specified in port type");
         }
         return sequenceNr;

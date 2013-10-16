@@ -1,6 +1,6 @@
 package nl.esciencecenter.aether.server;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.support.Connection;
 import nl.esciencecenter.aether.support.management.AttributeDescription;
 import ibis.smartsockets.virtual.VirtualSocketAddress;
@@ -21,7 +21,7 @@ class ManagementServiceConnection implements ManagementServiceInterface {
 
     // Java 1.5 Does not allow @Override for interface methods
     //    @Override
-    public Object[] getAttributes(IbisIdentifier ibis,
+    public Object[] getAttributes(AetherIdentifier ibis,
             AttributeDescription... descriptions) throws Exception {
         Connection connection = new Connection(address, TIMEOUT, true,
                 socketFactory);

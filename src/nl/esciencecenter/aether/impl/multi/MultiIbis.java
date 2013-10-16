@@ -14,12 +14,12 @@ import java.util.Random;
 import java.util.UUID;
 
 import nl.esciencecenter.aether.Credentials;
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisCreationFailedException;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
-import nl.esciencecenter.aether.IbisProperties;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.CreationFailedException;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
+import nl.esciencecenter.aether.AetherProperties;
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.NoSuchPropertyException;
 import nl.esciencecenter.aether.PortType;
@@ -36,7 +36,7 @@ import nl.esciencecenter.aether.util.TypedProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MultiIbis implements Ibis {
+public class MultiIbis implements Aether {
 
     /** Debugging output. */
     private static final Logger logger = LoggerFactory
@@ -48,9 +48,9 @@ public class MultiIbis implements Ibis {
             PortType.COMMUNICATION_RELIABLE, PortType.CONNECTION_MANY_TO_ONE,
             PortType.RECEIVE_EXPLICIT, PortType.SERIALIZATION_OBJECT);
 
-    final HashMap<String, Ibis> subIbisMap = new HashMap<String, Ibis>();
+    final HashMap<String, Aether> subIbisMap = new HashMap<String, Aether>();
 
-    private final HashMap<IbisIdentifier, MultiIbisIdentifier> idMap = new HashMap<IbisIdentifier, MultiIbisIdentifier>();
+    private final HashMap<AetherIdentifier, MultiIbisIdentifier> idMap = new HashMap<AetherIdentifier, MultiIbisIdentifier>();
 
     private final ArrayList<MultiSendPort> sendPorts = new ArrayList<MultiSendPort>();
 
@@ -75,15 +75,15 @@ public class MultiIbis implements Ibis {
     final HashMap<String, MultiRegistryEventHandler> registryHandlerMap = new HashMap<String, MultiRegistryEventHandler>();
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public MultiIbis(IbisFactory factory,
+    public MultiIbis(AetherFactory factory,
             RegistryEventHandler registryEventHandler,
-            Properties userProperties, IbisCapabilities capabilities,
+            Properties userProperties, Capabilities capabilities,
             Credentials credentials, byte[] applicationTag, PortType[] portTypes,
             String specifiedSubImplementation, MultiIbisStarter multiIbisStarter) {
         if (logger.isDebugEnabled()) {
             logger.debug("Constructing MultiIbis!");
         }
-        HashMap<String, IbisIdentifier> subIdMap = new HashMap<String, IbisIdentifier>();
+        HashMap<String, AetherIdentifier> subIdMap = new HashMap<String, AetherIdentifier>();
         if (logger.isDebugEnabled()) {
             org.slf4j.MDC.put("UID", String.valueOf(new Random().nextInt()));
         }
@@ -107,9 +107,9 @@ public class MultiIbis implements Ibis {
             try {
                 // add name of implementation to the poolname
                 String poolName = userProperties
-                        .getProperty(IbisProperties.POOL_NAME);
+                        .getProperty(AetherProperties.POOL_NAME);
                 Properties subProperties = new Properties(userProperties);
-                subProperties.setProperty(IbisProperties.POOL_NAME, poolName
+                subProperties.setProperty(AetherProperties.POOL_NAME, poolName
                         + ":" + implementation);
 
                 MultiRegistryEventHandler handler = null;
@@ -118,7 +118,7 @@ public class MultiIbis implements Ibis {
                             registryEventHandler);
                 }
 
-                Ibis ibis = factory.createIbis(handler, capabilities,
+                Aether ibis = factory.createIbis(handler, capabilities,
                         subProperties, credentials, applicationTag, requiredPortTypes,
                         implementation);
 
@@ -138,7 +138,7 @@ public class MultiIbis implements Ibis {
                 try {
                     new MultiNameResolver(this, implementation);
                 } catch (IOException e) {
-                    throw new IbisCreationFailedException(
+                    throw new CreationFailedException(
                             "Unable to create resolver.", e);
                 }
             } catch (Throwable t) {
@@ -150,13 +150,13 @@ public class MultiIbis implements Ibis {
             throw new RuntimeException("Unable to create any children!");
         }
 
-        String poolName = userProperties.getProperty(IbisProperties.POOL_NAME);
+        String poolName = userProperties.getProperty(AetherProperties.POOL_NAME);
         Location location = Location.defaultLocation(userProperties);
         id = new MultiIbisIdentifier(UUID.randomUUID().toString(), subIdMap,
                 null, location, poolName, applicationTag);
 
         for (String ibisName : subIdMap.keySet()) {
-            IbisIdentifier subId = subIdMap.get(ibisName);
+            AetherIdentifier subId = subIdMap.get(ibisName);
             idMap.put(subId, id);
         }
 
@@ -185,7 +185,7 @@ public class MultiIbis implements Ibis {
     }
 
     public synchronized void end() throws IOException {
-        for (Ibis ibis : subIbisMap.values()) {
+        for (Aether ibis : subIbisMap.values()) {
             ibis.end();
         }
         // Kill all the receive ports
@@ -207,18 +207,18 @@ public class MultiIbis implements Ibis {
     }
 
     public synchronized void poll() throws IOException {
-        for (Ibis ibis : subIbisMap.values()) {
+        for (Aether ibis : subIbisMap.values()) {
             ibis.poll();
         }
     }
 
-    public synchronized IbisIdentifier identifier() {
+    public synchronized AetherIdentifier identifier() {
         return id;
     }
 
     public synchronized String getVersion() {
         StringBuffer buffer = new StringBuffer("MultiIbis on top of");
-        for (Ibis ibis : subIbisMap.values()) {
+        for (Aether ibis : subIbisMap.values()) {
             buffer.append(' ');
             buffer.append(ibis.getVersion());
         }
@@ -277,7 +277,7 @@ public class MultiIbis implements Ibis {
         return port;
     }
 
-    public MultiIbisIdentifier mapIdentifier(IbisIdentifier ibisId,
+    public MultiIbisIdentifier mapIdentifier(AetherIdentifier ibisId,
             String ibisName) throws IOException {
         MultiIbisIdentifier id = idMap.get(ibisId);
         while (id == null) {
@@ -346,7 +346,7 @@ public class MultiIbis implements Ibis {
 
     public void resolved(MultiIbisIdentifier id) {
         for (String subIbisName : subIbisMap.keySet()) {
-            IbisIdentifier subId = id.subIdForIbis(subIbisName);
+            AetherIdentifier subId = id.subIdForIbis(subIbisName);
             if (subId != null) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Resolved: " + subId + " to: " + id);
@@ -356,7 +356,7 @@ public class MultiIbis implements Ibis {
         }
     }
 
-    public boolean isResolved(IbisIdentifier toResolve) {
+    public boolean isResolved(AetherIdentifier toResolve) {
         return idMap.get(toResolve) != null;
     }
 

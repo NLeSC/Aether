@@ -1,10 +1,10 @@
 package ibis.ipl.benchmarks.registry;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisCreationFailedException;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.CreationFailedException;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.RegistryEventHandler;
 import nl.esciencecenter.aether.util.ThreadPool;
@@ -24,21 +24,21 @@ final class IbisApplication implements Runnable, RegistryEventHandler {
 
     private final boolean generateEvents;
 
-    private Set<IbisIdentifier> ibisses;
+    private Set<AetherIdentifier> ibisses;
 
     private boolean stopped = false;
 
     private final Random random;
 
-    private Ibis ibis;
+    private Aether ibis;
 
     private final PortType portType;
 
     IbisApplication(boolean generateEvents, boolean fail)
-            throws IbisCreationFailedException, IOException {
+            throws CreationFailedException, IOException {
         this.generateEvents = generateEvents;
 
-        ibisses = new HashSet<IbisIdentifier>();
+        ibisses = new HashSet<AetherIdentifier>();
         random = new Random();
 
         portType =
@@ -74,27 +74,27 @@ final class IbisApplication implements Runnable, RegistryEventHandler {
         }
     }
 
-    public synchronized void joined(IbisIdentifier ident) {
+    public synchronized void joined(AetherIdentifier ident) {
         ibisses.add(ident);
         logger.info("upcall for join of: " + ident);
     }
 
-    public synchronized void left(IbisIdentifier ident) {
+    public synchronized void left(AetherIdentifier ident) {
         ibisses.remove(ident);
         logger.info("upcall for leave of: " + ident);
     }
 
-    public synchronized void died(IbisIdentifier corpse) {
+    public synchronized void died(AetherIdentifier corpse) {
         ibisses.remove(corpse);
         logger.info("upcall for died of: " + corpse);
     }
 
-    public synchronized void gotSignal(String signal, IbisIdentifier source) {
+    public synchronized void gotSignal(String signal, AetherIdentifier source) {
         logger.info("got string: " + signal + " from " + source);
     }
 
     public synchronized void electionResult(String electionName,
-            IbisIdentifier winner) {
+            AetherIdentifier winner) {
         logger.info("got election result for :\"" + electionName + "\" : "
                 + winner);
     }
@@ -103,7 +103,7 @@ final class IbisApplication implements Runnable, RegistryEventHandler {
         logger.info("pool now closed");
 	}
 
-	public void poolTerminated(IbisIdentifier source) {
+	public void poolTerminated(AetherIdentifier source) {
         logger.info("pool terminated by " + source);
 	}
 
@@ -125,14 +125,14 @@ final class IbisApplication implements Runnable, RegistryEventHandler {
         return ibisses.size();
     }
 
-    private synchronized IbisIdentifier getRandomIbis() {
+    private synchronized AetherIdentifier getRandomIbis() {
         if (ibisses.isEmpty()) {
             return null;
         }
 
         int element = random.nextInt(ibisses.size());
 
-        for (IbisIdentifier ibis : ibisses) {
+        for (AetherIdentifier ibis : ibisses) {
             if (element == 0) {
                 return ibis;
             }
@@ -143,13 +143,13 @@ final class IbisApplication implements Runnable, RegistryEventHandler {
     }
 
     // get random ibisses. May/will contain some duplicates :)
-    private synchronized IbisIdentifier[] getRandomIbisses() {
+    private synchronized AetherIdentifier[] getRandomIbisses() {
         if (nrOfIbisses() == 0) {
-            return new IbisIdentifier[0];
+            return new AetherIdentifier[0];
         }
 
-        IbisIdentifier[] result =
-            new IbisIdentifier[random.nextInt(nrOfIbisses())];
+        AetherIdentifier[] result =
+            new AetherIdentifier[random.nextInt(nrOfIbisses())];
 
         for (int i = 0; i < result.length; i++) {
             result[i] = getRandomIbis();
@@ -171,13 +171,13 @@ final class IbisApplication implements Runnable, RegistryEventHandler {
         try {
             synchronized (this) {
 
-                IbisCapabilities s =
-                    new IbisCapabilities(
-                            IbisCapabilities.MEMBERSHIP_UNRELIABLE,
-                            IbisCapabilities.ELECTIONS_UNRELIABLE,
-                            IbisCapabilities.SIGNALS);
+                Capabilities s =
+                    new Capabilities(
+                            Capabilities.MEMBERSHIP_UNRELIABLE,
+                            Capabilities.ELECTIONS_UNRELIABLE,
+                            Capabilities.SIGNALS);
 
-                ibis = IbisFactory.createIbis(s, this, portType);
+                ibis = AetherFactory.createIbis(s, this, portType);
 
                 logger.debug("ibis created, enabling upcalls");
 
@@ -204,7 +204,7 @@ final class IbisApplication implements Runnable, RegistryEventHandler {
                         switch (nextCase) {
                         case 0:
                             logger.debug("signalling random member(s)");
-                            IbisIdentifier[] signalList = getRandomIbisses();
+                            AetherIdentifier[] signalList = getRandomIbisses();
 
                             ibis.registry().signal("ARRG to you all!",
                                 signalList);
@@ -227,14 +227,14 @@ final class IbisApplication implements Runnable, RegistryEventHandler {
                             break;
                         case 4:
                             logger.debug("doing maybeDead() on random ibis");
-                            IbisIdentifier suspect = getRandomIbis();
+                            AetherIdentifier suspect = getRandomIbis();
                             if (suspect != null) {
                                 ibis.registry().maybeDead(suspect);
                             }
                             break;
                         case 5:
                             logger.debug("signalling random member");
-                            IbisIdentifier signallee = getRandomIbis();
+                            AetherIdentifier signallee = getRandomIbis();
 
                             if (signallee != null) {
                                 ibis.registry().signal("ARRG!", signallee);

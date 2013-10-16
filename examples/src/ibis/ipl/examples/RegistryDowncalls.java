@@ -1,9 +1,9 @@
 package ibis.ipl.examples;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 
 /**
  * This program shows how to handle events from the registry using downcalls. It
@@ -13,32 +13,32 @@ import nl.esciencecenter.aether.IbisIdentifier;
 
 public class RegistryDowncalls {
 
-    IbisCapabilities ibisCapabilities = new IbisCapabilities(
-            IbisCapabilities.MEMBERSHIP_TOTALLY_ORDERED);
+    Capabilities ibisCapabilities = new Capabilities(
+            Capabilities.MEMBERSHIP_TOTALLY_ORDERED);
 
     private void run() throws Exception {
         // Create an ibis instance, pass "null" as the event handler, enabling
         // downcalls
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null);
+        Aether ibis = AetherFactory.createIbis(ibisCapabilities, null);
 
         // poll the registry once every second for new events
         for (int i = 0; i < 30; i++) {
 
             // poll for new ibises
-            IbisIdentifier[] joinedIbises = ibis.registry().joinedIbises();
-            for (IbisIdentifier joinedIbis : joinedIbises) {
+            AetherIdentifier[] joinedIbises = ibis.registry().joinedIbises();
+            for (AetherIdentifier joinedIbis : joinedIbises) {
                 System.err.println("Ibis joined: " + joinedIbis);
             }
 
             // poll for left ibises
-            IbisIdentifier[] leftIbises = ibis.registry().leftIbises();
-            for (IbisIdentifier leftIbis : leftIbises) {
+            AetherIdentifier[] leftIbises = ibis.registry().leftIbises();
+            for (AetherIdentifier leftIbis : leftIbises) {
                 System.err.println("Ibis left: " + leftIbis);
             }
 
             // poll for died ibises
-            IbisIdentifier[] diedIbises = ibis.registry().diedIbises();
-            for (IbisIdentifier diedIbis : diedIbises) {
+            AetherIdentifier[] diedIbises = ibis.registry().diedIbises();
+            for (AetherIdentifier diedIbis : diedIbises) {
                 System.err.println("Ibis died: " + diedIbis);
             }
 

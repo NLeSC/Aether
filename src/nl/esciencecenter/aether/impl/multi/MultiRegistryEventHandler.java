@@ -3,7 +3,7 @@ package nl.esciencecenter.aether.impl.multi;
 
 import java.io.IOException;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.RegistryEventHandler;
 
 public class MultiRegistryEventHandler implements RegistryEventHandler {
@@ -22,7 +22,7 @@ public class MultiRegistryEventHandler implements RegistryEventHandler {
         this.subHandler = subHandler;
     }
 
-    public synchronized void died(IbisIdentifier corpse) {
+    public synchronized void died(AetherIdentifier corpse) {
         while (registry == null) {
             try {
                 wait();
@@ -42,7 +42,7 @@ public class MultiRegistryEventHandler implements RegistryEventHandler {
     }
 
     public synchronized void electionResult(String electionName,
-            IbisIdentifier winner) {
+            AetherIdentifier winner) {
         while (registry == null) {
             try {
                 wait();
@@ -68,11 +68,11 @@ public class MultiRegistryEventHandler implements RegistryEventHandler {
         }
     }
 
-    public void gotSignal(String signal, IbisIdentifier source) {
+    public void gotSignal(String signal, AetherIdentifier source) {
         subHandler.gotSignal(signal, source);
     }
 
-    public synchronized void joined(IbisIdentifier joinedIbis) {
+    public synchronized void joined(AetherIdentifier joinedIbis) {
         while (registry == null) {
             try {
                 wait();
@@ -91,7 +91,7 @@ public class MultiRegistryEventHandler implements RegistryEventHandler {
         }
     }
 
-    public synchronized void left(IbisIdentifier leftIbis) {
+    public synchronized void left(AetherIdentifier leftIbis) {
         while (registry == null) {
             try {
                 wait();
@@ -123,7 +123,7 @@ public class MultiRegistryEventHandler implements RegistryEventHandler {
         // FIXME: implement
     }
 
-    public void poolTerminated(IbisIdentifier source) {
+    public void poolTerminated(AetherIdentifier source) {
         // FIXME: implement
     }
 

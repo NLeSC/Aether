@@ -12,10 +12,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 /**
- * This implementation of the {@link nl.esciencecenter.aether.IbisIdentifier} interface
+ * This implementation of the {@link nl.esciencecenter.aether.AetherIdentifier} interface
  * identifies an Ibis instance on the network.
  */
-public final class IbisIdentifier implements nl.esciencecenter.aether.IbisIdentifier {
+public final class AetherIdentifier implements nl.esciencecenter.aether.AetherIdentifier {
     /**
      * Generated
      */
@@ -60,7 +60,7 @@ public final class IbisIdentifier implements nl.esciencecenter.aether.IbisIdenti
      * @param tag
      *            user-provided tag for this ibis.
      */
-    public IbisIdentifier(String id, byte[] implementationData,
+    public AetherIdentifier(String id, byte[] implementationData,
             byte[] registryData, Location location, String pool,
             byte[] tag) {
         this.id = id;
@@ -80,7 +80,7 @@ public final class IbisIdentifier implements nl.esciencecenter.aether.IbisIdenti
      * @exception IOException
      *                is thrown in case of trouble.
      */
-    public IbisIdentifier(byte[] codedForm) throws IOException {
+    public AetherIdentifier(byte[] codedForm) throws IOException {
         this(codedForm, 0, codedForm.length);
     }
 
@@ -97,7 +97,7 @@ public final class IbisIdentifier implements nl.esciencecenter.aether.IbisIdenti
      * @exception IOException
      *                is thrown in case of trouble.
      */
-    public IbisIdentifier(byte[] codedForm, int offset, int size)
+    public AetherIdentifier(byte[] codedForm, int offset, int size)
             throws IOException {
         this(new DataInputStream(new ByteArrayInputStream(codedForm, offset,
                 size)));
@@ -111,7 +111,7 @@ public final class IbisIdentifier implements nl.esciencecenter.aether.IbisIdenti
      * @exception IOException
      *                is thrown in case of trouble.
      */
-    public IbisIdentifier(DataInput dis) throws IOException {
+    public AetherIdentifier(DataInput dis) throws IOException {
         location = new Location(dis);
         pool = dis.readUTF();
         int implementationSize = dis.readInt();
@@ -212,7 +212,7 @@ public final class IbisIdentifier implements nl.esciencecenter.aether.IbisIdenti
             return false;
         }
 
-        IbisIdentifier other = (IbisIdentifier) o;
+        AetherIdentifier other = (AetherIdentifier) o;
         return other.id.equals(id) && other.pool.equals(pool);
     }
 
@@ -279,11 +279,11 @@ public final class IbisIdentifier implements nl.esciencecenter.aether.IbisIdenti
      * @param c
      *            the Ibis identifier to compare to.
      */
-    public int compareTo(nl.esciencecenter.aether.IbisIdentifier c) {
-        if (c instanceof IbisIdentifier) {
+    public int compareTo(nl.esciencecenter.aether.AetherIdentifier c) {
+        if (c instanceof AetherIdentifier) {
             // If not, the specified Ibis identifier is from a completely
             // different implementation.
-            IbisIdentifier other = (IbisIdentifier) c;
+            AetherIdentifier other = (AetherIdentifier) c;
             // First compare pools.
             int cmp = pool.compareTo(other.pool);
             if (cmp == 0) {

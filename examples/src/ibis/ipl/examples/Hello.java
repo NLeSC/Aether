@@ -1,9 +1,9 @@
 package ibis.ipl.examples;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
 import nl.esciencecenter.aether.ReceivePort;
@@ -24,10 +24,10 @@ public class Hello {
             PortType.SERIALIZATION_DATA, PortType.RECEIVE_EXPLICIT,
             PortType.CONNECTION_ONE_TO_ONE);
 
-    IbisCapabilities ibisCapabilities = new IbisCapabilities(
-            IbisCapabilities.ELECTIONS_STRICT);
+    Capabilities ibisCapabilities = new Capabilities(
+            Capabilities.ELECTIONS_STRICT);
 
-    private void server(Ibis myIbis) throws IOException {
+    private void server(Aether myIbis) throws IOException {
 
         // Create a receive port and enable connections.
         ReceivePort receiver = myIbis.createReceivePort(portType, "server");
@@ -43,7 +43,7 @@ public class Hello {
         receiver.close();
     }
 
-    private void client(Ibis myIbis, IbisIdentifier server) throws IOException {
+    private void client(Aether myIbis, AetherIdentifier server) throws IOException {
 
         // Create a send port for sending requests and connect.
         SendPort sender = myIbis.createSendPort(portType);
@@ -60,10 +60,10 @@ public class Hello {
 
     private void run() throws Exception {
         // Create an ibis instance.
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portType);
+        Aether ibis = AetherFactory.createIbis(ibisCapabilities, null, portType);
 
         // Elect a server
-        IbisIdentifier server = ibis.registry().elect("Server");
+        AetherIdentifier server = ibis.registry().elect("Server");
 
         System.out.println("Server is " + server);
 

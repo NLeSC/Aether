@@ -4,7 +4,7 @@ package nl.esciencecenter.aether.server;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import nl.esciencecenter.aether.IbisFactory;
+import nl.esciencecenter.aether.AetherFactory;
 import nl.esciencecenter.aether.registry.Registry;
 import nl.esciencecenter.aether.util.TypedProperties;
 
@@ -49,7 +49,7 @@ public final class ServerProperties {
 
         if (version == null || version.equals("0.0")) {
             // try to get version from IPL_MANIFEST file
-            version = IbisFactory.getManifestProperty("support.version");
+            version = AetherFactory.getManifestProperty("support.version");
         }
 
         if (version == null) {

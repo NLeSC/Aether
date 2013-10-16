@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.security.AccessControlException;
 
 import nl.esciencecenter.aether.Credentials;
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.impl.Location;
 import nl.esciencecenter.aether.io.Conversion;
 import nl.esciencecenter.aether.registry.ControlPolicy;
@@ -173,7 +173,7 @@ final class ServerConnectionHandler implements Runnable {
     }
 
     private Pool handleLeave(Connection connection) throws Exception {
-        IbisIdentifier identifier = new IbisIdentifier(connection.in());
+        AetherIdentifier identifier = new AetherIdentifier(connection.in());
 
         Pool pool = server.getPool(identifier.poolName());
 
@@ -197,7 +197,7 @@ final class ServerConnectionHandler implements Runnable {
     }
 
     private Pool handleElect(Connection connection) throws Exception {
-        IbisIdentifier candidate = new IbisIdentifier(connection.in());
+        AetherIdentifier candidate = new AetherIdentifier(connection.in());
         String election = connection.in().readUTF();
 
         Pool pool = server.getPool(candidate.poolName());
@@ -207,7 +207,7 @@ final class ServerConnectionHandler implements Runnable {
             throw new Exception("pool " + candidate.poolName() + " not found");
         }
 
-        IbisIdentifier winner = pool.elect(election, candidate);
+        AetherIdentifier winner = pool.elect(election, candidate);
 
         connection.sendOKReply();
 
@@ -219,7 +219,7 @@ final class ServerConnectionHandler implements Runnable {
 
     private Pool handleGetSequenceNumber(Connection connection)
             throws Exception {
-        IbisIdentifier identifier = new IbisIdentifier(connection.in());
+        AetherIdentifier identifier = new AetherIdentifier(connection.in());
         String name = connection.in().readUTF();
 
         Pool pool = server.getPool(identifier.poolName());
@@ -240,8 +240,8 @@ final class ServerConnectionHandler implements Runnable {
     }
 
     private Pool handleDead(Connection connection) throws Exception {
-        IbisIdentifier identifier = new IbisIdentifier(connection.in());
-        IbisIdentifier corpse = new IbisIdentifier(connection.in());
+        AetherIdentifier identifier = new AetherIdentifier(connection.in());
+        AetherIdentifier corpse = new AetherIdentifier(connection.in());
 
         Pool pool = server.getPool(identifier.poolName());
 
@@ -265,8 +265,8 @@ final class ServerConnectionHandler implements Runnable {
     }
 
     private Pool handleMaybeDead(Connection connection) throws Exception {
-        IbisIdentifier identifier = new IbisIdentifier(connection.in());
-        IbisIdentifier suspect = new IbisIdentifier(connection.in());
+        AetherIdentifier identifier = new AetherIdentifier(connection.in());
+        AetherIdentifier suspect = new AetherIdentifier(connection.in());
 
         Pool pool = server.getPool(identifier.poolName());
 
@@ -284,14 +284,14 @@ final class ServerConnectionHandler implements Runnable {
     }
 
     private Pool handleSignal(Connection connection) throws Exception {
-        IbisIdentifier identifier = new IbisIdentifier(connection.in());
+        AetherIdentifier identifier = new AetherIdentifier(connection.in());
 
         String signal = connection.in().readUTF();
 
-        IbisIdentifier[] receivers = new IbisIdentifier[connection.in()
+        AetherIdentifier[] receivers = new AetherIdentifier[connection.in()
                 .readInt()];
         for (int i = 0; i < receivers.length; i++) {
-            receivers[i] = new IbisIdentifier(connection.in());
+            receivers[i] = new AetherIdentifier(connection.in());
         }
 
         Pool pool = server.getPool(identifier.poolName());
@@ -310,7 +310,7 @@ final class ServerConnectionHandler implements Runnable {
     }
 
     private Pool handleGetState(Connection connection) throws Exception {
-        IbisIdentifier identifier = new IbisIdentifier(connection.in());
+        AetherIdentifier identifier = new AetherIdentifier(connection.in());
         int joinTime = connection.in().readInt();
 
         Pool pool = server.getPool(identifier.poolName());
@@ -329,7 +329,7 @@ final class ServerConnectionHandler implements Runnable {
     }
 
     private Pool handleHeartbeat(Connection connection) throws Exception {
-        IbisIdentifier identifier = new IbisIdentifier(connection.in());
+        AetherIdentifier identifier = new AetherIdentifier(connection.in());
 
         Pool pool = server.getPool(identifier.poolName());
 
@@ -345,7 +345,7 @@ final class ServerConnectionHandler implements Runnable {
     }
 
     private Pool handleTerminate(Connection connection) throws Exception {
-        IbisIdentifier source = new IbisIdentifier(connection.in());
+        AetherIdentifier source = new AetherIdentifier(connection.in());
 
         Pool pool = server.getPool(source.poolName());
 

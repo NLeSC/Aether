@@ -10,7 +10,7 @@ import java.util.Properties;
 
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.SendPortDisconnectUpcall;
-import nl.esciencecenter.aether.impl.Ibis;
+import nl.esciencecenter.aether.impl.Aether;
 import nl.esciencecenter.aether.impl.ReceivePortIdentifier;
 import nl.esciencecenter.aether.impl.SendPort;
 import nl.esciencecenter.aether.impl.SendPortConnectionInfo;
@@ -26,7 +26,7 @@ public final class NioSendPort extends SendPort implements Protocol {
 
     private final NioAccumulator accumulator;
 
-    NioSendPort(Ibis ibis, PortType type, String name,
+    NioSendPort(Aether ibis, PortType type, String name,
             SendPortDisconnectUpcall cU, Properties props) throws IOException {
         super(ibis, type, name, cU, props);
 

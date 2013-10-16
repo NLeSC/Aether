@@ -6,9 +6,9 @@ import ibis.smartsockets.virtual.VirtualSocketFactory;
 
 import java.io.IOException;
 
-import nl.esciencecenter.aether.IbisConfigurationException;
-import nl.esciencecenter.aether.impl.Ibis;
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.ConfigurationException;
+import nl.esciencecenter.aether.impl.Aether;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.registry.statistics.Statistics;
 import nl.esciencecenter.aether.support.Client;
 import nl.esciencecenter.aether.support.Connection;
@@ -55,7 +55,7 @@ class CommunicationHandler implements Runnable {
 
     CommunicationHandler(TypedProperties properties, Registry registry,
             MemberSet members, ElectionSet elections, Statistics statistics)
-            throws IbisConfigurationException, IOException {
+            throws ConfigurationException, IOException {
         this.registry = registry;
         this.pool = members;
         this.elections = elections;
@@ -66,7 +66,7 @@ class CommunicationHandler implements Runnable {
 
         gossipSize = properties.getIntProperty(RegistryProperties.GOSSIP_COUNT);
 
-        String clientID = properties.getProperty(Ibis.ID_PROPERTY);
+        String clientID = properties.getProperty(Aether.ID_PROPERTY);
         Client client = Client.getOrCreateClient(clientID, properties, 0);
         socketFactory = client.getFactory();
 
@@ -100,11 +100,11 @@ class CommunicationHandler implements Runnable {
         createThread();
     }
 
-    public void sendSignals(String signal, IbisIdentifier[] ibises)
+    public void sendSignals(String signal, AetherIdentifier[] ibises)
             throws IOException {
         String errorMessage = null;
 
-        for (IbisIdentifier ibis : ibises) {
+        for (AetherIdentifier ibis : ibises) {
             try {
                 long start = System.currentTimeMillis();
                 Connection connection = new Connection(ibis,
@@ -139,7 +139,7 @@ class CommunicationHandler implements Runnable {
     }
 
     private void handleSignal(Connection connection) throws IOException {
-        IbisIdentifier source = new IbisIdentifier(connection.in());
+        AetherIdentifier source = new AetherIdentifier(connection.in());
         String signal = connection.in().readUTF();
 
         connection.sendOKReply();
@@ -192,7 +192,7 @@ class CommunicationHandler implements Runnable {
     }
 
     private void handleGossip(Connection connection) throws IOException {
-        IbisIdentifier peer = new IbisIdentifier(connection.in());
+        AetherIdentifier peer = new AetherIdentifier(connection.in());
 
         if (peer.equals(registry.getIbisIdentifier())) {
             logger.error("eep! talking to ourselves");
@@ -258,7 +258,7 @@ class CommunicationHandler implements Runnable {
     }
 
     private void handleLeave(Connection connection) throws IOException {
-        IbisIdentifier ibis = new IbisIdentifier(connection.in());
+        AetherIdentifier ibis = new AetherIdentifier(connection.in());
 
         connection.sendOKReply();
 
@@ -267,7 +267,7 @@ class CommunicationHandler implements Runnable {
         connection.close();
     }
 
-    public void ping(IbisIdentifier ibis) throws IOException {
+    public void ping(AetherIdentifier ibis) throws IOException {
         long start = System.currentTimeMillis();
         Connection connection = new Connection(ibis, CONNECTION_TIMEOUT, true,
                 socketFactory, Protocol.VIRTUAL_PORT);
@@ -276,7 +276,7 @@ class CommunicationHandler implements Runnable {
         connection.out().writeByte(Protocol.OPCODE_PING);
 
         connection.getAndCheckReply();
-        IbisIdentifier result = new IbisIdentifier(connection.in());
+        AetherIdentifier result = new AetherIdentifier(connection.in());
 
         connection.close();
 

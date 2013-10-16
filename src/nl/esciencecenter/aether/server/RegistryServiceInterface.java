@@ -3,7 +3,7 @@ package nl.esciencecenter.aether.server;
 import java.io.IOException;
 import java.util.Map;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 
 
 /**
@@ -42,6 +42,6 @@ public interface RegistryServiceInterface {
      * @return a list containing the current members of the specified pool.
      * @throws IOException is thrown in case of communication troubles.
      */
-    public IbisIdentifier[] getMembers(String poolName) throws IOException;
+    public AetherIdentifier[] getMembers(String poolName) throws IOException;
 
 }

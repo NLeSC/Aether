@@ -1,9 +1,9 @@
 package ibis.ipl.benchmarks.connect;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
 import nl.esciencecenter.aether.ReceivePort;
@@ -48,8 +48,8 @@ public class Connect {
             PortType.RECEIVE_EXPLICIT,
             PortType.CONNECTION_ONE_TO_ONE);
     
-    private static final IbisCapabilities ibisCapabilities =
-        new IbisCapabilities(IbisCapabilities.ELECTIONS_STRICT);
+    private static final Capabilities ibisCapabilities =
+        new Capabilities(Capabilities.ELECTIONS_STRICT);
 
     private final PortType portType; 
     private final int bytes;
@@ -67,7 +67,7 @@ public class Connect {
     	this.reconnect = reconnect;
     }
     
-    private void server(Ibis myIbis) throws IOException {
+    private void server(Aether myIbis) throws IOException {
 
         // Create a receive port and enable connections.
         ReceivePort receiver = myIbis.createReceivePort(portType, "server");
@@ -80,7 +80,7 @@ public class Connect {
         
         boolean connected = false;
         
-        IbisIdentifier src = null;
+        AetherIdentifier src = null;
         
        	sender = myIbis.createSendPort(portType);
         
@@ -167,7 +167,7 @@ public class Connect {
         receiver.close();
     }
 
-    private void client(Ibis myIbis,  IbisIdentifier server) throws IOException {
+    private void client(Aether myIbis,  AetherIdentifier server) throws IOException {
 
     	// Create a receive port and enable connections.
         ReceivePort receiver = myIbis.createReceivePort(portType, "client");
@@ -263,10 +263,10 @@ public class Connect {
     private void run() throws Exception {
     	
         // Create an ibis instance.
-        Ibis ibis = IbisFactory.createIbis(ibisCapabilities, null, portType);
+        Aether ibis = AetherFactory.createIbis(ibisCapabilities, null, portType);
 
         // Elect a server
-        IbisIdentifier server = ibis.registry().elect("Server");
+        AetherIdentifier server = ibis.registry().elect("Server");
 
         System.out.println("Server is " + server);
         

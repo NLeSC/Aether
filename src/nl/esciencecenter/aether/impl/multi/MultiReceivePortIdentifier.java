@@ -3,7 +3,7 @@ package nl.esciencecenter.aether.impl.multi;
 
 import java.util.HashMap;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.ReceivePortIdentifier;
 
 public class MultiReceivePortIdentifier implements ReceivePortIdentifier {
@@ -14,16 +14,16 @@ public class MultiReceivePortIdentifier implements ReceivePortIdentifier {
     private static final long serialVersionUID = 3918962573170503300L
     ;
     private final String name;
-    private final IbisIdentifier id;
+    private final AetherIdentifier id;
 
     private final HashMap<String, ReceivePortIdentifier>subIds = new HashMap<String, ReceivePortIdentifier>();
 
-    public MultiReceivePortIdentifier(IbisIdentifier id, String name) {
+    public MultiReceivePortIdentifier(AetherIdentifier id, String name) {
         this.name = name;
         this.id = id;
     }
 
-    public IbisIdentifier ibisIdentifier() {
+    public AetherIdentifier ibisIdentifier() {
         return id;
     }
 

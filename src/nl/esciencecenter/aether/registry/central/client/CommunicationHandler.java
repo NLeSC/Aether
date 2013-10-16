@@ -9,10 +9,10 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import nl.esciencecenter.aether.Credentials;
-import nl.esciencecenter.aether.IbisConfigurationException;
-import nl.esciencecenter.aether.IbisProperties;
-import nl.esciencecenter.aether.impl.Ibis;
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.ConfigurationException;
+import nl.esciencecenter.aether.AetherProperties;
+import nl.esciencecenter.aether.impl.Aether;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.impl.Location;
 import nl.esciencecenter.aether.io.Conversion;
 import nl.esciencecenter.aether.registry.central.Event;
@@ -67,9 +67,9 @@ final class CommunicationHandler implements Runnable {
 
     // bootstrap data
 
-    private IbisIdentifier identifier;
+    private AetherIdentifier identifier;
 
-    private IbisIdentifier[] bootstrapList;
+    private AetherIdentifier[] bootstrapList;
 
     private int joinTime;
 
@@ -79,15 +79,15 @@ final class CommunicationHandler implements Runnable {
 
     CommunicationHandler(TypedProperties properties, Pool pool,
             Statistics statistics) throws IOException,
-            IbisConfigurationException {
+            ConfigurationException {
         this.properties = properties;
         this.pool = pool;
         this.statistics = statistics;
 
-        if (properties.getProperty(IbisProperties.SERVER_ADDRESS) == null) {
-            throw new IbisConfigurationException(
+        if (properties.getProperty(AetherProperties.SERVER_ADDRESS) == null) {
+            throw new ConfigurationException(
                     "cannot initialize registry, property "
-                            + IbisProperties.SERVER_ADDRESS
+                            + AetherProperties.SERVER_ADDRESS
                             + " is not specified");
         }
 
@@ -95,7 +95,7 @@ final class CommunicationHandler implements Runnable {
         tree = properties.getBooleanProperty(RegistryProperties.TREE);
 
         if (gossip && tree) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "enabling both gossip and tree communication not allowed");
         }
 
@@ -105,7 +105,7 @@ final class CommunicationHandler implements Runnable {
             peerBootstrap = false;
             if (properties
                     .getBooleanProperty(RegistryProperties.PEER_BOOTSTRAP)) {
-                throw new IbisConfigurationException(
+                throw new ConfigurationException(
                         "peer bootstrap not possible in combination with tree");
             }
         } else {
@@ -116,7 +116,7 @@ final class CommunicationHandler implements Runnable {
         timeout = properties
                 .getIntProperty(RegistryProperties.CLIENT_CONNECT_TIMEOUT) * 1000;
 
-        String clientID = this.properties.getProperty(Ibis.ID_PROPERTY);
+        String clientID = this.properties.getProperty(Aether.ID_PROPERTY);
         client = Client.getOrCreateClient(clientID, properties, 0);
         virtualSocketFactory = client.getFactory();
 
@@ -160,7 +160,7 @@ final class CommunicationHandler implements Runnable {
 
     }
 
-    synchronized IbisIdentifier getIdentifier() {
+    synchronized AetherIdentifier getIdentifier() {
         return identifier;
     }
 
@@ -174,7 +174,7 @@ final class CommunicationHandler implements Runnable {
      * @throws IOException
      *             in case of trouble
      */
-    IbisIdentifier join(byte[] implementationData,
+    AetherIdentifier join(byte[] implementationData,
             String implementationVersion, Credentials credentials, byte[] tag)
             throws IOException {
         long start = System.currentTimeMillis();
@@ -221,7 +221,7 @@ final class CommunicationHandler implements Runnable {
             connection = new Connection(serverAddress, timeout, true,
                     virtualSocketFactory);
         } catch (IOException e) {
-            throw new IbisConfigurationException("Cannot connect to server at "
+            throw new ConfigurationException("Cannot connect to server at "
                     + serverAddress + ", please check if it has been started", e);
         }
 
@@ -274,14 +274,14 @@ final class CommunicationHandler implements Runnable {
 
             connection.getAndCheckReply();
 
-            IbisIdentifier identifier = new IbisIdentifier(connection.in());
+            AetherIdentifier identifier = new AetherIdentifier(connection.in());
             int joinTime = connection.in().readInt();
             int startOfEventListTime = connection.in().readInt();
 
             int listLength = connection.in().readInt();
-            IbisIdentifier[] bootstrapList = new IbisIdentifier[listLength];
+            AetherIdentifier[] bootstrapList = new AetherIdentifier[listLength];
             for (int i = 0; i < listLength; i++) {
-                bootstrapList[i] = new IbisIdentifier(connection.in());
+                bootstrapList[i] = new AetherIdentifier(connection.in());
             }
             connection.close();
             heartbeat.resetDeadlines();
@@ -329,8 +329,8 @@ final class CommunicationHandler implements Runnable {
 
         long start = System.currentTimeMillis();
 
-        IbisIdentifier identifier;
-        IbisIdentifier[] bootstrapList;
+        AetherIdentifier identifier;
+        AetherIdentifier[] bootstrapList;
         int joinTime;
 
         synchronized (this) {
@@ -339,7 +339,7 @@ final class CommunicationHandler implements Runnable {
             joinTime = this.joinTime;
         }
 
-        for (IbisIdentifier ibis : bootstrapList) {
+        for (AetherIdentifier ibis : bootstrapList) {
             if (!ibis.equals(identifier)) {
         	if (logger.isDebugEnabled()) {
         	    logger.debug("trying to bootstrap with data from " + ibis);
@@ -407,7 +407,7 @@ final class CommunicationHandler implements Runnable {
         }
     }
 
-    public void signal(String signal, nl.esciencecenter.aether.IbisIdentifier... ibisses)
+    public void signal(String signal, nl.esciencecenter.aether.AetherIdentifier... ibisses)
             throws IOException {
         long start = System.currentTimeMillis();
 
@@ -421,7 +421,7 @@ final class CommunicationHandler implements Runnable {
             connection.out().writeUTF(signal);
             connection.out().writeInt(ibisses.length);
             for (int i = 0; i < ibisses.length; i++) {
-                ((IbisIdentifier) ibisses[i]).writeTo(connection.out());
+                ((AetherIdentifier) ibisses[i]).writeTo(connection.out());
             }
             connection.out().flush();
 
@@ -522,7 +522,7 @@ final class CommunicationHandler implements Runnable {
         }
     }
 
-    public void assumeDead(nl.esciencecenter.aether.IbisIdentifier ibis) throws IOException {
+    public void assumeDead(nl.esciencecenter.aether.AetherIdentifier ibis) throws IOException {
         long start = System.currentTimeMillis();
 
         if (pool.isStopped()) {
@@ -541,7 +541,7 @@ final class CommunicationHandler implements Runnable {
             connection.out().writeByte(Protocol.MAGIC_BYTE);
             connection.out().writeByte(Protocol.OPCODE_DEAD);
             getIdentifier().writeTo(connection.out());
-            ((IbisIdentifier) ibis).writeTo(connection.out());
+            ((AetherIdentifier) ibis).writeTo(connection.out());
             connection.out().flush();
 
             connection.getAndCheckReply();
@@ -564,7 +564,7 @@ final class CommunicationHandler implements Runnable {
         }
     }
 
-    public void maybeDead(nl.esciencecenter.aether.IbisIdentifier ibis) throws IOException {
+    public void maybeDead(nl.esciencecenter.aether.AetherIdentifier ibis) throws IOException {
         long start = System.currentTimeMillis();
 
         if (pool.isStopped()) {
@@ -583,7 +583,7 @@ final class CommunicationHandler implements Runnable {
             connection.out().writeByte(Protocol.MAGIC_BYTE);
             connection.out().writeByte(Protocol.OPCODE_MAYBE_DEAD);
             getIdentifier().writeTo(connection.out());
-            ((IbisIdentifier) ibis).writeTo(connection.out());
+            ((AetherIdentifier) ibis).writeTo(connection.out());
             connection.out().flush();
 
             connection.getAndCheckReply();
@@ -703,7 +703,7 @@ final class CommunicationHandler implements Runnable {
         }
     }
 
-    public IbisIdentifier elect(String election, long timeout)
+    public AetherIdentifier elect(String election, long timeout)
             throws IOException {
         long start = System.currentTimeMillis();
 
@@ -728,7 +728,7 @@ final class CommunicationHandler implements Runnable {
 
             connection.getAndCheckReply();
 
-            IbisIdentifier winner = new IbisIdentifier(connection.in());
+            AetherIdentifier winner = new AetherIdentifier(connection.in());
 
             connection.close();
 
@@ -753,7 +753,7 @@ final class CommunicationHandler implements Runnable {
         }
     }
 
-    void gossip(IbisIdentifier ibis) throws IOException {
+    void gossip(AetherIdentifier ibis) throws IOException {
         long start = System.currentTimeMillis();
 
         if (ibis.equals(getIdentifier())) {
@@ -837,7 +837,7 @@ final class CommunicationHandler implements Runnable {
         }
     }
 
-    void forward(IbisIdentifier ibis) {
+    void forward(AetherIdentifier ibis) {
         byte opcode = Protocol.OPCODE_FORWARD;
         long start = System.currentTimeMillis();
 
@@ -936,7 +936,7 @@ final class CommunicationHandler implements Runnable {
 	    logger.debug("got a gossip request");
 	}
 
-        IbisIdentifier identifier = new IbisIdentifier(connection.in());
+        AetherIdentifier identifier = new AetherIdentifier(connection.in());
         String poolName = identifier.poolName();
         int peerTime = connection.in().readInt();
 
@@ -1092,7 +1092,7 @@ final class CommunicationHandler implements Runnable {
 	if (logger.isDebugEnabled()) {
 	    logger.debug("got a ping request");
 	}
-        IbisIdentifier identifier = getIdentifier();
+        AetherIdentifier identifier = getIdentifier();
         if (identifier == null) {
             connection.closeWithError("ibis identifier not initialized yet");
             return;
@@ -1108,7 +1108,7 @@ final class CommunicationHandler implements Runnable {
 	    logger.debug("got a state request");
 	}
 
-        IbisIdentifier identifier = new IbisIdentifier(connection.in());
+        AetherIdentifier identifier = new AetherIdentifier(connection.in());
         int joinTime = connection.in().readInt();
 
         String poolName = identifier.poolName();

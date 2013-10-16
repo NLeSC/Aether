@@ -9,7 +9,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import nl.esciencecenter.aether.Location;
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.registry.ControlPolicy;
 import nl.esciencecenter.aether.registry.central.Member;
 import nl.esciencecenter.aether.registry.central.Protocol;
@@ -235,16 +235,16 @@ public final class CentralRegistryService extends Thread implements Service, Reg
      * ibis.ipl.registry.central.server.RegistryService#getMembers(java.lang
      * .String)
      */
-    public IbisIdentifier[] getMembers(String poolName) {
+    public AetherIdentifier[] getMembers(String poolName) {
         Pool pool = getPool(poolName);
 
         if (pool == null) {
-            return new IbisIdentifier[0];
+            return new AetherIdentifier[0];
         }
 
         Member[] members = pool.getMembers();
 
-        IbisIdentifier[] result = new IbisIdentifier[members.length];
+        AetherIdentifier[] result = new AetherIdentifier[members.length];
 
         for (int i = 0; i < members.length; i++) {
             result[i] = members[i].getIbis();

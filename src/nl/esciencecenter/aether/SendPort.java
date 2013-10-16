@@ -190,7 +190,7 @@ public interface SendPort extends Manageable {
      * @exception ConnectionFailedException
      *          is thrown in case of trouble.
      */
-    public ReceivePortIdentifier connect(IbisIdentifier ibisIdentifier, 
+    public ReceivePortIdentifier connect(AetherIdentifier ibisIdentifier, 
             String receivePortName) throws ConnectionFailedException;
 
     /**
@@ -227,7 +227,7 @@ public interface SendPort extends Manageable {
      * @exception ConnectionFailedException
      *          in case of trouble.
      */
-    public ReceivePortIdentifier connect(IbisIdentifier ibisIdentifier, 
+    public ReceivePortIdentifier connect(AetherIdentifier ibisIdentifier, 
             String receivePortName, long timeoutMillis, boolean fillTimeout) 
         throws ConnectionFailedException;
 
@@ -284,7 +284,7 @@ public interface SendPort extends Manageable {
      *          an array of receiveport identifiers.
      */
     public nl.esciencecenter.aether.ReceivePortIdentifier[] connect(
-            Map<nl.esciencecenter.aether.IbisIdentifier, String> ports)
+            Map<nl.esciencecenter.aether.AetherIdentifier, String> ports)
             throws ConnectionsFailedException;
 
     /**
@@ -308,7 +308,7 @@ public interface SendPort extends Manageable {
      *          succeeded.
      */
     public nl.esciencecenter.aether.ReceivePortIdentifier[] connect(
-            Map<nl.esciencecenter.aether.IbisIdentifier, String> ports, long timeoutMillis, 
+            Map<nl.esciencecenter.aether.AetherIdentifier, String> ports, long timeoutMillis, 
             boolean fillTimeout) throws ConnectionsFailedException;
     
     /**
@@ -335,7 +335,7 @@ public interface SendPort extends Manageable {
      *          is thrown if there was no connection to the receiveport
      *          specified or in case of other trouble.
      */
-    public void disconnect(IbisIdentifier ibisIdentifier,
+    public void disconnect(AetherIdentifier ibisIdentifier,
             String receivePortName) throws IOException;
 
     /**
@@ -368,7 +368,7 @@ public interface SendPort extends Manageable {
      * @return
      *          a set of receiveport identifiers to which the connection
      *          is lost.
-     * @exception IbisConfigurationException
+     * @exception ConfigurationException
      *          is thrown when the port type does not specify the connection
      *          downcalls capability.
      */

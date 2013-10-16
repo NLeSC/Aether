@@ -5,11 +5,12 @@ package nl.esciencecenter.aether.impl.tcp;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.net.Socket;
 
 import nl.esciencecenter.aether.MessageUpcall;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortConnectUpcall;
-import nl.esciencecenter.aether.impl.Ibis;
+import nl.esciencecenter.aether.impl.Aether;
 import nl.esciencecenter.aether.impl.ReadMessage;
 import nl.esciencecenter.aether.impl.ReceivePort;
 import nl.esciencecenter.aether.impl.ReceivePortConnectionInfo;
@@ -24,9 +25,9 @@ class TcpReceivePort extends ReceivePort implements TcpProtocol {
     class ConnectionHandler extends ReceivePortConnectionInfo 
             implements Runnable, TcpProtocol {
 
-        private final IbisSocket s;
+        private final Socket s;
 
-        ConnectionHandler(SendPortIdentifier origin, IbisSocket s,
+        ConnectionHandler(SendPortIdentifier origin, Socket s,
                 ReceivePort port, BufferedArrayInputStream in)
                 throws IOException {
             super(origin, port, in);
@@ -155,7 +156,7 @@ class TcpReceivePort extends ReceivePort implements TcpProtocol {
                     if (lazy_connectionhandler_thread && ! fromHandlerThread) {
                         // Wake up the connection handler thread so that it can die.
                         synchronized(this) {
-                            notifyAll();
+                            this.notifyAll();
                         }
                     }
                     return;
@@ -239,7 +240,7 @@ class TcpReceivePort extends ReceivePort implements TcpProtocol {
 
     private boolean reader_busy = false;
 
-    TcpReceivePort(Ibis ibis, PortType type, String name, MessageUpcall upcall,
+    TcpReceivePort(Aether ibis, PortType type, String name, MessageUpcall upcall,
             ReceivePortConnectUpcall connUpcall, Properties props) throws IOException {
         super(ibis, type, name, upcall, connUpcall, props);
 
@@ -339,7 +340,7 @@ class TcpReceivePort extends ReceivePort implements TcpProtocol {
         }
     }
 
-    void connect(SendPortIdentifier origin, IbisSocket s,
+    void connect(SendPortIdentifier origin, Socket s,
             BufferedArrayInputStream in) throws IOException {
         ConnectionHandler conn;
 

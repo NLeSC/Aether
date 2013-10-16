@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisConfigurationException;
-import nl.esciencecenter.aether.IbisProperties;
-import nl.esciencecenter.aether.impl.IbisIdentifier;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.ConfigurationException;
+import nl.esciencecenter.aether.AetherProperties;
+import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.registry.central.Election;
 import nl.esciencecenter.aether.registry.central.ElectionSet;
 import nl.esciencecenter.aether.registry.central.Event;
@@ -65,7 +65,7 @@ final class Pool {
 
     private int time;
 
-    Pool(IbisCapabilities capabilities, TypedProperties properties,
+    Pool(Capabilities capabilities, TypedProperties properties,
             Registry registry, Statistics statistics) {
         this.registry = registry;
 
@@ -94,23 +94,23 @@ final class Pool {
         stopped = false;
         
         // get the pool ....
-        poolName = properties.getProperty(IbisProperties.POOL_NAME);
+        poolName = properties.getProperty(AetherProperties.POOL_NAME);
         if (poolName == null) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "cannot initialize registry, property "
-                            + IbisProperties.POOL_NAME + " is not specified");
+                            + AetherProperties.POOL_NAME + " is not specified");
         }
 
-        closedWorld = capabilities.hasCapability(IbisCapabilities.CLOSED_WORLD);
+        closedWorld = capabilities.hasCapability(Capabilities.CLOSED_WORLD);
 
         if (closedWorld) {
             try {
-                size = properties.getIntProperty(IbisProperties.POOL_SIZE);
+                size = properties.getIntProperty(AetherProperties.POOL_SIZE);
             } catch (final NumberFormatException e) {
-                throw new IbisConfigurationException(
+                throw new ConfigurationException(
                         "could not start registry for a closed world ibis, "
                                 + "required property: "
-                                + IbisProperties.POOL_SIZE + " undefined", e);
+                                + AetherProperties.POOL_SIZE + " undefined", e);
             }
         } else {
             size = -1;
@@ -157,12 +157,12 @@ final class Pool {
         return stopped;
     }
 
-    synchronized boolean isMember(IbisIdentifier ibis) {
+    synchronized boolean isMember(AetherIdentifier ibis) {
         return members.contains(ibis);
     }
 
     public synchronized boolean mustReportMaybeDead(
-            nl.esciencecenter.aether.IbisIdentifier ibisIdentifier) {
+            nl.esciencecenter.aether.AetherIdentifier ibisIdentifier) {
         Member member = members.get(ibisIdentifier.name());
 
         if (member == null) {
@@ -342,7 +342,7 @@ final class Pool {
         }
     }
     
-    synchronized String[] wonElections(IbisIdentifier id) {
+    synchronized String[] wonElections(AetherIdentifier id) {
         ArrayList<String> result = new ArrayList<String>();
         for (Election e : elections) {
             if (e.getWinner().equals(id)) {
@@ -352,7 +352,7 @@ final class Pool {
         return result.toArray(new String[result.size()]);
     }
 
-    synchronized IbisIdentifier getElectionResult(String election, long timeout)
+    synchronized AetherIdentifier getElectionResult(String election, long timeout)
             throws IOException {
         long deadline = System.currentTimeMillis() + timeout;
 
@@ -413,7 +413,7 @@ final class Pool {
             }
             break;
         case Event.DIED:
-            IbisIdentifier died = event.getIbis();
+            AetherIdentifier died = event.getIbis();
             members.remove(died);
             if (statistics != null) {
                 statistics.newPoolSize(members.size());
@@ -462,7 +462,7 @@ final class Pool {
 
     synchronized boolean isClosed() {
         if (!closedWorld) {
-            throw new IbisConfigurationException("isClosed() called but not "
+            throw new ConfigurationException("isClosed() called but not "
                     + "closed world");
         }
 
@@ -471,7 +471,7 @@ final class Pool {
 
     synchronized void waitUntilPoolClosed() {
         if (!closedWorld) {
-            throw new IbisConfigurationException(
+            throw new ConfigurationException(
                     "waitUntilPoolClosed() called but not " + "closed world");
         }
 
@@ -570,7 +570,7 @@ final class Pool {
         return terminated;
     }
 
-    synchronized nl.esciencecenter.aether.IbisIdentifier waitUntilTerminated() {
+    synchronized nl.esciencecenter.aether.AetherIdentifier waitUntilTerminated() {
         while (!(terminated || stopped)) {
             try {
                 wait();

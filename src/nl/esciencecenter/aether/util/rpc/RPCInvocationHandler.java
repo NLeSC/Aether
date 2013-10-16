@@ -6,8 +6,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.ReadMessage;
 import nl.esciencecenter.aether.ReceivePort;
 import nl.esciencecenter.aether.SendPort;
@@ -21,11 +21,11 @@ class RPCInvocationHandler implements InvocationHandler {
 	private static final Logger logger = LoggerFactory
 			.getLogger(RPCInvocationHandler.class);
 
-	private final Ibis ibis;
-	private final IbisIdentifier ibisIdentifier;
+	private final Aether ibis;
+	private final AetherIdentifier ibisIdentifier;
 	private final String name;
 
-	RPCInvocationHandler(IbisIdentifier ibisIdentifier, String name, Ibis ibis) {
+	RPCInvocationHandler(AetherIdentifier ibisIdentifier, String name, Aether ibis) {
 		this.ibisIdentifier = ibisIdentifier;
 		this.name = name;
 		this.ibis = ibis;

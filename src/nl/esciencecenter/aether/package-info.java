@@ -10,13 +10,13 @@
  * Only receive ports and send ports of the same port type can communicate. Any number of receive ports and
  * send ports can be created on a JVM (even of the same port type).
  * <p>
- * First, an {@link nl.esciencecenter.aether.Ibis Ibis} instance must be created. This is achieved by
- * calling one of the <code>createIbis</code> methods of the {@link nl.esciencecenter.aether.IbisFactory IbisFactory},
- * specifying the {@link nl.esciencecenter.aether.IbisCapabilities capabilities} and port types required.
+ * First, an {@link nl.esciencecenter.aether.Aether Ibis} instance must be created. This is achieved by
+ * calling one of the <code>createIbis</code> methods of the {@link nl.esciencecenter.aether.AetherFactory IbisFactory},
+ * specifying the {@link nl.esciencecenter.aether.Capabilities capabilities} and port types required.
  * <p>
  * SendPorts and ReceivePorts are created by an Ibis instance using the
- * {@link nl.esciencecenter.aether.Ibis#createSendPort(PortType, String) createSendPort} and
- * {@link nl.esciencecenter.aether.Ibis#createReceivePort(PortType, String) createReceivePort} methods. When creating a
+ * {@link nl.esciencecenter.aether.Aether#createSendPort(PortType, String) createSendPort} and
+ * {@link nl.esciencecenter.aether.Aether#createReceivePort(PortType, String) createReceivePort} methods. When creating a
  * ReceivePort, it can be supplied with an {@link nl.esciencecenter.aether.MessageUpcall MessageUpcall} object. If so, upcalls
  * are generated when messages arrive. If not, explicit receive must be used to read messages.
  * <p>

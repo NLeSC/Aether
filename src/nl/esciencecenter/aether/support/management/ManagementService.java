@@ -2,7 +2,7 @@ package nl.esciencecenter.aether.support.management;
 
 import java.io.IOException;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.io.Conversion;
 import nl.esciencecenter.aether.server.ManagementServiceInterface;
 import nl.esciencecenter.aether.support.Connection;
@@ -36,11 +36,11 @@ public class ManagementService implements nl.esciencecenter.aether.server.Servic
 	 * ibis.ipl.management.ManagementServerInterface#getAttributes(ibis.ipl.
 	 * IbisIdentifier, ibis.ipl.management.AttributeDescription)
 	 */
-	public Object[] getAttributes(IbisIdentifier ibis,
+	public Object[] getAttributes(AetherIdentifier ibis,
 			AttributeDescription... descriptions) throws IOException {
-		nl.esciencecenter.aether.impl.IbisIdentifier identifier;
+		nl.esciencecenter.aether.impl.AetherIdentifier identifier;
 		try {
-			identifier = (nl.esciencecenter.aether.impl.IbisIdentifier) ibis;
+			identifier = (nl.esciencecenter.aether.impl.AetherIdentifier) ibis;
 		} catch (ClassCastException e) {
 			throw new IOException(
 					"cannot cast given identifier to implementation identifier: " + e);

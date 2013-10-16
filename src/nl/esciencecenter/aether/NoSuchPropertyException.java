@@ -8,7 +8,7 @@ package nl.esciencecenter.aether;
  * that an illegal property name was used in one of the methods from
  * the {@link Manageable} interface.
  */
-public class NoSuchPropertyException extends IbisException {
+public class NoSuchPropertyException extends AetherException {
 
     private static final long serialVersionUID = 0x1L;
 

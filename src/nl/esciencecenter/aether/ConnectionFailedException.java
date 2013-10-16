@@ -3,11 +3,11 @@ package nl.esciencecenter.aether;
 /**
  * Container class for a single connection failure.
  */
-public class ConnectionFailedException extends IbisIOException {
+public class ConnectionFailedException extends AetherIOException {
 
     private static final long serialVersionUID = 1L;
     private final ReceivePortIdentifier receivePortIdentifier;
-    private final IbisIdentifier ibisIdentifier;
+    private final AetherIdentifier ibisIdentifier;
     private final String receivePortName;
 
     /**
@@ -22,7 +22,7 @@ public class ConnectionFailedException extends IbisIOException {
      *          the receivePortName of the receive port.
      */
     public ConnectionFailedException(String detailMessage,
-            IbisIdentifier ibisIdentifier, String receivePortName) {
+            AetherIdentifier ibisIdentifier, String receivePortName) {
         super(detailMessage);
         this.ibisIdentifier = ibisIdentifier;
         this.receivePortName = receivePortName;
@@ -43,7 +43,7 @@ public class ConnectionFailedException extends IbisIOException {
      *          the cause of the failure.
      */
     public ConnectionFailedException(String detailMessage,
-            IbisIdentifier ibisIdentifier, String receivePortName,
+            AetherIdentifier ibisIdentifier, String receivePortName,
             Throwable cause) {
         super(detailMessage);
         initCause(cause);
@@ -91,7 +91,7 @@ public class ConnectionFailedException extends IbisIOException {
      * @return
      *          the ibis identifier.
      */
-    public IbisIdentifier ibisIdentifier() {
+    public AetherIdentifier ibisIdentifier() {
         if (ibisIdentifier == null) {
             return receivePortIdentifier.ibisIdentifier();
         }

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Map;
 
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.NoSuchPropertyException;
 
 public final class ForwardingRegistry extends nl.esciencecenter.aether.registry.Registry {
@@ -26,48 +26,48 @@ public final class ForwardingRegistry extends nl.esciencecenter.aether.registry.
         target.leave();
     }
 
-    public void assumeDead(nl.esciencecenter.aether.IbisIdentifier ibis) throws IOException {
+    public void assumeDead(nl.esciencecenter.aether.AetherIdentifier ibis) throws IOException {
         target.assumeDead(ibis);
     }
 
-    public nl.esciencecenter.aether.IbisIdentifier elect(String election, long timeoutMillis) throws IOException {
+    public nl.esciencecenter.aether.AetherIdentifier elect(String election, long timeoutMillis) throws IOException {
         return target.elect(election, timeoutMillis);
     }
 
-    public nl.esciencecenter.aether.IbisIdentifier elect(String election) throws IOException {
+    public nl.esciencecenter.aether.AetherIdentifier elect(String election) throws IOException {
         return target.elect(election);
     }
     
-    public nl.esciencecenter.aether.IbisIdentifier getElectionResult(String election) throws IOException {
+    public nl.esciencecenter.aether.AetherIdentifier getElectionResult(String election) throws IOException {
         return target.getElectionResult(election);
     }
 
-    public nl.esciencecenter.aether.IbisIdentifier getElectionResult(String election, long timeoutMillis) throws IOException {
+    public nl.esciencecenter.aether.AetherIdentifier getElectionResult(String election, long timeoutMillis) throws IOException {
         return target.getElectionResult(election, timeoutMillis);
     }
 
-    public void maybeDead(nl.esciencecenter.aether.IbisIdentifier ibis) throws IOException {
+    public void maybeDead(nl.esciencecenter.aether.AetherIdentifier ibis) throws IOException {
         target.maybeDead(ibis);
     }
 
-    public void signal(String string, nl.esciencecenter.aether.IbisIdentifier... ibisses) throws IOException {
+    public void signal(String string, nl.esciencecenter.aether.AetherIdentifier... ibisses) throws IOException {
         target.signal(string, ibisses);
     }
 
     @Override
-    public nl.esciencecenter.aether.impl.IbisIdentifier getIbisIdentifier() {
+    public nl.esciencecenter.aether.impl.AetherIdentifier getIbisIdentifier() {
         return target.getIbisIdentifier();
     }
 
-    public IbisIdentifier[] diedIbises() {
+    public AetherIdentifier[] diedIbises() {
         return target.diedIbises();
     }
 
-    public IbisIdentifier[] joinedIbises() {
+    public AetherIdentifier[] joinedIbises() {
         return target.joinedIbises();
     }
 
-    public IbisIdentifier[] leftIbises() {
+    public AetherIdentifier[] leftIbises() {
         return target.leftIbises();
     }
 
@@ -127,12 +127,12 @@ public final class ForwardingRegistry extends nl.esciencecenter.aether.registry.
         target.terminate();
     }
 
-    public IbisIdentifier waitUntilTerminated() {
+    public AetherIdentifier waitUntilTerminated() {
         return target.waitUntilTerminated();
     }
 
     @Override
-    public nl.esciencecenter.aether.impl.IbisIdentifier getRandomPoolMember() {
+    public nl.esciencecenter.aether.impl.AetherIdentifier getRandomPoolMember() {
         return target.getRandomPoolMember();
     }
 

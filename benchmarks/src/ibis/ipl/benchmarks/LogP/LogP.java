@@ -2,10 +2,10 @@ package ibis.ipl.benchmarks.LogP;
 
 /* $Id: LogP.java 11529 2009-11-18 15:53:11Z ceriel $ */
 
-import nl.esciencecenter.aether.Ibis;
-import nl.esciencecenter.aether.IbisCapabilities;
-import nl.esciencecenter.aether.IbisFactory;
-import nl.esciencecenter.aether.IbisIdentifier;
+import nl.esciencecenter.aether.Aether;
+import nl.esciencecenter.aether.Capabilities;
+import nl.esciencecenter.aether.AetherFactory;
+import nl.esciencecenter.aether.AetherIdentifier;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReadMessage;
 import nl.esciencecenter.aether.ReceivePort;
@@ -188,7 +188,7 @@ class LogP {
 
     static Logger logger = LoggerFactory.getLogger(LogP.class.getName());
 
-    static Ibis ibis;
+    static Aether ibis;
 
     static Registry registry;
 
@@ -241,8 +241,8 @@ class LogP {
 
         try {
 
-            IbisCapabilities s = new IbisCapabilities(
-                    IbisCapabilities.ELECTIONS_STRICT
+            Capabilities s = new Capabilities(
+                    Capabilities.ELECTIONS_STRICT
             );
             PortType t = new PortType(
                     noneSer ? PortType.SERIALIZATION_BYTE : PortType.SERIALIZATION_OBJECT,
@@ -257,14 +257,14 @@ class LogP {
                 p.setProperty("ibis.serialization", "sun");
             }
 
-            ibis = IbisFactory.createIbis(s, p, true, null, t);
+            ibis = AetherFactory.createIbis(s, p, true, null, t);
             registry = ibis.registry();
 
             SendPort sport = ibis.createSendPort(t, "send port");
             ReceivePort rport;
             logger.debug("LogP: pre elect");
-            IbisIdentifier master = registry.elect("logp");
-            IbisIdentifier remote;
+            AetherIdentifier master = registry.elect("logp");
+            AetherIdentifier remote;
             logger.debug("LogP: post elect");
 
             if (master.equals(ibis.identifier())) {

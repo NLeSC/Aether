@@ -5,7 +5,7 @@ package nl.esciencecenter.aether;
 /**
  * Signals that an Ibis instance could not be created.
  */
-public class IbisCreationFailedException extends IbisException {
+public class CreationFailedException extends AetherException {
 
     private static final long serialVersionUID = 1L;
 
@@ -13,7 +13,7 @@ public class IbisCreationFailedException extends IbisException {
      * Constructs a <code>IbisCreationFailedException</code> with
      * <code>null</code> as its error detail message.
      */
-    public IbisCreationFailedException() {
+    public CreationFailedException() {
         super();
     }
 
@@ -24,7 +24,7 @@ public class IbisCreationFailedException extends IbisException {
      * @param detailMessage
      *            the detail message
      */
-    public IbisCreationFailedException(String detailMessage) {
+    public CreationFailedException(String detailMessage) {
         super(detailMessage);
     }
 
@@ -37,7 +37,7 @@ public class IbisCreationFailedException extends IbisException {
      * @param cause
      *            the cause
      */
-    public IbisCreationFailedException(String detailMessage, Throwable cause) {
+    public CreationFailedException(String detailMessage, Throwable cause) {
         super(detailMessage, cause);
     }
 
@@ -48,7 +48,7 @@ public class IbisCreationFailedException extends IbisException {
      * @param cause
      *            the cause
      */
-    public IbisCreationFailedException(Throwable cause) {
+    public CreationFailedException(Throwable cause) {
         super(cause);
     }
 }

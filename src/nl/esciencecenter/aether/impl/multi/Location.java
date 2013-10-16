@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
-import nl.esciencecenter.aether.IbisProperties;
+import nl.esciencecenter.aether.AetherProperties;
 import nl.esciencecenter.aether.util.TypedProperties;
 
 /**
@@ -205,7 +205,7 @@ public final class Location implements nl.esciencecenter.aether.Location {
         
         TypedProperties p = new TypedProperties(props);
 
-        String s = p.getProperty(IbisProperties.LOCATION);
+        String s = p.getProperty(AetherProperties.LOCATION);
         if (s == null) {
             s = DEFAULT_LOCATION;
         }

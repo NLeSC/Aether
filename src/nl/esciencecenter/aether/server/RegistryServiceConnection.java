@@ -47,7 +47,7 @@ class RegistryServiceConnection implements RegistryServiceInterface {
     }
 
     //    @Override
-    public nl.esciencecenter.aether.IbisIdentifier[] getMembers(String poolName)
+    public nl.esciencecenter.aether.AetherIdentifier[] getMembers(String poolName)
             throws IOException {
         Connection connection = new Connection(address, TIMEOUT, true,
                 socketFactory);
@@ -65,9 +65,9 @@ class RegistryServiceConnection implements RegistryServiceInterface {
                 throw new IOException("negative number of members received");
             }
 
-            nl.esciencecenter.aether.IbisIdentifier[] result = new nl.esciencecenter.aether.IbisIdentifier[nrOfMembers];
+            nl.esciencecenter.aether.AetherIdentifier[] result = new nl.esciencecenter.aether.AetherIdentifier[nrOfMembers];
             for (int i = 0; i < nrOfMembers; i++) {
-                result[i] = new nl.esciencecenter.aether.impl.IbisIdentifier(connection.in());
+                result[i] = new nl.esciencecenter.aether.impl.AetherIdentifier(connection.in());
             }
 
             return result;

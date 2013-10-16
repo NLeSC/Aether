@@ -5,7 +5,7 @@ import java.io.PrintStream;
 import java.util.Map;
 import java.util.Properties;
 
-import nl.esciencecenter.aether.IbisProperties;
+import nl.esciencecenter.aether.AetherProperties;
 import nl.esciencecenter.aether.registry.central.RegistryProperties;
 
 public class PropertyFileGenerator {
@@ -48,8 +48,8 @@ public class PropertyFileGenerator {
 
             out.println("#### Generic Ibis properties ####");
             out.println();
-            writeEntries(IbisProperties.getDescriptions(),
-                IbisProperties.getHardcodedProperties(), out);
+            writeEntries(AetherProperties.getDescriptions(),
+                AetherProperties.getHardcodedProperties(), out);
             out.println();
             out.println();
 

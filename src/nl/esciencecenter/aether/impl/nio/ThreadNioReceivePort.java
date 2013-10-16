@@ -41,7 +41,7 @@ final class ThreadNioReceivePort extends NioReceivePort {
         }
 
         addConnection(spi, new ThreadNioDissipator(
-                ((NioIbis) ibis).sendReceiveThread(),
+                ((NioAether) ibis).sendReceiveThread(),
                 (ReadableByteChannel) channel));
     }
 

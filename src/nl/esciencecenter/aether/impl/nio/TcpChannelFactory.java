@@ -40,9 +40,9 @@ class TcpChannelFactory implements ChannelFactory, Protocol {
     // Address ssc is bound to
     private InetSocketAddress address;
 
-    private NioIbis ibis;
+    private NioAether ibis;
 
-    TcpChannelFactory(NioIbis ibis) throws IOException {
+    TcpChannelFactory(NioAether ibis) throws IOException {
         int port = 0;
         InetAddress localAddress = IPUtils.getLocalHostAddress();
 

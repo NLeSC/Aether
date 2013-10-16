@@ -18,7 +18,7 @@ import nl.esciencecenter.aether.RegistryEventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class NioIbisStarter extends nl.esciencecenter.aether.AetherStarter {
+public final class NioAetherStarter extends nl.esciencecenter.aether.AetherStarter {
 
     static final Logger logger = LoggerFactory
             .getLogger("ibis.ipl.impl.nio.NioIbisStarter");
@@ -45,7 +45,7 @@ public final class NioIbisStarter extends nl.esciencecenter.aether.AetherStarter
             "sendport.nonblocking", "sendport.thread", "receiveport.blocking",
             "receivport.nonblocking", "receiveport.thread");
 
-    public NioIbisStarter(String nickName, String iplVersion,
+    public NioAetherStarter(String nickName, String iplVersion,
             String implementationVersion) {
         super(nickName, iplVersion, implementationVersion);
     }
@@ -88,7 +88,7 @@ public final class NioIbisStarter extends nl.esciencecenter.aether.AetherStarter
             Properties userProperties, Capabilities capabilities,
             Credentials credentials, byte[] applicationTag, PortType[] portTypes,
             String specifiedSubImplementation) throws CreationFailedException {
-        return new NioIbis(registryEventHandler, capabilities, credentials,
+        return new NioAether(registryEventHandler, capabilities, credentials,
                 applicationTag, portTypes, userProperties, this);
     }
 }

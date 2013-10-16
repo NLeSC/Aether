@@ -25,7 +25,7 @@ import nl.esciencecenter.aether.impl.AetherIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class NioIbis extends nl.esciencecenter.aether.impl.Aether {
+public final class NioAether extends nl.esciencecenter.aether.impl.Aether {
 
     static final String prefix = "ibis.ipl.impl.nio.";
 
@@ -45,7 +45,7 @@ public final class NioIbis extends nl.esciencecenter.aether.impl.Aether {
 
     private SendReceiveThread sendReceiveThread = null;
 
-    public NioIbis(RegistryEventHandler r, Capabilities p, Credentials credentials, byte[] applicationTag, PortType[] types, Properties tp,
+    public NioAether(RegistryEventHandler r, Capabilities p, Credentials credentials, byte[] applicationTag, PortType[] types, Properties tp,
             AetherStarter starter) throws CreationFailedException {
 
         super(r, p, credentials, applicationTag, types, tp, starter);

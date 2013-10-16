@@ -43,7 +43,7 @@ import nl.esciencecenter.aether.util.TypedProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class SmartSocketsIbis extends nl.esciencecenter.aether.impl.Aether implements
+public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aether implements
         Runnable, SmartSocketsProtocol {
 
     private static final String PORT_PROPERTY = "ibis.local.port";
@@ -67,13 +67,14 @@ public final class SmartSocketsIbis extends nl.esciencecenter.aether.impl.Aether
     
     private int soTimeout = -1;
 
-    private HashMap<nl.esciencecenter.aether.AetherIdentifier, VirtualSocketAddress> addresses = new HashMap<nl.esciencecenter.aether.AetherIdentifier, VirtualSocketAddress>();
+    private HashMap<nl.esciencecenter.aether.AetherIdentifier, VirtualSocketAddress> addresses = 
+            new HashMap<nl.esciencecenter.aether.AetherIdentifier, VirtualSocketAddress>();
 
     private final HashMap<String, Object> lightConnection = new HashMap<String, Object>();
 
     private final HashMap<String, Object> directConnection = new HashMap<String, Object>();
 
-    public SmartSocketsIbis(RegistryEventHandler registryEventHandler,
+    public SmartSocketsAether(RegistryEventHandler registryEventHandler,
             Capabilities capabilities, Credentials credentials,
             byte[] applicationTag, PortType[] types, Properties userProperties,
             AetherStarter starter) throws CreationFailedException {

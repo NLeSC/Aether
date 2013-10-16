@@ -18,7 +18,7 @@ import nl.esciencecenter.aether.RegistryEventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class SmartSocketsIbisStarter extends nl.esciencecenter.aether.AetherStarter {
+public final class SmartSocketsAetherStarter extends nl.esciencecenter.aether.AetherStarter {
 
     static final Logger logger = LoggerFactory
             .getLogger("ibis.ipl.impl.smartsockets.SmartSocketsIbisStarter");
@@ -45,7 +45,7 @@ public final class SmartSocketsIbisStarter extends nl.esciencecenter.aether.Aeth
             PortType.RECEIVE_AUTO_UPCALLS, PortType.RECEIVE_EXPLICIT,
             PortType.RECEIVE_POLL_UPCALLS, PortType.RECEIVE_TIMEOUT);
 
-    public SmartSocketsIbisStarter(String nickName, String iplVersion,
+    public SmartSocketsAetherStarter(String nickName, String iplVersion,
             String implementationVersion) {
         super(nickName, iplVersion, implementationVersion);
     }
@@ -88,7 +88,7 @@ public final class SmartSocketsIbisStarter extends nl.esciencecenter.aether.Aeth
             Properties userProperties, Capabilities capabilities,
             Credentials credentials, byte[] applicationTag,
             PortType[] portTypes, String specifiedSubImplementation) throws CreationFailedException {
-        return new SmartSocketsIbis(registryEventHandler, capabilities,
+        return new SmartSocketsAether(registryEventHandler, capabilities,
                 credentials, applicationTag, portTypes, userProperties, this);
     }
 }

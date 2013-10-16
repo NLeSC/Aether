@@ -43,7 +43,7 @@ public class SmartSocketsUltraLightReceivePort implements ReceivePort, CallBack,
 	private final LinkedList<SmartSocketsUltraLightReadMessage> messages = 
 		new LinkedList<SmartSocketsUltraLightReadMessage>();
 
-	SmartSocketsUltraLightReceivePort(SmartSocketsIbis ibis, PortType type, 
+	SmartSocketsUltraLightReceivePort(SmartSocketsAether ibis, PortType type, 
 			String name, MessageUpcall upcall, Properties properties) throws IOException {
 
 // 		this.ibis = ibis;

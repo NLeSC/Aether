@@ -38,7 +38,7 @@ public final class NioSendPort extends SendPort implements Protocol {
         }
         else if (type.hasCapability("sendport.thread")) {
             accumulator = new ThreadNioAccumulator(this,
-                    ((NioIbis)ibis).sendReceiveThread());
+                    ((NioAether)ibis).sendReceiveThread());
         }
         else if (type.hasCapability(PortType.CONNECTION_ONE_TO_ONE)
                 || type.hasCapability(PortType.CONNECTION_ONE_TO_MANY)) {
@@ -61,7 +61,7 @@ public final class NioSendPort extends SendPort implements Protocol {
         // FIXME: implement fillTimeout in the lower layers!
         
         // make the connection. Will throw an Exception if if failed
-        Channel channel = ((NioIbis)ibis).factory.connect(this, receiver,
+        Channel channel = ((NioAether)ibis).factory.connect(this, receiver,
                 timeoutMillis);
 
         if (!(channel instanceof GatheringByteChannel)) {

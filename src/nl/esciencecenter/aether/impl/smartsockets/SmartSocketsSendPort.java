@@ -88,7 +88,7 @@ final class SmartSocketsSendPort extends SendPort implements SmartSocketsProtoco
     protected SendPortConnectionInfo doConnect(ReceivePortIdentifier receiver,
             long timeoutMillis, boolean fillTimeout) throws IOException {
 
-        VirtualSocket s = ((SmartSocketsIbis) ibis).connect(this, receiver, (int) timeoutMillis,
+        VirtualSocket s = ((SmartSocketsAether) ibis).connect(this, receiver, (int) timeoutMillis,
                         fillTimeout);
         Conn c = new Conn(s, this, receiver);
         if (out != null) {

@@ -35,7 +35,7 @@ public class SmartSocketsUltraLightSendPort implements SendPort {
 	private final PortType type;
 	private final String name;
  	final Properties properties;	
-	private final SmartSocketsIbis ibis;
+	private final SmartSocketsAether ibis;
 
 	private final SendPortIdentifier sid;
 	
@@ -49,7 +49,7 @@ public class SmartSocketsUltraLightSendPort implements SendPort {
 	
 	private final byte [][] messageToHub;
 	
-	SmartSocketsUltraLightSendPort(SmartSocketsIbis ibis, PortType type, String name, 
+	SmartSocketsUltraLightSendPort(SmartSocketsAether ibis, PortType type, String name, 
 			Properties props) throws IOException {
 		
 		this.ibis = ibis;

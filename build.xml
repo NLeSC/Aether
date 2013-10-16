@@ -3,22 +3,21 @@
         Build file for Aether
     </description>
 
-    <target name="build" description="Build Aether and its implementations" depends="clean,compile-ipl,examples,benchmarks" />
-
-    <!-- Names for generated directories. -->
-    <property name="javadoc" value="javadoc/ipl" />
+    <target name="build" description="Build Aether and its implementations" depends="clean,compile,examples,benchmarks" />
 
     <!-- If you change the version number, change it in IbisFactory.java as well! -->
-    <property name="version" value="1.0" />
-    <property name="version-tag" value="-${version}" />
+    <property name="version-tag" value="1.0" />
 
-    <property name="sources-filename" value="ipl${version-tag}-sources" />
+    <!-- Names for generated directories. -->
+    <property name="javadoc" value="doc/javadoc" />
+    <property name="tmp" value="tmp" />
+    <property name="dist" value="dist" />
 
-    <property name="sources-zip" value="sources/${sources-filename}.zip" />
+    <property name="sources" value="${dist}/Aether-src-${version-tag}.zip" />
 
     <!-- location of smartsockets libraries. Defaults to included smartsockets,
          override with ant -Dsmartsockets=/location/of/smartsockets/lib -->
-    <property name="smartsockets" value="external/smartsockets" />
+    <property name="smartsockets" value="lib/smartsockets" />
 
     <property name="build.sysclasspath" value="ignore"/>
 
@@ -27,6 +26,9 @@
 
     <path id="external.jars">
         <fileset dir="lib">
+            <include name="*.jar" />
+        </fileset>
+        <fileset dir="lib/smartsockets">
             <include name="*.jar" />
         </fileset>
     </path>
@@ -40,21 +42,25 @@
 
     <!-- Copy external libraries to lib directory -->
     <target name="copy-external">
-        <mkdir dir="lib" />
+        <mkdir dir="${dist}" />
         <!-- Smartsockets -->
         <echo message="using smartsockets from ${smartsockets}" />
-        <copy todir="lib">
+        <copy todir="${dist}">
             <fileset dir="${smartsockets}" />
         </copy>
         <!-- Other -->
-        <copy todir="lib">
-            <fileset dir="external" includes="*.jar" excludes="log4jME*.jar" />
+        <copy todir="${dist}">
+            <fileset dir="lib" includes="*.jar"/>
         </copy>
     </target>
 
-    <!-- Compile IPL -->
-    <target name="compile-ipl" depends="copy-external">
-        <mkdir dir="tmp" />
+    <!-- Compile Aether -->
+    <target name="compile" depends="copy-external">
+
+ 	<!-- Create the build directory structure used by util -->
+        <delete dir="${tmp}" />
+        <mkdir dir="${tmp}" />
+        <mkdir dir="${dist}" />
 
         <!-- Compile the java code from src into tmp -->
         <javac srcdir="src" destdir="tmp" debug="on" classpathref="external.jars">
@@ -62,12 +68,12 @@
         </javac>
 
         <!--
-            Build jar of IPL before rewriting. Otherwise a dependency of
-            IPL on ibis-io is introduced. A IPL_MANIFEST property file is added
+            Build jar of Aether before rewriting. Otherwise a dependency of
+            Aether on AetherIO is introduced. A IPL_MANIFEST property file is added
             to this jar later (see below)
         -->
 
-        <jar destfile="lib/ipl-${version-tag}.jar">
+        <jar destfile="${dist}/Aether-${version-tag}.jar">
             <fileset dir="tmp" includes="nl/esciencecenter/aether/*.class" />
             <metainf dir="." includes="LICENSE.txt" />
         </jar>
@@ -88,7 +94,7 @@
             <fileset dir="tmp" includes="${support.files}" />
         </checksum>
 
-        <jar destfile="lib/ipl-support${version-tag}.jar">
+        <jar destfile="${dist}/AetherSupport-${version-tag}.jar">
             <fileset dir="tmp" includes="${support.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
@@ -104,7 +110,7 @@
             <fileset dir="tmp" includes="${implementation.files}" />
         </checksum>
 
-        <jar destfile="lib/ipl-impl${version-tag}.jar">
+        <jar destfile="${dist}/AetherImpl-${version-tag}.jar">
             <fileset dir="tmp" includes="${implementation.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
@@ -120,7 +126,7 @@
             <fileset dir="tmp" includes="${smartsockets.files}" />
         </checksum>
 
-        <jar destfile="lib/ipl-impl-smartsockets${version-tag}.jar">
+        <jar destfile="${dist}/AetherSmartSockets-${version-tag}.jar">
             <fileset dir="tmp" includes="${smartsockets.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
@@ -140,7 +146,7 @@
         </checksum>
 
 
-        <jar destfile="lib/ipl-impl-tcp${version-tag}.jar">
+        <jar destfile="${dist}/AetherTCP-${version-tag}.jar">
             <fileset dir="tmp" includes="${tcp.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
@@ -159,7 +165,7 @@
             <fileset dir="tmp" includes="${nio.files}" />
         </checksum>
 
-        <jar destfile="lib/ipl-impl-nio${version-tag}.jar">
+        <jar destfile="${dist}/AetherNIO-${version-tag}.jar">
             <fileset dir="tmp" includes="${nio.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
@@ -178,7 +184,7 @@
             <fileset dir="tmp" includes="${dummy.files}" />
         </checksum>
 
-        <jar destfile="lib/ipl-impl-dummy${version-tag}.jar">
+        <jar destfile="${dist}/AetherStacking-Dummy-${version-tag}.jar">
             <fileset dir="tmp" includes="${dummy.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
@@ -197,7 +203,7 @@
             <fileset dir="tmp" includes="${lrmc.files}" />
         </checksum>
 
-        <jar destfile="lib/ipl-impl-lrmc${version-tag}.jar">
+        <jar destfile="${dist}/AetherStacking-LRMC-${version-tag}.jar">
             <fileset dir="tmp" includes="${lrmc.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
@@ -216,7 +222,7 @@
             <fileset dir="tmp" includes="${multi.files}" />
         </checksum>
 
-        <jar destfile="lib/ipl-impl-multi${version-tag}.jar">
+        <jar destfile="${dist}/AetherStacking-Multi-${version-tag}.jar">
             <fileset dir="tmp" includes="${multi.files}" />
             <metainf dir="." includes="LICENSE.txt" />
             <manifest>
@@ -267,21 +273,19 @@
         </echo>
 
         <!-- Add manifest property file to ipl jar -->
-        <jar destfile="lib/aether-${version-tag}.jar" update="true">
+        <jar destfile="${dist}/Aether-${version-tag}.jar" update="true">
             <fileset dir="tmp" includes="nl/esciencecenter/aether/IPL_MANIFEST" />
         </jar>
 
-        <delete dir="tmp" />
+        <delete dir="${tmp}" />
     </target>
 
     <!-- Clean up everything except the rewritten classlibs -->
     <target name="clean" description="Clean up (leaves rewritten classlibs)">
-        <delete dir="tmp" />
-        <delete dir="lib" />
-        <delete dir="javadoc/ipl" />
+        <delete dir="${tmp}" />
+        <delete dir="${dist}" />
+        <delete dir="${javadoc}" />
 
-        <delete file="${sources-zip}" />
-        <delete file="ipl${version-tag}.zip" />
         <ant dir="examples" inheritAll="false" target="clean" />
         <ant dir="benchmarks" inheritAll="false" target="clean" />
     </target>
@@ -333,19 +337,14 @@
         </delete>
     </target>
 
-    <target name="javadoc" description="Create javadocs" depends="compile-ipl">
+    <target name="javadoc" description="Create javadocs" depends="compile">
         <!-- Create the javadoc directory -->
-        <delete dir="javadoc/ipl" />
-        <mkdir dir="javadoc/ipl" />
-        <javadoc destdir="javadoc/ipl" access="public" sourcepath="src" windowtitle="Ibis IPL Documentation" packagenames="ibis.ipl,ibis.ipl.server" classpathref="default.classpath" overview="src/overview.html" doctitle="Ibis IPL Documentation" bottom="The Ibis project">
+        <delete dir="${javadoc}" />
+        <mkdir dir="${javadoc}" />
+        <javadoc destdir="${javadoc}" access="public" sourcepath="src" windowtitle="Aether Documentation" packagenames="nl.esciencecenter.aether,nl.esciencecenter.aether.server" classpathref="default.classpath" overview="src/overview.html" doctitle="Aether Documentation" bottom="Netherlands eScience Center">
 	    <link href="http://download.oracle.com/javase/1.7.0/docs/api/" />
-
             <tag name="ibis.experimental" description="WARNING: This is an Experimental feature of the IPL. It may not function correctly, future releases of the IPL may have a revised API for this feature, or it may be removed completely. " />
         </javadoc>
-
-        <ant dir="util" inheritAll="false" target="javadoc" />
-        <ant dir="compile" inheritAll="false" target="javadoc" />
-        <ant dir="io" inheritAll="false" target="javadoc" />
     </target>
 
     <target name="docs" description="Create manuals">

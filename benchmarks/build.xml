@@ -21,7 +21,6 @@
         <delete dir="${tmp}" />
         <delete dir="${lib}" />
 
-
         <!-- Create the time stamp -->
         <tstamp />
 
@@ -30,7 +29,7 @@
         <mkdir dir="${lib}" />
 
         <path id="default.classpath">
-            <fileset dir="${ibis}/lib">
+            <fileset dir="${ibis}/dist">
                 <include name="*.jar" />
             </fileset>
 	    <pathelement path="tmp" />

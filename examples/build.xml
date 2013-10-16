@@ -1,11 +1,10 @@
-<project name="Ibis IPL examples" default="build" basedir=".">
+<project name="Aether examples" default="build" basedir=".">
 
     <description>
-	Build file for the Ibis IPL applications.
+	Build file for the Aether example applications.
     </description>
 
     <!-- Global properties -->
-
     <property name="ibis" location=".." />
 
     <property name="version-tag" value="" />
@@ -31,7 +30,7 @@
         <mkdir dir="${lib}" />
 
         <path id="default.classpath">
-            <fileset dir="${ibis}/lib">
+            <fileset dir="${ibis}/dist">
                 <include name="*.jar" />
             </fileset>
 	    <pathelement path="tmp" />

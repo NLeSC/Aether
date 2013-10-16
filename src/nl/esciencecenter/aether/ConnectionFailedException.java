@@ -1,9 +1,11 @@
 package nl.esciencecenter.aether;
 
+import java.io.IOException;
+
 /**
  * Container class for a single connection failure.
  */
-public class ConnectionFailedException extends AetherIOException {
+public class ConnectionFailedException extends IOException {
 
     private static final long serialVersionUID = 1L;
     private final ReceivePortIdentifier receivePortIdentifier;

@@ -27,7 +27,6 @@ import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.ReceivePortConnectUpcall;
 import nl.esciencecenter.aether.RegistryEventHandler;
 import nl.esciencecenter.aether.SendPortDisconnectUpcall;
-import nl.esciencecenter.aether.io.IbisIOException;
 import nl.esciencecenter.aether.registry.Registry;
 import nl.esciencecenter.aether.support.management.ManagementClient;
 import nl.esciencecenter.aether.support.vivaldi.Coordinates;
@@ -340,7 +339,7 @@ public abstract class Aether implements nl.esciencecenter.aether.Aether // , Ibi
         try {
             registry.leave();
         } catch (Throwable e) {
-            throw new IbisIOException("Registry: leave failed ", e);
+            throw new IOException("Registry: leave failed ", e);
         } finally {
             quit();
         }

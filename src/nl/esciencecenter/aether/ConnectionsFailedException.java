@@ -2,6 +2,7 @@
 
 package nl.esciencecenter.aether;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * Signals a failure to connect to one or more ReceivePorts. Besides 
  * failed connections, also has a list of succeeded connection attempts.
  */
-public class ConnectionsFailedException extends AetherIOException {
+public class ConnectionsFailedException extends IOException {
     
     private static final long serialVersionUID = 1L;
     

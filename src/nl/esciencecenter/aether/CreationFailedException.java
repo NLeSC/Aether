@@ -5,7 +5,7 @@ package nl.esciencecenter.aether;
 /**
  * Signals that an Ibis instance could not be created.
  */
-public class CreationFailedException extends AetherException {
+public class CreationFailedException extends Exception {
 
     private static final long serialVersionUID = 1L;
 

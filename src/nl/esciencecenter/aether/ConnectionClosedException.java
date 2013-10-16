@@ -2,13 +2,15 @@
 
 package nl.esciencecenter.aether;
 
+import java.io.IOException;
+
 /**
  * Signals that a connection has been closed. A
  * <code>ConnectionClosedException</code> is thrown to indicate
  * that an input or output operation has been terminated because
  * the connection was broken.
  */
-public class ConnectionClosedException extends AetherIOException {
+public class ConnectionClosedException extends IOException {
     private static final long serialVersionUID = 1L;
 
     /**

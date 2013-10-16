@@ -9,7 +9,7 @@ package nl.esciencecenter.aether;
  * for instance because a method was invoked that requires capabilities
  * that were not configured.
  */
-public class ConfigurationException extends AetherRuntimeException {
+public class ConfigurationException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     /**

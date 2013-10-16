@@ -1,8 +1,8 @@
 package nl.esciencecenter.aether.util.rpc;
 
-import nl.esciencecenter.aether.AetherIOException;
+import java.io.IOException;
 
-public class RemoteException extends AetherIOException {
+public class RemoteException extends IOException {
 
     public RemoteException() {
 	super();

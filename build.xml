@@ -3,7 +3,7 @@
         Build file for Aether
     </description>
 
-    <target name="build" description="Build Aether and its implementations" depends="clean,compile,examples,benchmarks" />
+    <target name="build" description="Build Aether API and generic implementation" depends="clean,compile,examples,benchmarks" />
 
     <!-- If you change the version number, change it in IbisFactory.java as well! -->
     <property name="version-tag" value="1.0" />
@@ -137,139 +137,17 @@
             </manifest>
         </jar>
 
-        <!-- TCP -->
-
-        <property name="tcp.files" value="nl/esciencecenter/aether/impl/tcp/**/*.class" />
-
-        <checksum totalproperty="tcp.checksum">
-            <fileset dir="tmp" includes="${tcp.files}" />
-        </checksum>
-
-
-        <jar destfile="${dist}/AetherTCP-${version-tag}.jar">
-            <fileset dir="tmp" includes="${tcp.files}" />
-            <metainf dir="." includes="LICENSE.txt" />
-            <manifest>
-                <attribute name="Ibis-Starter-Class" value="nl.esciencecenter.aether.impl.tcp.TcpIbisStarter" />
-                <attribute name="Ibis-IPL-Version" value="${version}" />
-                <attribute name="Ibis-Implementation-Version" value="${tcp.checksum}" />
-                <attribute name="Ibis-NickName" value="tcp" />
-            </manifest>
-        </jar>
-
-        <!-- NIO -->
-
-        <property name="nio.files" value="nl/esciencecenter/aether/impl/nio/**/*.class" />
-
-        <checksum totalproperty="nio.checksum">
-            <fileset dir="tmp" includes="${nio.files}" />
-        </checksum>
-
-        <jar destfile="${dist}/AetherNIO-${version-tag}.jar">
-            <fileset dir="tmp" includes="${nio.files}" />
-            <metainf dir="." includes="LICENSE.txt" />
-            <manifest>
-                <attribute name="Ibis-Starter-Class" value="nl.esciencecenter.aether.impl.nio.NioIbisStarter" />
-                <attribute name="Ibis-IPL-Version" value="${version}" />
-                <attribute name="Ibis-Implementation-Version" value="${nio.checksum}" />
-                <attribute name="Ibis-NickName" value="nio" />
-            </manifest>
-        </jar>
-
-        <!-- DUMMY -->
-
-        <property name="dummy.files" value="nl/esciencecenter/aether/impl/stacking/dummy/**/*.class" />
-
-        <checksum totalproperty="dummy.checksum">
-            <fileset dir="tmp" includes="${dummy.files}" />
-        </checksum>
-
-        <jar destfile="${dist}/AetherStacking-Dummy-${version-tag}.jar">
-            <fileset dir="tmp" includes="${dummy.files}" />
-            <metainf dir="." includes="LICENSE.txt" />
-            <manifest>
-                <attribute name="Ibis-Starter-Class" value="nl.esciencecenter.aether.impl.stacking.dummy.StackingIbisStarter" />
-                <attribute name="Ibis-IPL-Version" value="${version}" />
-                <attribute name="Ibis-Implementation-Version" value="${dummy.files}" />
-                <attribute name="Ibis-NickName" value="dummy" />
-            </manifest>
-        </jar>
-
-        <!-- LRMC -->
-
-        <property name="lrmc.files" value="nl/esciencecenter/aether/impl/stacking/lrmc/**/*.class" />
-
-        <checksum totalproperty="lrmc.checksum">
-            <fileset dir="tmp" includes="${lrmc.files}" />
-        </checksum>
-
-        <jar destfile="${dist}/AetherStacking-LRMC-${version-tag}.jar">
-            <fileset dir="tmp" includes="${lrmc.files}" />
-            <metainf dir="." includes="LICENSE.txt" />
-            <manifest>
-                <attribute name="Ibis-Starter-Class" value="nl.esciencecenter.aether.impl.stacking.lrmc.LrmcIbisStarter" />
-                <attribute name="Ibis-IPL-Version" value="${version}" />
-                <attribute name="Ibis-Implementation-Version" value="${lrmc.checksum}" />
-                <attribute name="Ibis-NickName" value="lrmc" />
-            </manifest>
-        </jar>
-
-        <!-- MULTI -->
-
-        <property name="multi.files" value="nl/esciencecenter/aether/impl/multi/**/*.class" />
-
-        <checksum totalproperty="multi.checksum">
-            <fileset dir="tmp" includes="${multi.files}" />
-        </checksum>
-
-        <jar destfile="${dist}/AetherStacking-Multi-${version-tag}.jar">
-            <fileset dir="tmp" includes="${multi.files}" />
-            <metainf dir="." includes="LICENSE.txt" />
-            <manifest>
-                <attribute name="Ibis-Starter-Class" value="nl.esciencecenter.aether.impl.multi.MultiIbisStarter" />
-                <attribute name="Ibis-IPL-Version" value="${version}" />
-                <attribute name="Ibis-Implementation-Version" value="${multi.checksum}" />
-                <attribute name="Ibis-NickName" value="multi" />
-            </manifest>
-        </jar>
-
         <!-- Backup manifest. Used if the jar file manifests cannot be loaded
              for some reason (e.g. on android) -->
         <echo file="tmp/nl/esciencecenter/aether/IPL_MANIFEST">
             support.version=${support.checksum}
             implementation.version=${implementation.checksum}
-
             implementations=smartsockets,tcp,nio,dummy,lrmc
 
             #smartsockets
             smartsockets.starter.class=nl.esciencecenter.aether.impl.smartsockets.SmartSocketsIbisStarter
             smartsockets.ipl.version=${version}
             smartsockets.version=${smartsockets.checksum}
-
-            #tcp
-            tcp.starter.class=nl.esciencecenter.aether.impl.tcp.TcpIbisStarter
-            tcp.ipl.version=${version}
-            tcp.version=${tcp.checksum}
-
-            #nio
-            nio.starter.class=nl.esciencecenter.aether.impl.nio.NioIbisStarter
-            nio.ipl.version=${version}
-            nio.version=${nio.checksum}
-
-            #dummy
-            dummy.starter.class=nl.esciencecenter.aether.impl.stacking.dummy.StackingIbisStarter
-            dummy.ipl.version=${version}
-            dummy.version=${dummy.checksum}
-
-            #lrmc
-            lrmc.starter.class=nl.esciencecenter.aether.impl.stacking.lrmc.LrmcIbisStarter
-            lrmc.ipl.version=${version}
-            lrmc.version=${lrmc.checksum}
-
-            #multi
-            multi.starter.class=nl.esciencecenter.aether.impl.multi.MultiIbisStarter
-            multi.ipl.version=${version}
-            multi.version=${multi.checksum}
         </echo>
 
         <!-- Add manifest property file to ipl jar -->

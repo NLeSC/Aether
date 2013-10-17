@@ -1,4 +1,4 @@
-package nl.esciencecenter.aether.impl.util;
+package nl.esciencecenter.aether.util;
 
 
 import java.io.PrintStream;

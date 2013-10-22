@@ -34,6 +34,7 @@ import nl.esciencecenter.aether.SendPortDisconnectUpcall;
 import nl.esciencecenter.aether.impl.AetherIdentifier;
 import nl.esciencecenter.aether.impl.ReceivePort;
 import nl.esciencecenter.aether.impl.SendPortIdentifier;
+import nl.esciencecenter.aether.impl.Protocol;
 import nl.esciencecenter.aether.io.BufferedArrayInputStream;
 import nl.esciencecenter.aether.io.BufferedArrayOutputStream;
 import nl.esciencecenter.aether.support.Client;
@@ -44,7 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aether implements
-        Runnable, SmartSocketsProtocol {
+        Runnable, Protocol {
 
     private static final String PORT_PROPERTY = "ibis.local.port";
     

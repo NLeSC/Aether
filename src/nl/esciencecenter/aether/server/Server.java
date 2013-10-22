@@ -395,21 +395,16 @@ public final class Server implements ServerInterface {
         out.println("USAGE: ibis-server [OPTIONS]");
         out.println();
         out.println("--no-hub\t\t\tDo not start a hub.");
-        out
-                .println("--hub-only\t\t\tOnly start a hub, not the rest of the server.");
-        out
-                .println("--hub-addresses HUB[,HUB]\tAdditional hubs to connect to.");
-        out
-                .println("--hub-address-file [FILE_NAME]\tWrite the addresses of the hub to the given");
+        out.println("--hub-only\t\t\tOnly start a hub, not the rest of the server.");
+        out.println("--hub-addresses HUB[,HUB]\tAdditional hubs to connect to.");
+        out.println("--hub-address-file [FILE_NAME]\tWrite the addresses of the hub to the given");
         out.println("\t\t\t\tfile. The file is deleted on exit.");
         out.println("--port PORT\t\t\tPort used for the server.");
-        out
-                .println("--remote\t\t\tListen to commands for this server on stdin.");
+        out.println("--remote\t\t\tListen to commands for this server on stdin.");
         out.println();
         out.println("Output Options:");
         out.println("--events\t\t\tPrint events.");
-        out
-                .println("--errors\t\t\tPrint details of errors (such as stacktraces).");
+        out.println("--errors\t\t\tPrint details of errors (such as stacktraces).");
         out.println("--stats\t\t\t\tPrint statistics once in a while.");
         out.println("--help | -h | /?\t\tThis message.");
 

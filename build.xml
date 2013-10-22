@@ -74,7 +74,7 @@
         -->
 
         <jar destfile="${dist}/Aether-${version-tag}.jar">
-            <fileset dir="tmp" includes="nl/esciencecenter/aether/*.class" />
+            <fileset dir="tmp" includes="nl/esciencecenter/aether/*.class nl/esciencecenter/aether/registry/*.class" />
             <metainf dir="." includes="LICENSE.txt" />
         </jar>
 

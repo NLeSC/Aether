@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * A <code>Manageable</code> class is able to read and set
- * implementation-dependant management properties.
+ * implementation-dependent management properties.
  */
 public interface Manageable {
     /**

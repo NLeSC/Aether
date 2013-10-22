@@ -28,8 +28,7 @@ import org.slf4j.LoggerFactory;
  * Implementation of the {@link nl.esciencecenter.aether.ReceivePort} interface, to be extended
  * by specific Ibis implementations.
  */
-public abstract class ReceivePort extends Manageable
-        implements nl.esciencecenter.aether.ReceivePort {
+public abstract class ReceivePort extends Manageable implements nl.esciencecenter.aether.ReceivePort {
 
     /** Debugging output. */
     private static final Logger logger
@@ -58,9 +57,7 @@ public abstract class ReceivePort extends Manageable
     /** Receiveport already has a connection, and ManyToOne is not specified. */
     public static final byte NO_MANY_TO_X = 6;
     
-    final static Set<Thread> threadsInUpcallSet
-        = Collections.synchronizedSet(new HashSet<Thread>());
-
+    final static Set<Thread> threadsInUpcallSet = Collections.synchronizedSet(new HashSet<Thread>());
 
     /** The type of this port. */
     public final PortType type;
@@ -148,9 +145,9 @@ public abstract class ReceivePort extends Manageable
      * @param properties the port properties.
      */
     @SuppressWarnings("unchecked")
-	protected ReceivePort(Aether ibis, PortType type, String name,
-            MessageUpcall upcall, ReceivePortConnectUpcall connectUpcall,
+    protected ReceivePort(Aether ibis, PortType type, String name, MessageUpcall upcall, ReceivePortConnectUpcall connectUpcall,
             Properties properties) throws IOException {
+        
         this.ibis = ibis;
         this.type = type;
         this.name = name;
@@ -293,17 +290,15 @@ public abstract class ReceivePort extends Manageable
 
     public ReadMessage receive(long timeout) throws IOException {
         if (upcall != null) {
-            throw new ConfigurationException(
-                    "Configured Receiveport for upcalls, downcall not allowed");
+            throw new ConfigurationException("Configured Receiveport for upcalls, downcall not allowed");
         }
 
         if (timeout < 0) {
             throw new IOException("timeout must be a non-negative number");
         }
-        if (timeout > 0 &&
-                ! type.hasCapability(PortType.RECEIVE_TIMEOUT)) {
-            throw new ConfigurationException(
-                    "This port is not configured for receive() with timeout");
+        
+        if (timeout > 0 && !type.hasCapability(PortType.RECEIVE_TIMEOUT)) {
+            throw new ConfigurationException("This port is not configured for receive() with timeout");
         }
 
         return getMessage(timeout);
@@ -509,8 +504,7 @@ public abstract class ReceivePort extends Manageable
                     if (timeout > 0) {
                         long time = System.currentTimeMillis();
                         if (time >= deadLine) {
-                            throw new ReceiveTimedOutException(
-                                    "timeout expired in receive()");
+                            throw new ReceiveTimedOutException("timeout expired in receive()");
                         }
                         time = deadLine - time;
                         wait(time);
@@ -566,19 +560,15 @@ public abstract class ReceivePort extends Manageable
             if (logger.isDebugEnabled()) {
                 logger.debug("Got exception from upcall", e);
             }
-            if (! msg.isFinished()) {
-                IOException ioex =
-                    new IOException("Got ClassNotFoundException: "
-                        + e.getMessage());
+            if (!msg.isFinished()) {
+                IOException ioex = new IOException("Got ClassNotFoundException: " + e.getMessage());
                 ioex.initCause(e);
                 msg.finish(ioex);
             }
             return;
-        } catch(Throwable e) {
-            logger.error("Got unexpected throwable in upcall(), "
-                    + "this Java instance will be terminated", e);
+        } catch (Throwable e) {
+            logger.error("Got unexpected throwable in upcall(), this Java instance will be terminated", e);
             System.exit(1);
-
         } finally {
             msg.setInUpcall(false);
         }

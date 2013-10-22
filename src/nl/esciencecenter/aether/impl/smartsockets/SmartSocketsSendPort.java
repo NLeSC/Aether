@@ -11,6 +11,7 @@ import java.util.Properties;
 import nl.esciencecenter.aether.PortType;
 import nl.esciencecenter.aether.SendPortDisconnectUpcall;
 import nl.esciencecenter.aether.impl.Aether;
+import nl.esciencecenter.aether.impl.Protocol;
 import nl.esciencecenter.aether.impl.ReceivePortIdentifier;
 import nl.esciencecenter.aether.impl.SendPort;
 import nl.esciencecenter.aether.impl.SendPortConnectionInfo;
@@ -21,7 +22,7 @@ import nl.esciencecenter.aether.io.Conversion;
 import nl.esciencecenter.aether.io.OutputStreamSplitter;
 import nl.esciencecenter.aether.io.SplitterException;
 
-final class SmartSocketsSendPort extends SendPort implements SmartSocketsProtocol {
+final class SmartSocketsSendPort extends SendPort implements Protocol {
 
     private class Conn extends SendPortConnectionInfo {
         VirtualSocket s;

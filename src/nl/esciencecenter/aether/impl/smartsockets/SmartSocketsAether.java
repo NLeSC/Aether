@@ -44,17 +44,15 @@ import nl.esciencecenter.aether.util.TypedProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aether implements
-        Runnable, Protocol {
+public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aether implements Runnable, Protocol {
 
     private static final String PORT_PROPERTY = "ibis.local.port";
-    
+
     private static final String KEEP_ALIVE_PROPERTY = "ibis.ipl.impl.smartsockets.keepalive";
-    
+
     private static final String SOCKET_TIMEOUT_PROPERTY = "ibis.ipl.impl.smartsockets.sotimeout";
 
-    static final Logger logger = LoggerFactory
-            .getLogger("ibis.ipl.impl.smartsockets.SmartSocketsIbis");
+    static final Logger logger = LoggerFactory.getLogger("ibis.ipl.impl.smartsockets.SmartSocketsIbis");
 
     private VirtualSocketFactory factory;
 
@@ -63,24 +61,21 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
     private VirtualSocketAddress myAddress;
 
     private boolean quiting = false;
-    
+
     private boolean keepAlive = false;
-    
+
     private int soTimeout = -1;
 
-    private HashMap<nl.esciencecenter.aether.AetherIdentifier, VirtualSocketAddress> addresses = 
-            new HashMap<nl.esciencecenter.aether.AetherIdentifier, VirtualSocketAddress>();
+    private HashMap<nl.esciencecenter.aether.AetherIdentifier, VirtualSocketAddress> addresses = new HashMap<nl.esciencecenter.aether.AetherIdentifier, VirtualSocketAddress>();
 
     private final HashMap<String, Object> lightConnection = new HashMap<String, Object>();
 
     private final HashMap<String, Object> directConnection = new HashMap<String, Object>();
 
-    public SmartSocketsAether(RegistryEventHandler registryEventHandler,
-            Capabilities capabilities, Credentials credentials,
-            byte[] applicationTag, PortType[] types, Properties userProperties,
-            AetherStarter starter) throws CreationFailedException {
-        super(registryEventHandler, capabilities, credentials, applicationTag,
-                types, userProperties, starter);
+    public SmartSocketsAether(RegistryEventHandler registryEventHandler, Capabilities capabilities, Credentials credentials,
+            byte[] applicationTag, PortType[] types, Properties userProperties, AetherStarter starter)
+            throws CreationFailedException {
+        super(registryEventHandler, capabilities, credentials, applicationTag, types, userProperties, starter);
 
         lightConnection.put("connect.module.allow", "ConnectModule(HubRouted)");
 
@@ -91,8 +86,8 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
         // result in a direct connection...
         directConnection.put("connect.module.allow", "ConnectModule(Direct)");
 
-        this.properties.checkProperties("ibis.ipl.impl.smartsockets.",
-                new String[] { KEEP_ALIVE_PROPERTY, SOCKET_TIMEOUT_PROPERTY }, null, true);
+        this.properties.checkProperties("ibis.ipl.impl.smartsockets.", new String[] { KEEP_ALIVE_PROPERTY,
+                SOCKET_TIMEOUT_PROPERTY }, null, true);
 
         keepAlive = this.properties.getBooleanProperty(KEEP_ALIVE_PROPERTY, false);
         soTimeout = this.properties.getIntProperty(SOCKET_TIMEOUT_PROPERTY, -1);
@@ -103,13 +98,11 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
                     if (sl != null) {
                         String colorString = "";
                         if (properties.getProperty(AetherProperties.LOCATION_COLOR) != null) {
-                            colorString = "^"
-                                    + properties
-                                    .getProperty(AetherProperties.LOCATION_COLOR);
+                            colorString = "^" + properties.getProperty(AetherProperties.LOCATION_COLOR);
                         }
 
-                        sl.registerProperty("smartsockets.viz", "I^" + ident.name() + "^" + ident.name()
-                                + "," + ident.location().toString() + colorString);
+                        sl.registerProperty("smartsockets.viz", "I^" + ident.name() + "^" + ident.name() + ","
+                                + ident.location().toString() + colorString);
 
                     }
                 } catch (Throwable e) {
@@ -117,7 +110,7 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
                 }
             }
         };
-        
+
         ThreadPool.createNew(r, "Color setter");
 
         // Create a new accept thread
@@ -128,7 +121,7 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
         String clientID = this.properties.getProperty(ID_PROPERTY);
 
         int port = this.properties.getIntProperty(PORT_PROPERTY, 0);
-        
+
         Client client = Client.getOrCreateClient(clientID, properties, port);
         factory = client.getFactory();
 
@@ -159,8 +152,7 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
         return factory.getServiceLink();
     }
 
-    VirtualSocket connect(SmartSocketsSendPort sp,
-            nl.esciencecenter.aether.impl.ReceivePortIdentifier rip, int timeout,
+    VirtualSocket connect(SmartSocketsSendPort sp, nl.esciencecenter.aether.impl.ReceivePortIdentifier rip, int timeout,
             boolean fillTimeout) throws IOException {
 
         AetherIdentifier id = (AetherIdentifier) rip.ibisIdentifier();
@@ -170,8 +162,7 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
         synchronized (addresses) {
             idAddr = addresses.get(id);
             if (idAddr == null) {
-                idAddr = VirtualSocketAddress.fromBytes(id
-                        .getImplementationData(), 0);
+                idAddr = VirtualSocketAddress.fromBytes(id.getImplementationData(), 0);
                 addresses.put(id, idAddr);
             }
         }
@@ -179,8 +170,7 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
         long startTime = System.currentTimeMillis();
 
         if (logger.isDebugEnabled()) {
-            logger.debug("--> Creating socket for connection to " + name
-                    + " at " + idAddr);
+            logger.debug("--> Creating socket for connection to " + name + " at " + idAddr);
         }
 
         PortType sendPortType = sp.getPortType();
@@ -195,8 +185,7 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
 
                 if (sp.getPortType().hasCapability(PortType.CONNECTION_LIGHT)) {
                     h = lightConnection;
-                } else if (sp.getPortType().hasCapability(
-                        PortType.CONNECTION_DIRECT)) {
+                } else if (sp.getPortType().hasCapability(PortType.CONNECTION_DIRECT)) {
                     h = directConnection;
                 }
 
@@ -229,9 +218,9 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
                         if (logger.isDebugEnabled()) {
                             logger.debug("Setting KeepAlive");
                         }
-                	s.setKeepAlive(true);
-                    } catch(Throwable e) {
-                	logger.info("Could not set KeepAlive", e);
+                        s.setKeepAlive(true);
+                    } catch (Throwable e) {
+                        logger.info("Could not set KeepAlive", e);
                     }
                 }
                 if (soTimeout > 0) {
@@ -240,13 +229,12 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
                             logger.debug("Setting soTimeout");
                         }
                         s.setSoTimeout(soTimeout);
-                    } catch(Throwable e) {
+                    } catch (Throwable e) {
                         logger.info("Could not set SoTimeout", e);
                     }
                 }
 
-                out = new DataOutputStream(
-                        new BufferedArrayOutputStream(s.getOutputStream()));
+                out = new DataOutputStream(new BufferedArrayOutputStream(s.getOutputStream()));
 
                 out.writeUTF(name);
                 sp.getIdent().writeTo(out);
@@ -265,8 +253,7 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
                     if (logger.isDebugEnabled()) {
                         logger.debug("Connection refused: already connected");
                     }
-                    throw new AlreadyConnectedException("Already connected",
-                            rip);
+                    throw new AlreadyConnectedException("Already connected", rip);
                 case ReceivePort.TYPE_MISMATCH:
                     // Read receiveport type from input, to produce a
                     // better error message.
@@ -276,44 +263,34 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
                     CapabilitySet s2 = sendPortType.unmatchedCapabilities(rtp);
                     String message = "";
                     if (s1.size() != 0) {
-                        message = message
-                                + "\nUnmatched receiveport capabilities: "
-                                + s1.toString() + ".";
+                        message = message + "\nUnmatched receiveport capabilities: " + s1.toString() + ".";
                     }
                     if (s2.size() != 0) {
-                        message = message
-                                + "\nUnmatched sendport capabilities: "
-                                + s2.toString() + ".";
+                        message = message + "\nUnmatched sendport capabilities: " + s2.toString() + ".";
                     }
                     if (logger.isDebugEnabled()) {
                         logger.debug("Connection refused: " + message);
                     }
-                    throw new PortMismatchException(
-                            "Cannot connect ports of different port types."
-                                    + message, rip);
+                    throw new PortMismatchException("Cannot connect ports of different port types." + message, rip);
                 case ReceivePort.DENIED:
                     if (logger.isDebugEnabled()) {
                         logger.debug("Connection denied");
                     }
-                    throw new ConnectionRefusedException(
-                            "Receiver denied connection", rip);
+                    throw new ConnectionRefusedException("Receiver denied connection", rip);
                 case ReceivePort.NO_MANY_TO_X:
                     if (logger.isDebugEnabled()) {
                         logger.debug("Connection refused: already connected and no ManyToXXX");
                     }
                     throw new ConnectionRefusedException(
-                            "Receiver already has a connection and neither ManyToOne not ManyToMany "
-                                    + "is set", rip);
+                            "Receiver already has a connection and neither ManyToOne not ManyToMany " + "is set", rip);
                 case ReceivePort.NOT_PRESENT:
                 case ReceivePort.DISABLED:
                     // and try again if we did not reach the timeout...
-                    if (timeout > 0
-                            && System.currentTimeMillis() > startTime + timeout) {
+                    if (timeout > 0 && System.currentTimeMillis() > startTime + timeout) {
                         if (logger.isDebugEnabled()) {
                             logger.debug("Connection timed out");
                         }
-                        throw new ConnectionTimedOutException(
-                                "Could not connect", rip);
+                        throw new ConnectionTimedOutException("Could not connect", rip);
                     }
                     if (logger.isDebugEnabled()) {
                         logger.debug("Connection retrying ...");
@@ -373,13 +350,12 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
 
         boolean keepAlive = this.keepAlive;
         int soTimeout = this.soTimeout;
-        
+
         if (logger.isDebugEnabled()) {
             logger.debug("--> SmartSocketsIbis got connection request from " + s);
         }
- 
-        BufferedArrayInputStream bais = 
-            new BufferedArrayInputStream(s.getInputStream());
+
+        BufferedArrayInputStream bais = new BufferedArrayInputStream(s.getInputStream());
 
         DataInputStream in = new DataInputStream(bais);
         OutputStream out = s.getOutputStream();
@@ -402,16 +378,15 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
             in.close();
             s.close();
             return;
-            
+
         }
 
-        synchronized(rp) {
+        synchronized (rp) {
             result = rp.connectionAllowed(send, sp);
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("--> S RP = " + name + ": "
-                    + ReceivePort.getString(result));
+            logger.debug("--> S RP = " + name + ": " + ReceivePort.getString(result));
         }
 
         try {
@@ -422,7 +397,7 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
                 dout.flush();
             }
             out.flush();
-        } catch(IOException e) {
+        } catch (IOException e) {
             // If we cannot write the result back, we must notify the system that
             // the connection is to be removed.
             if (logger.isDebugEnabled()) {
@@ -448,7 +423,7 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
                         logger.debug("Setting soTimeout");
                     }
                     s.setSoTimeout(soTimeout);
-                } catch(Throwable e) {
+                } catch (Throwable e) {
                     logger.info("Could not set SoTimeout", e);
                 }
             }
@@ -458,11 +433,11 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
                         logger.debug("Setting KeepAlive");
                     }
                     s.setKeepAlive(true);
-                } catch(Throwable e) {
+                } catch (Throwable e) {
                     logger.info("Could not set KeepAlive", e);
                 }
             }
-            
+
             rp.connect(send, s, bais);
             if (logger.isDebugEnabled()) {
                 logger.debug("--> S connect done ");
@@ -532,8 +507,7 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
                 } catch (Throwable e2) {
                     // ignored
                 }
-                logger.error("EEK: SmartSocketsIbis:run: got exception "
-                        + "(closing this socket only: ", e);
+                logger.error("EEK: SmartSocketsIbis:run: got exception " + "(closing this socket only: ", e);
             }
         }
     }
@@ -546,8 +520,8 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
         }
     }
 
-    protected nl.esciencecenter.aether.SendPort doCreateSendPort(PortType tp, String nm,
-            SendPortDisconnectUpcall cU, Properties props) throws IOException {
+    protected nl.esciencecenter.aether.SendPort doCreateSendPort(PortType tp, String nm, SendPortDisconnectUpcall cU,
+            Properties props) throws IOException {
 
         if (tp.hasCapability(PortType.CONNECTION_ULTRALIGHT)) {
             return new SmartSocketsUltraLightSendPort(this, tp, nm, props);
@@ -573,9 +547,8 @@ public final class SmartSocketsAether extends nl.esciencecenter.aether.impl.Aeth
         return new SmartSocketsSendPort(this, tp, nm, cU, props);
     }
 
-    protected nl.esciencecenter.aether.ReceivePort doCreateReceivePort(PortType tp, String nm,
-            MessageUpcall u, ReceivePortConnectUpcall cU, Properties props)
-            throws IOException {
+    protected nl.esciencecenter.aether.ReceivePort doCreateReceivePort(PortType tp, String nm, MessageUpcall u,
+            ReceivePortConnectUpcall cU, Properties props) throws IOException {
 
         if (tp.hasCapability(PortType.CONNECTION_ULTRALIGHT)) {
             return new SmartSocketsUltraLightReceivePort(this, tp, nm, u, props);
